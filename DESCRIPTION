@@ -8,8 +8,11 @@ License: MIT + file LICENSE
 Depends:
     R (>= 3.3.1)
 Imports:
+    broom,
+    dplyr,
     datacheckr (>= 0.1.1.9001),
     magrittr,
+    stats,
     TMB
 Suggests:
     testthat
