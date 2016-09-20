@@ -19,6 +19,11 @@ To install from GitHub
     # install.packages("devtools")
     devtools::install_github("poissonconsulting/tmbnaut")
 
+Inspiration
+-----------
+
+-   [broom](https://github.com/dgrtwo/broom)
+
 Contribution
 ------------
 
