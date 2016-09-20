@@ -30,6 +30,10 @@ To install from GitHub
 devtools::install_github("poissonconsulting/tmbnaut")
 ```
 
+## Inspiration
+
+- [broom](https://github.com/dgrtwo/broom)
+
 ## Contribution
 
 Please report any [issues](https://github.com/poissonconsulting/tmbnaut/issues).
@@ -37,5 +41,6 @@ Please report any [issues](https://github.com/poissonconsulting/tmbnaut/issues).
 [Pull requests](https://github.com/poissonconsulting/tmbnaut/pulls) are always welcome.
 
 ## Documentation
+
 
 
