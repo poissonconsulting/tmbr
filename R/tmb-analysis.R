@@ -7,18 +7,17 @@
 #' @export
 tmb_analysis <- function(data, model) {
   check_data1(data)
-  stopifnot(is.tmb_model(model))
+  if (!is.tmb_model(model)) stop("model must be a tmb_model", call. = FALSE)
 
   tempfile <- tempfile()
-  tempfile <- "regression"
 
   write(model_code(model), file = paste0(tempfile, ".cpp"))
 
   TMB::compile(paste0(tempfile, ".cpp"))
   dyn.load(TMB::dynlib(tempfile))
 
-  ad_fun <- TMB::MakeADFun(data = as.list(data),  parameters = parameters(model)[[1]],
-                             DLL = tempfile)
+  ad_fun <- TMB::MakeADFun(data = as.list(data),  parameters = parameters(model),
+                           DLL = basename(tempfile), silent = TRUE)
 
   opt <- do.call("optim", ad_fun)
 
@@ -26,6 +25,7 @@ tmb_analysis <- function(data, model) {
   obj$data <- data
   obj$model <- model
   obj$ad_fun <- ad_fun
+  obj$opt <- opt
   class(obj) <- "tmb_analysis"
   obj
 }

@@ -1,6 +1,6 @@
-context("tmb-model")
+context("tmb-analysis")
 
-test_that("tmb_model", {
+test_that("tmb_analysis", {
   model_code <- "
 // linear regression
 #include <TMB.hpp>
@@ -35,7 +35,16 @@ return nll;
   parameters <- list(a = 0, b = 0, log_sigma = 0)
   model <- tmb_model(model_code, parameters = parameters)
 
-  expect_true(is.tmb_model(model))
-  expect_identical(model_code(model), model_code)
-  expect_identical(parameters(model), parameters)
+  set.seed(123)
+  data <- data.frame(x = runif(20, 1, 10))
+  data$y = rnorm(20, mean = 1.8 + 2.4 * data$x, sd = exp(0.3))
+
+  analysis <- tmb_analysis(data, model)
+
+  expect_true(is.tmb_analysis(analysis))
+
+  expect_identical(model_code(analysis), model_code)
+  expect_identical(parameters(analysis), parameters)
+
+  coef <- coef(analysis)
 })

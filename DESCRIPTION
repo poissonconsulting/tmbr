@@ -9,6 +9,7 @@ Depends:
     R (>= 3.3.1)
 Imports:
     datacheckr (>= 0.1.1.9001),
+    magrittr,
     TMB
 Suggests:
     testthat

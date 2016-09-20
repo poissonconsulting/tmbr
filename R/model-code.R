@@ -10,3 +10,6 @@ model_code <- function(x) {UseMethod("model_code")}
 
 #' @export
 model_code.tmb_model <- function(x) x$model_code
+
+#' @export
+model_code.tmb_analysis <- function(x) model_code(x$model)
