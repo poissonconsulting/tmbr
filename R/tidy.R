@@ -1,5 +1,7 @@
 profile <- function(term, obj) {
-  TMB::tmbprofile(obj = obj$ad_fun, name = term, trace = FALSE)
+  ad_fun <- obj$ad_fun
+#  ad_fun$retape()
+  TMB::tmbprofile(obj = ad_fun, name = term, trace = FALSE)
 }
 
 conf_int <- function(obj, level) {
@@ -14,7 +16,9 @@ confints <- function(obj, terms, level) {
 }
 
 sd <- function(obj, terms) {
-  sd <- TMB::sdreport(obj$ad_fun)
+  ad_fun <- obj$ad_fun
+#  ad_fun$retape()
+  sd <- TMB::sdreport(ad_fun)
   sd %<>% summary(select = terms, p.value = TRUE) %>% as.data.frame()
   sd %<>% mutate_(term = ~row.names(sd))
   sd %<>% select_(term = ~term, estimate = ~Estimate, std.error = ~`Std. Error`,
