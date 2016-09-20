@@ -37,17 +37,10 @@ return nll;
   data <- data.frame(x = runif(20, 1, 10))
   data$y = rnorm(20, mean = 1.8 + 2.4 * data$x, sd = exp(0.3))
 
-  model <- tmb_model(model_code, parameters = parameters, name = "Model_1")
+  model <- tmb_model(model_code, parameters = parameters)
   expect_is(tmb_model(model_code, parameters = parameters), "tmb_model")
+  expect_true(is.tmb_model(model))
 
-  names(model_code) <- "Model_1"
   expect_identical(model_code(model), model_code)
-
-  parameters <- list(Model_1 = parameters)
   expect_identical(parameters(model), parameters)
-
-  analysis <- tmb_analysis(data, model)
-  expect_is(analysis, "tmb_analysis")
-  coef(analysis)
-
 })

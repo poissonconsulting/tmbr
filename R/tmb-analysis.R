@@ -1,0 +1,31 @@
+#' TMB Analysis
+#'
+#' @param data The data.frame to analyse.
+#' @param model The tmb_model to analyse.
+#'
+#' @return An object of class tmb_analysis.
+#' @export
+tmb_analysis <- function(data, model) {
+  check_data1(data)
+  stopifnot(is.tmb_model(model))
+
+  tempfile <- tempfile()
+  tempfile <- "regression"
+
+  write(model_code(model), file = paste0(tempfile, ".cpp"))
+
+  TMB::compile(paste0(tempfile, ".cpp"))
+  dyn.load(TMB::dynlib(tempfile))
+
+  ad_fun <- TMB::MakeADFun(data = as.list(data),  parameters = parameters(model)[[1]],
+                             DLL = tempfile)
+
+  opt <- do.call("optim", ad_fun)
+
+  obj <- list()
+  obj$data <- data
+  obj$model <- model
+  obj$ad_fun <- ad_fun
+  class(obj) <- "tmb_analysis"
+  obj
+}
