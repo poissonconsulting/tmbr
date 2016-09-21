@@ -11,11 +11,14 @@ install:
   ps: Bootstrap
 
 # Adapt as necessary starting from here
+
 environment:
   global:
+    WARNINGS_ARE_ERRORS: 1
     USE_RTOOLS: true
 
 build_script:
+  - travis-tool.sh install_r TMB
   - travis-tool.sh install_deps
 
 test_script:
