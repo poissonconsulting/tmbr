@@ -4,7 +4,7 @@
 \alias{tmb_model}
 \title{TMB Model}
 \usage{
-tmb_model(model_code, parameters, select = NULL)
+tmb_model(model_code, parameters, select = NULL, random = NULL)
 }
 \arguments{
 \item{model_code}{A string of the model template.}
@@ -12,6 +12,8 @@ tmb_model(model_code, parameters, select = NULL)
 \item{parameters}{A list of all parameter objects required by the user template.}
 
 \item{select}{A character vector specifying the variables to pass to the analysis.}
+
+\item{random}{A character vector specifying the random effects parameters.}
 }
 \value{
 An object of class tmb_model.

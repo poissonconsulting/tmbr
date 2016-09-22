@@ -24,6 +24,7 @@ tmb_analysis <- function(data, model) {
   dyn.load(TMB::dynlib(tempfile))
 
   ad_fun <- TMB::MakeADFun(data = as.list(data),  parameters = parameters(model),
+                           random = random(model),
                            DLL = basename(tempfile), silent = TRUE)
 
   opt <- do.call("optim", ad_fun)
