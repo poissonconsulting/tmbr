@@ -1,6 +1,6 @@
-context("tmb-analysis")
+context("tmb-coef")
 
-test_that("tmb_analysis", {
+test_that("tmb_coef", {
   model_code <- "
 #include <TMB.hpp>
 
@@ -39,10 +39,11 @@ return nll;
 
   analysis <- tmb_analysis(data, model)
 
-  expect_true(is.tmb_analysis(analysis))
-
-  expect_identical(model_code(analysis), model_code)
-  expect_identical(parameters(analysis), parameters)
+  coef <- coef(analysis, conf.int = TRUE)
+  expect_is(coef, "data.frame")
+  expect_identical(colnames(coef), c("term", "estimate", "std.error", "statistic", "p.value", "lower", "upper"))
+  expect_identical(coef[c("term", "estimate", "std.error", "statistic", "p.value")], coef(analysis))
+  expect_identical(coef, tidy(analysis, conf.int = TRUE))
 
   fixed <- tidy(analysis)
   expect_identical(nrow(fixed), 3L)

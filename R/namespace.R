@@ -1,5 +1,5 @@
 #' @import datacheckr dplyr TMB
 #' @importFrom broom tidy
 #' @importFrom magrittr %<>% %>%
-#' @importFrom stats confint
+#' @importFrom stats coef confint
 NULL

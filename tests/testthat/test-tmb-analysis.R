@@ -45,9 +45,4 @@ return nll;
 
   expect_identical(model_code(analysis), model_code)
   expect_identical(parameters(analysis), parameters)
-
-  tidy <- tidy(analysis, conf.int = TRUE)
-  expect_is(tidy, "data.frame")
-  expect_identical(colnames(tidy), c("term", "estimate", "std.error", "statistic", "p.value", "lower", "upper"))
-  expect_identical(tidy[c("term", "estimate", "std.error", "statistic", "p.value")], tidy(analysis))
 })

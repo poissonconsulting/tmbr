@@ -6,13 +6,13 @@ Authors@R: person("Joe", "Thorley", email = "joe@poissonconsulting.ca", role = c
 Description: Facilitates analyses using Template Model Builder (TMB).
 License: MIT + file LICENSE
 Depends:
-    R (>= 3.3.1)
-Imports:
+    R (>= 3.3.1),
     broom,
+    stats
+Imports:
     dplyr,
     datacheckr,
     magrittr,
-    stats,
     TMB
 Suggests:
     testthat

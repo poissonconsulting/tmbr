@@ -9,6 +9,13 @@ tmb_analysis <- function(data, model) {
   check_data1(data)
   if (!is.tmb_model(model)) stop("model must be a tmb_model", call. = FALSE)
 
+  check_cols(data, model$select)
+
+  if (!is.null(model$select)) {
+    check_cols(data, model$select)
+    data <- data[model$select]
+  }
+
   tempfile <- tempfile()
 
   write(model_code(model), file = paste0(tempfile, ".cpp"))

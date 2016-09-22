@@ -40,14 +40,5 @@ sd <- function(obj, terms) {
 #' @seealso \code{\link[broom]{tidy}}.
 #' @export
 tidy.tmb_analysis <- function(x, terms = "fixed", conf.int = FALSE, conf.level = 0.95, ...) {
-  check_vector(terms, c("^all$", "^fixed$", "^random$", "^report$"), max_length = 1)
-  check_flag(conf.int)
-  check_number(conf.level, c(0.5, 0.99))
-
-  sd <- sd(obj = x, terms)
-  if (conf.int) {
-    confints <- confints(obj = x, terms = sd$term, level = conf.level)
-    sd %<>% bind_cols(confints)
-  }
-  sd
+  coef(x, term = terms, conf.int = conf.int, conf.level = conf.level)
 }

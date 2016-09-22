@@ -38,4 +38,6 @@ return nll;
   expect_true(is.tmb_model(model))
   expect_identical(model_code(model), model_code)
   expect_identical(parameters(model), parameters)
+
+  expect_error(tmb_model(model_code, parameters = parameters, select = 1))
 })
