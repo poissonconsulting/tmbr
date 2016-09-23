@@ -4,14 +4,14 @@
 \alias{tmb_model}
 \title{TMB Model}
 \usage{
-tmb_model(model_code, parameters, select = NULL, random = NULL)
+tmb_model(model_code, parameters, select_data = NULL, random = NULL)
 }
 \arguments{
 \item{model_code}{A string of the model template.}
 
 \item{parameters}{A list of all parameter objects required by the user template.}
 
-\item{select}{A character vector specifying the variables to pass to the analysis.}
+\item{select_data}{NULL or a character vector or a named list specifying the variables to pass to the analysis (and in the case of a named list the associated classes and values).}
 
 \item{random}{A character vector specifying the random effects parameters.}
 }
@@ -19,6 +19,7 @@ tmb_model(model_code, parameters, select = NULL, random = NULL)
 An object of class tmb_model.
 }
 \description{
-TMB Model
+If select is a named list then check_data2 is used to check the consistency of
+the data.
 }
 

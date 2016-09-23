@@ -1,31 +1,3 @@
-profile <- function(term, obj) {
-  ad_fun <- obj$ad_fun
-#  ad_fun$retape()
-  TMB::tmbprofile(obj = ad_fun, name = term, trace = FALSE)
-}
-
-conf_int <- function(obj, level) {
-  confint(object = obj, level = level) %>% as.data.frame()
-}
-
-confints <- function(obj, terms, level) {
-  profile <- lapply(terms, FUN = profile, obj = obj)
-  confints <- lapply(profile, FUN = conf_int, level = level)
-  confints %<>% bind_rows()
-  confints
-}
-
-sd <- function(obj, terms) {
-  ad_fun <- obj$ad_fun
-#  ad_fun$retape()
-  sd <- TMB::sdreport(ad_fun)
-  sd %<>% summary(select = terms, p.value = TRUE) %>% as.data.frame()
-  sd %<>% mutate_(term = ~row.names(sd))
-  sd %<>% select_(term = ~term, estimate = ~Estimate, std.error = ~`Std. Error`,
-                  statistic = ~`z value`, p.value = ~`Pr(>|z^2|)`)
-  sd
-}
-
 #' Tidy TMB Analysis
 #'
 #' Tidys the coefficients of a TMB analysis object into a data frame.

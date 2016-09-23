@@ -1,3 +1,10 @@
+is.named <- function(x) {
+  !is.null(names(x))
+}
+
+is.named_list <- function(x) {
+  is.list(x) && is.named(x)
+}
 
 #' Is a TMB Model?
 #'

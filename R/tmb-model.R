@@ -1,8 +1,8 @@
-tmb_model_object <- function(model_code, parameters, select, random) {
+tmb_model_object <- function(model_code, parameters, select_data, random) {
   obj <- list()
   obj$model_code <- model_code
   obj$parameters <- parameters
-  obj$select <- unique(select)
+  obj$select_data <- select_data
   obj$random <- unique(random)
   class(obj) <- "tmb_model"
   obj
@@ -10,21 +10,24 @@ tmb_model_object <- function(model_code, parameters, select, random) {
 
 #' TMB Model
 #'
+#' If select is a named list then check_data2 is used to check the consistency of
+#' the data.
+#'
 #' @param model_code A string of the model template.
 #' @param parameters A list of all parameter objects required by the user template.
-#' @param select A character vector specifying the variables to pass to the analysis.
+#' @param select_data NULL or a character vector or a named list specifying the variables to pass to the analysis (and in the case of a named list the associated classes and values).
 #' @param random A character vector specifying the random effects parameters.
 #' @return An object of class tmb_model.
 #' @export
-tmb_model <- function(model_code, parameters, select = NULL,
+tmb_model <- function(model_code, parameters, select_data = NULL,
                       random = NULL) {
   check_string(model_code)
-  if (!is.null(select) && !is.character(select))
-    stop("select must be a character vector or NULL" ,call. = FALSE)
+  if (!is.null(select_data) && !is.character(select_data) && !is.named_list(select_data))
+    stop("select_data must be a NULL or a character vector or named list specifying the columns and their associated classes and values" ,call. = FALSE)
 
   if (!is.null(random) && !is.character(random))
     stop("random must be a character vector or NULL" ,call. = FALSE)
 
-  tmb_model_object(model_code = model_code, parameters = parameters, select = select,
+  tmb_model_object(model_code = model_code, parameters = parameters, select_data = select_data,
                    random = random)
 }
