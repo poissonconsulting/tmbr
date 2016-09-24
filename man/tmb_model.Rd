@@ -4,14 +4,20 @@
 \alias{tmb_model}
 \title{TMB Model}
 \usage{
-tmb_model(model_code, parameters, select_data = NULL, random_effects = NULL)
+tmb_model(model_code, parameters, select_data = character(0),
+  center = character(0), scale = character(0),
+  random_effects = character(0))
 }
 \arguments{
 \item{model_code}{A string of the model template.}
 
 \item{parameters}{A list of all parameter objects required by the user template.}
 
-\item{select_data}{NULL or a character vector or a named list specifying the variables to pass to the analysis (and in the case of a named list the associated classes and values).}
+\item{select_data}{A character vector or a named list specifying the variables to pass to the analysis (and in the case of a named list the associated classes and values).}
+
+\item{center}{A character vector of the columns to center.}
+
+\item{scale}{A character vector of the columns to scale (after centering).}
 
 \item{random_effects}{A character vector specifying the random effects parameters.}
 }
@@ -21,5 +27,8 @@ An object of class tmb_model.
 \description{
 If select is a named list then check_data2 is used to check the consistency of
 the data.
+}
+\seealso{
+\code{\link[datacheckr]{check_data}} \code{\link[rescale]{rescale}}
 }
 

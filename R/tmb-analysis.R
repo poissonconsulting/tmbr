@@ -26,6 +26,7 @@ tmb_analysis <- function(data_set, model) {
   obj$data_set <- data_set
 
   data_set %<>% select_data(model$select_data)
+  data_set %<>% rescale::rescale(center = model$center, scale = model$scale)
   data_set %<>% as.list()
 
   tempfile <- tempfile()
@@ -33,6 +34,7 @@ tmb_analysis <- function(data_set, model) {
   write(model_code(model), file = paste0(tempfile, ".cpp"))
 
   TMB::compile(paste0(tempfile, ".cpp"))
+
   dyn.load(TMB::dynlib(tempfile))
 
   ad_fun <- TMB::MakeADFun(data = data_set,  parameters = parameters(model),
