@@ -1,0 +1,11 @@
+library(devtools)
+
+rm(list = ls())
+
+set.seed(123)
+data_set_example1 <- data.frame(x = stats::runif(20, 1, 10))
+data_set_example1$y = stats::rnorm(20, mean = 1.8 + 2.4 * data_set_example1$x, sd = exp(0.3))
+
+data_set_example2 <- data_set_example1
+
+use_data(data_set_example1, data_set_example2, internal = TRUE, overwrite = TRUE)

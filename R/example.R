@@ -22,13 +22,6 @@ for(int i = 0; i < n; i++){
 return nll;
 }"
 
-data_set_example1 <- function() {
-  set.seed(123)
-  data <- data.frame(x = stats::runif(20, 1, 10))
-  data$y = stats::rnorm(20, mean = 1.8 + 2.4 * data$x, sd = exp(0.3))
-  data
-}
-
 parameters_example1 <- list(a = 0, b = 0, log_sigma = 0)
 
 model_code_example2 <- "
@@ -57,12 +50,5 @@ for(int i = 0; i < n; i++){
 ADREPORT(fit);
 return nll;
 }"
-
-data_set_example2 <- function() {
-  set.seed(123)
-  data <- data.frame(x = stats::runif(20, 1, 10))
-  data$y = stats::rnorm(20, mean = 1.8 + 2.4 * data$x, sd = exp(0.3))
-  data
-}
 
 parameters_example2 <- list(a = 0, b = 0, log_sigma = 0)

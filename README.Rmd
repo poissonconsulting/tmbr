@@ -20,7 +20,9 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-## Utilisation
+`tmbnaut` is an R package to facilitate analyse using Template Model Builder (TMB).
+
+## Demonstration
 
 ## Installation
 
@@ -42,5 +44,6 @@ Please report any [issues](https://github.com/poissonconsulting/tmbnaut/issues).
 
 ## Documentation
 
+- [Template Model Builder](https://github.com/kaskr/adcomp)
 
 

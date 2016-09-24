@@ -3,7 +3,7 @@ context("tmb-analysis")
 test_that("coef", {
   model <- tmb_model(model_code_example2, parameters = parameters_example2)
 
-  analysis <- tmb_analysis(data_set_example2(), model)
+  analysis <- tmb_analysis(data_set_example2, model)
 
   coef <- coef(analysis, conf.int = TRUE)
   expect_is(coef, "data.frame")
