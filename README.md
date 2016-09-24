@@ -8,8 +8,10 @@ tmbnaut
 Introduction
 ------------
 
-Utilisation
------------
+`tmbnaut` is an R package to facilitate analyse using Template Model Builder (TMB).
+
+Demonstration
+-------------
 
 Installation
 ------------
@@ -19,11 +21,6 @@ To install from GitHub
     # install.packages("devtools")
     devtools::install_github("poissonconsulting/tmbnaut")
 
-Inspiration
------------
-
--   [broom](https://github.com/dgrtwo/broom)
-
 Contribution
 ------------
 
@@ -31,5 +28,13 @@ Please report any [issues](https://github.com/poissonconsulting/tmbnaut/issues).
 
 [Pull requests](https://github.com/poissonconsulting/tmbnaut/pulls) are always welcome.
 
+Inspiration
+-----------
+
+-   [broom](https://github.com/dgrtwo/broom)
+-   [jaggernaut](https://github.com/poissonconsulting/jaggernaut)
+
 Documentation
 -------------
+
+-   [TMB](https://github.com/kaskr/adcomp)

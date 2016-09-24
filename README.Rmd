@@ -32,18 +32,19 @@ To install from GitHub
 devtools::install_github("poissonconsulting/tmbnaut")
 ```
 
-## Inspiration
-
-- [broom](https://github.com/dgrtwo/broom)
-
 ## Contribution
 
 Please report any [issues](https://github.com/poissonconsulting/tmbnaut/issues).
 
 [Pull requests](https://github.com/poissonconsulting/tmbnaut/pulls) are always welcome.
 
+## Inspiration
+
+- [broom](https://github.com/dgrtwo/broom)
+- [jaggernaut](https://github.com/poissonconsulting/jaggernaut)
+
 ## Documentation
 
-- [Template Model Builder](https://github.com/kaskr/adcomp)
+- [TMB](https://github.com/kaskr/adcomp)
 
 
