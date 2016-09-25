@@ -12,4 +12,4 @@ parameters <- function(x) {UseMethod("parameters")}
 parameters.tmb_model <- function(x) x$parameters
 
 #' @export
-parameters.tmb_analysis <- function(x) parameters(x$model)
+parameters.tmb_analysis <- function(x) parameters(model(x))

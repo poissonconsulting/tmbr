@@ -1,11 +1,8 @@
 #' TMB Model
 #'
-#' If select is a named list then check_data2 is used to check the consistency of
-#' the data.
-#'
 #' @param model_code A string of the model template.
-#' @param parameters A list of all parameter objects required by the user template.
-#' @param select_data A character vector or a named list specifying the variables to pass to the analysis (and in the case of a named list the associated classes and values).
+#' @param parameters A list of all parameter objects required by the user template (both random and fixed).
+#' @param select_data A character vector or a named list specifying the columns to select (and in the case of a named list the associated classes and values).
 #' @param random_effects A character vector specifying the random effects parameters.
 #' @inheritParams rescale::rescale
 #' @return An object of class tmb_model.

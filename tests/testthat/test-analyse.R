@@ -3,7 +3,7 @@ context("tmb-analysis")
 test_that("tmb_analysis", {
   model <- tmb_model(model_code_example1, parameters = parameters_example1)
 
-  analysis <- tmb_analysis(data_set_example1, model)
+  analysis <- analyse(model, data_set_example1, beep = FALSE)
 
   expect_true(is.tmb_analysis(analysis))
 

@@ -12,4 +12,4 @@ random_effects <- function(x) {UseMethod("random_effects")}
 random_effects.tmb_model <- function(x) x$random_effects
 
 #' @export
-random_effects.tmb_analysis <- function(x) random_effects(x$model)
+random_effects.tmb_analysis <- function(x) random_effects(model(x))

@@ -1,4 +1,4 @@
 library(testthat)
-library(tmbnaut)
+library(tmbr0)
 
-test_check("tmbnaut")
+test_check("tmbr0")

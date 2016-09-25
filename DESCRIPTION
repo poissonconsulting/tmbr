@@ -1,4 +1,4 @@
-Package: tmbnaut
+Package: tmbr0
 Title: Analyses Using TMB
 Version: 0.0.0.9001
 Date: 2016-09-24
@@ -10,17 +10,20 @@ Depends:
     broom,
     stats
 Imports:
+    beepr,
     dplyr,
     datacheckr,
     magrittr,
     newdata,
     rescale,
+    timer,
     TMB
 Suggests:
     testthat
 Remotes:
     poissonconsulting/newdata,
-    poissoconsulting/rescale
+    poissonconsulting/rescale,
+    poissonconsulting/timer
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 5.0.1

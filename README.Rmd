@@ -12,31 +12,76 @@ knitr::opts_chunk$set(
 )
 ```
 
-[![Travis-CI Build Status](https://travis-ci.org/poissonconsulting/tmbnaut.svg?branch=master)](https://travis-ci.org/poissonconsulting/tmbnaut)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/poissonconsulting/tmbnaut?branch=master&svg=true)](https://ci.appveyor.com/project/poissonconsulting/tmbnaut)
-[![codecov](https://codecov.io/gh/poissonconsulting/tmbnaut/branch/master/graph/badge.svg)](https://codecov.io/gh/poissonconsulting/tmbnaut)
+[![Travis-CI Build Status](https://travis-ci.org/poissonconsulting/tmbr0.svg?branch=master)](https://travis-ci.org/poissonconsulting/tmbr0)
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/poissonconsulting/tmbr0?branch=master&svg=true)](https://ci.appveyor.com/project/poissonconsulting/tmbr0)
+[![codecov](https://codecov.io/gh/poissonconsulting/tmbr0/branch/master/graph/badge.svg)](https://codecov.io/gh/poissonconsulting/tmbr0)
 
-# tmbnaut
+# tmbr0
 
 ## Introduction
 
-`tmbnaut` is an R package to facilitate analyse using Template Model Builder (TMB).
+`tmbr0` (pronounced timber-naut) is an R package to facilitate analyse using Template Model Builder (TMB).
 
 ## Demonstration
+
+```{r}
+library(tmbr0)
+
+model_code <- "
+#include <TMB.hpp>
+
+template<class Type>
+Type objective_function<Type>::operator() () {
+DATA_VECTOR(wt);
+DATA_VECTOR(hp);
+DATA_VECTOR(disp);
+DATA_VECTOR(mpg);
+
+PARAMETER(bIntercept); 
+PARAMETER(bWt); 
+PARAMETER(bHp); 
+PARAMETER(bDisp); 
+PARAMETER(bDisp2); 
+PARAMETER(log_sigma);
+
+Type sigma = exp(log_sigma);
+
+int n = wt.size();
+
+Type nll = 0.0;
+for(int i = 0; i < n; i++){
+  nll -= dnorm(mpg[i], bIntercept + bWt * wt[i] + bHp * hp[i] + bDisp * disp[i] + bDisp2 * pow(disp[i], 2), sigma, true);
+}
+
+return nll;
+}"
+
+parameters <- list(bIntercept = 0, bWt = 0, bHp = 0, bDisp = 0, bDisp2 = 0, log_sigma = 0)
+
+model <- tmb_model(model_code, parameters = parameters, scale = c("wt", "hp", "disp"))
+
+analysis <- analyse(model, data = mtcars)
+
+tidy(analysis)
+
+lm <- lm(mpg ~ wt + hp + poly(disp,2), 
+        data = rescale::rescale(mtcars, scale = c("wt", "hp", "disp")))
+tidy(lm)
+```
 
 ## Installation
 
 To install from GitHub
 ```
 # install.packages("devtools")
-devtools::install_github("poissonconsulting/tmbnaut")
+devtools::install_github("poissonconsulting/tmbr0")
 ```
 
 ## Contribution
 
-Please report any [issues](https://github.com/poissonconsulting/tmbnaut/issues).
+Please report any [issues](https://github.com/poissonconsulting/tmbr0/issues).
 
-[Pull requests](https://github.com/poissonconsulting/tmbnaut/pulls) are always welcome.
+[Pull requests](https://github.com/poissonconsulting/tmbr0/pulls) are always welcome.
 
 ## Inspiration
 
@@ -46,5 +91,3 @@ Please report any [issues](https://github.com/poissonconsulting/tmbnaut/issues).
 ## Documentation
 
 - [TMB](https://github.com/kaskr/adcomp)
-
-
