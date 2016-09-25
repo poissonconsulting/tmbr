@@ -17,11 +17,15 @@ analyse.tmb_model <- function(model, data_set, beep = TRUE, debug = FALSE, ...) 
   check_flag(debug)
 
   if (beep) on.exit(beepr::beep())
-
-  obj <- list(model = model, data_set = data_set)
+  if (!debug) {
+    sink(tempfile())
+    on.exit(sink(), add = TRUE)
+  }
 
   timer <- timer::Timer$new()
   timer$start()
+
+  obj <- list(model = model, data_set = data_set)
 
   data_set %<>% select_data(model$select_data)
   data_set %<>% rescale::rescale(center = model$center, scale = model$scale)
@@ -41,9 +45,7 @@ analyse.tmb_model <- function(model, data_set, beep = TRUE, debug = FALSE, ...) 
 
   opt <- do.call("optim", ad_fun)
 
-  duration <- timer$elapsed()
-
-  obj %<>% c(ad_fun = list(ad_fun), opt = list(opt), duration = duration)
+  obj %<>% c(ad_fun = list(ad_fun), opt = list(opt), duration = timer$elapsed())
   class(obj) <- "tmb_analysis"
   obj
 }

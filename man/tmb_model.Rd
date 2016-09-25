@@ -11,7 +11,7 @@ tmb_model(model_code, parameters, select_data = character(0),
 \arguments{
 \item{model_code}{A string of the model template.}
 
-\item{parameters}{A list of all parameter objects required by the user template (both random and fixed).}
+\item{parameters}{A list of all parameter objects required by the user template (both random and fixed) with initial values.}
 
 \item{select_data}{A character vector or a named list specifying the columns to select (and in the case of a named list the associated classes and values).}
 

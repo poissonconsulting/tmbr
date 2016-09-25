@@ -63,10 +63,13 @@ model <- tmb_model(model_code, parameters = parameters, scale = c("wt", "hp", "d
 analysis <- analyse(model, data = mtcars)
 
 tidy(analysis)
+glance(analysis)
 
-lm <- lm(mpg ~ wt + hp + poly(disp,2), 
+analysis2 <- lm(mpg ~ wt + hp + poly(disp,2), 
         data = rescale::rescale(mtcars, scale = c("wt", "hp", "disp")))
-tidy(lm)
+
+tidy(analysis2)
+glance(analysis2)
 ```
 
 ## Installation

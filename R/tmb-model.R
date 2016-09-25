@@ -1,7 +1,7 @@
 #' TMB Model
 #'
 #' @param model_code A string of the model template.
-#' @param parameters A list of all parameter objects required by the user template (both random and fixed).
+#' @param parameters A list of all parameter objects required by the user template (both random and fixed) with initial values.
 #' @param select_data A character vector or a named list specifying the columns to select (and in the case of a named list the associated classes and values).
 #' @param random_effects A character vector specifying the random effects parameters.
 #' @inheritParams rescale::rescale
