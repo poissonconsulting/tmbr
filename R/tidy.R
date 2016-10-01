@@ -12,6 +12,7 @@
 #' @seealso \code{\link[broom]{tidy}}.
 #' @export
 tidy.tmb_analysis <- function(x, terms = "fixed", conf.int = FALSE, conf.level = 0.95, ...) {
-  conf_level <- ifelse(conf.int, conf.level, 0)
-  coef(x, term = terms, conf_level = conf_level)
+  check_flag(conf.int)
+  check_number(conf.level, c(0.5, 0.99))
+  coef(x, term = terms, conf_int = conf.int, conf_level = conf.level)
 }

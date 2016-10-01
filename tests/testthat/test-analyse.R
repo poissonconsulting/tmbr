@@ -29,22 +29,22 @@ test_that("tmb_analysis", {
   expect_equal(logLik(analysis), -32.31632, tolerance = 1e-7)
   expect_equal(glance(analysis), data.frame(logLik = -32.31632), tolerance = 1e-7)
 
-  coef <- coef(analysis, conf.int = TRUE)
+  coef <- coef(analysis, conf_int = TRUE)
   expect_is(coef, "data.frame")
   expect_identical(colnames(coef), c("term", "estimate", "std.error", "statistic", "p.value", "lower", "upper"))
   expect_identical(coef[c("term", "estimate", "std.error", "statistic", "p.value")], coef(analysis, conf_level = 0))
   expect_identical(coef, tidy(analysis, conf.int = TRUE))
 
-  fixed <- coef(analysis)
+  fixed <- coef(analysis, conf_int = TRUE)
   expect_identical(nrow(fixed), 3L)
 
-  report <- coef(analysis, terms = "report", conf_level = 0)
+  report <- coef(analysis, terms = "report")
   expect_identical(nrow(report), 20L)
 
-  all <- coef(analysis, terms = "all", conf_level = 0)
+  all <- coef(analysis, terms = "all")
   expect_identical(nrow(all), 23L)
 
   expect_identical(fixed, tidy(analysis, conf.int = TRUE))
 
-  expect_error(coef(analysis, terms = "report", conf.int = TRUE))
+  expect_error(coef(analysis, terms = "report", conf_int = TRUE))
 })

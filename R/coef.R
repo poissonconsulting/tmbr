@@ -35,16 +35,18 @@ sds <- function(obj, terms) {
 #'
 #' @param terms A string of the terms to tidy. Permitted values are 'all', 'fixed',
 #' 'random' and 'report'.
+#' @param conf_int A flag specifying whether to calculate confidence intervals.
 #' @param conf_level A number specifying the confidence level. By default 0.95.
-#' If conf_level = 0 confidence intervals are not calculated.
 #' @param ... unused.
 #' @export
-coef.tmb_analysis <- function(object, terms = "fixed", conf_level = 0.95, ...) {
+coef.tmb_analysis <- function(object, terms = "fixed", conf_int = FALSE,
+                              conf_level = 0.95, ...) {
   check_vector(terms, c("^all$", "^fixed$", "^random$", "^report$"), max_length = 1)
-  check_number(conf_level, c(0, 0.99))
+  check_flag(conf_int)
+  check_number(conf_level, c(0.5, 0.99))
 
   sds <- sds(obj = object, terms)
-  if (conf_level > 0) {
+  if (conf_int) {
     confints <- confints(obj = object, terms = sds$term, level = conf_level)
     sds %<>% bind_cols(confints)
   }
