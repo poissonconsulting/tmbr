@@ -1,13 +1,7 @@
-context("tmb-analysis")
+context("analyse")
 
-test_that("tmb_analysis", {
+test_that("analyse", {
   model <- tmb_model(model_code_example2, parameters = parameters_example2)
-
-  expect_true(is.tmb_model(model))
-  expect_identical(model_code(model), model_code_example2)
-  expect_identical(parameters(model), parameters_example2)
-
-  expect_error(tmb_model(model_code, parameters = parameters_example2, select_data = 1))
 
   analysis <- analyse(model, data_set_example2, beep = FALSE)
 
