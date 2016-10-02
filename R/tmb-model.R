@@ -21,7 +21,8 @@ tmb_model <- function(model_code, parameters, select_data = character(0),
   check_vector(random_effects, "", min_length = 0)
 
   if (length(select_data)) {
-    cols <- ifelse(is.named_list(select_data), names(select_data), select_data)
+    cols <- select_data
+    if (is.named_list(select_data)) cols %<>% names()
     if (!all(center %in% cols)) stop("columns in center must also be in select_data")
     if (!all(scale %in% cols)) stop("columns in scale must also be in select_data")
   }
