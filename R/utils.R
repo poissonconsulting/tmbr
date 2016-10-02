@@ -1,5 +1,7 @@
 dims <- function(x) if (is.vector(x)) length(x) else dim(x)
 
+error <- function(...) stop(..., call. = FALSE)
+
 is_named <- function(x) {
   !is.null(names(x))
 }

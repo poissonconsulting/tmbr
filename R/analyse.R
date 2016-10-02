@@ -59,7 +59,7 @@ analyse.tmb_model <- function(model, data_set, beep = TRUE, debug = FALSE, ...) 
 #' @inheritParams analyse
 #' @export
 tmb_analysis <- function(data_set, model, beep = TRUE, debug = FALSE, ...) {
-  if (!is.tmb_model(model)) stop("model must be a tmb_model", call. = FALSE)
+  if (!is.tmb_model(model)) error("model must be a tmb_model")
 
   analyse(model, data_set, beep = beep, debug = debug, ...)
 }

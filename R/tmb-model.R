@@ -1,6 +1,6 @@
 check_select <- function(select) {
   if (!(is.character(select) || is_named_list(select)))
-    stop("select must be a character vector or named list specifying the columns and their associated classes and values", call. = FALSE)
+    error("select must be a character vector or named list specifying the columns and their associated classes and values")
 
   if (is.character(select)) {
     check_unique(select)
@@ -17,7 +17,7 @@ check_center <- function(center, select) {
 
   if (length(select)) {
     if (is_named_list(select)) select %<>% names()
-    if (!all(center %in% select)) stop("columns in center must also be in select")
+    if (!all(center %in% select)) error("columns in center must also be in select")
   }
   center
 }
@@ -29,14 +29,14 @@ check_scale <- function(scale, select) {
 
   if (length(select)) {
     if (is_named_list(select)) select %<>% names()
-    if (!all(scale %in% select)) stop("columns in scale must also be in select")
+    if (!all(scale %in% select)) error("columns in scale must also be in select")
   }
   scale
 }
 
 check_inits <- function(inits) {
   if (!is_named_list(inits))
-    stop("inits must be a named list specifying the parameters and their starting values" ,call. = FALSE)
+    error("inits must be a named list specifying the parameters and their starting values" )
 
   check_unique(names(inits))
   inits
@@ -44,13 +44,13 @@ check_inits <- function(inits) {
 
 check_random <- function(random, select, inits) {
   if (!is.character(random) && !is_named_list(random))
-    stop("random must be a character vector or named list specifying the random effects and their associated factors" ,call. = FALSE)
+    error("random must be a character vector or named list specifying the random effects and their associated factors" )
 
   if (!length(random)) return(random)
 
   if (is.character(random)) {
     check_unique(random)
-    if (!all(random %in% names(inits))) stop("random effects must also be in inits")
+    if (!all(random %in% names(inits))) error("random effects must also be in inits")
     return(random)
   }
 
@@ -58,20 +58,20 @@ check_random <- function(random, select, inits) {
 
   check_unique(names(random))
 
-  if (!all(names(random) %in% names(inits))) stop("random effects must also be in inits", call. = FALSE)
+  if (!all(names(random) %in% names(inits))) error("random effects must also be in inits")
 
   class <- lapply(random, class) %>% unlist()
 
-  if (!all(class == "character")) stop("random effects factors must named as character vectors", call. = FALSE)
+  if (!all(class == "character")) error("random effects factors must named as character vectors")
 
   if (length(select)) {
     if (!all(unlist(random) %in% select))
-    stop("random effects factors must also be in select", call. = FALSE)
+    error("random effects factors must also be in select")
   }
 
   inits %<>% lapply(dims) %<>% lapply(length)
   inits <- inits[names(random)]
-  if (!identical(inits, lapply(random, length))) stop("random effects must have the same number of dimensions as corresponding inits", call. = FALSE)
+  if (!identical(inits, lapply(random, length))) error("random effects must have the same number of dimensions as corresponding inits")
   random
 }
 
