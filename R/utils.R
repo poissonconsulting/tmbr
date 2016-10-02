@@ -1,4 +1,4 @@
-dims <- function (x) if (is.vector(x)) length(x) else dim(x)
+dims <- function(x) if (is.vector(x)) length(x) else dim(x)
 
 is.named <- function(x) {
   !is.null(names(x))
@@ -30,4 +30,11 @@ is.tmb_model <- function(x) {
 #' @export
 is.tmb_analysis <- function(x) {
   inherits(x, "tmb_analysis")
+}
+
+sort_by_names <- function(x) {
+  stopifnot(is.character(x) || is.named_list(x))
+  if (is.character(x)) return(sort(x))
+  x[order(names(x))]
+  x[order(names(x))]
 }

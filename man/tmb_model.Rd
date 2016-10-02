@@ -18,13 +18,16 @@ tmb_model(model_code, inits, select = character(0), center = character(0),
 
 \item{scale}{A character vector of the columns to scale (after centering).}
 
-\item{random}{A character vector naming the random effects parameters.}
+\item{random}{A character vector or a named list specifying of the random effects (and in the case of a named list the associated factors).}
 }
 \value{
 An object of class tmb_model.
 }
 \description{
-TMB Model
+Creates TMB model.
+}
+\details{
+With the exception of \code{model_code} all arguments are sorted.
 }
 \seealso{
 \code{\link[datacheckr]{check_data}} \code{\link[rescale]{rescale}}

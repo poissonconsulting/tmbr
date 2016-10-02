@@ -12,7 +12,7 @@ Depends:
 Imports:
     beepr,
     dplyr,
-    datacheckr,
+    datacheckr (>= 0.1.1.9002),
     magrittr,
     newdata,
     rescale,
@@ -21,6 +21,7 @@ Imports:
 Suggests:
     testthat
 Remotes:
+    poissonconsulting/datacheckr,
     poissonconsulting/newdata,
     poissonconsulting/rescale,
     poissonconsulting/timer
