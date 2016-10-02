@@ -45,7 +45,9 @@ analyse.tmb_model <- function(model, data_set, beep = TRUE, debug = FALSE, ...) 
 
   opt <- do.call("optim", ad_fun)
 
-  obj %<>% c(ad_fun = list(ad_fun), opt = list(opt), duration = timer$elapsed())
+  sd <- TMB::sdreport(ad_fun)
+
+  obj %<>% c(ad_fun = list(ad_fun), opt = list(opt), sd = list(sd), duration = timer$elapsed())
   class(obj) <- "tmb_analysis"
   obj
 }
