@@ -27,7 +27,7 @@ An object of class tmb_model.
 Creates TMB model.
 }
 \details{
-With the exception of \code{model_code} all arguments are sorted.
+With the exception of \code{model_code} and \code{select} all arguments are sorted.
 }
 \seealso{
 \code{\link[datacheckr]{check_data}} \code{\link[rescale]{rescale}}

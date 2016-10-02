@@ -27,7 +27,13 @@ analyse.tmb_model <- function(model, data_set, beep = TRUE, debug = FALSE, ...) 
 
   obj <- list(model = model, data_set = data_set)
 
-  data_set %<>% select_data(model$select)
+  if (length(model$select)) {
+    data_set %<>% select_data(model$select)
+  } else {
+    cols <- c(model$center, model$scale)
+    if (is_named_list(model$random)) cols %<>% c(unlist(model$random))
+    check_cols(data_set, sort(cols))
+  }
   data_set %<>% rescale::rescale(center = model$center, scale = model$scale)
   data_set %<>% as.list()
 

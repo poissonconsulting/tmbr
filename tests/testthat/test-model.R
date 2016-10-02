@@ -18,4 +18,12 @@ test_that("model", {
   expect_error(tmb_model("", inits = list(a = 1, b = 1:2), random = list(b = c("Year", "Site"))), "random effects must have the same number of dimensions as corresponding inits")
   expect_error(tmb_model("", inits = list(a = 1, b = 1:2), select = "x", random = list(b = c("Year"))), "random effects factors must also be in select")
   expect_is(tmb_model("", inits = list(a = 1, b = 1:2), select = "Year", random = list(b = c("Year"))), "tmb_model")
+  expect_error(tmb_model("", inits = list(a = 1, b = 1:2), select = "Year", scale = "Year", random = list(b = c("Year"))), "random effects factors must not be scaled")
 })
+
+test_that("model data", {
+  model <- tmb_model(model_code_example2, inits = inits_example2,
+                     scale = "z")
+  expect_error(tmb_analysis(data_set_example2, model, beep = FALSE), "column names in data_set must include 'z'")
+})
+

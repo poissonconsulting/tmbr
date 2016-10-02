@@ -42,7 +42,7 @@ check_inits <- function(inits) {
   inits
 }
 
-check_random <- function(random, select, inits) {
+check_random <- function(random, select, center, scale, inits) {
   if (!is.character(random) && !is_named_list(random))
     error("random must be a character vector or named list specifying the random effects and their associated factors" )
 
@@ -65,8 +65,9 @@ check_random <- function(random, select, inits) {
   if (!all(class == "character")) error("random effects factors must named as character vectors")
 
   if (length(select)) {
-    if (!all(unlist(random) %in% select))
-    error("random effects factors must also be in select")
+    if (!all(unlist(random) %in% select)) error("random effects factors must also be in select")
+    if (any(unlist(random) %in% center)) error("random effects factors must not be centered")
+    if (any(unlist(random) %in% scale)) error("random effects factors must not be scaled")
   }
 
   inits %<>% lapply(dims) %<>% lapply(length)
@@ -79,7 +80,7 @@ check_random <- function(random, select, inits) {
 #'
 #' Creates TMB model.
 #'
-#' With the exception of \code{model_code} all arguments are sorted.
+#' With the exception of \code{model_code} and \code{select} all arguments are sorted.
 #'
 #' @param model_code A string of the model template code.
 #' @param inits A named list of initial values for all fixed and random parameters.
@@ -97,11 +98,11 @@ tmb_model <- function(model_code, inits, select = character(0),
   check_center(center, select)
   check_scale(scale, select)
   check_inits(inits)
-  check_random(random, select, inits)
+  check_random(random, select, center, scale, inits)
 
   obj <- list(model_code = model_code,
               inits = sort_by_names(inits),
-              select = sort_by_names(select),
+              select = select,
               center = sort_by_names(center),
               scale = sort_by_names(scale),
               random = sort_by_names(random))
