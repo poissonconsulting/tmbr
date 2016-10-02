@@ -1,3 +1,8 @@
+dims_inits <- function(x) {
+  inits <- inits(x)
+  lapply(inits, dims)
+}
+
 #' Inits
 #'
 #' Gets a named list of the initial values for an object.
