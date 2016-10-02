@@ -1,5 +1,12 @@
-select_data <- function(data_set, select) {
-  if (!length(select)) return(data_set)
+select_data <- function(data_set, model) {
+  select <- model$select
+
+  if (!length(select)) {
+    cols <- c(model$center, model$scale)
+    if (is_named_list(model$random)) cols %<>% c(unlist(model$random))
+    check_cols(data_set, sort(cols))
+    return(data_set)
+  }
 
   if (is.character(select)) {
     select %<>% unique()
