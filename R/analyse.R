@@ -27,7 +27,7 @@ analyse.tmb_model <- function(model, data_set, beep = TRUE, debug = FALSE, ...) 
 
   obj <- list(model = model, data_set = data_set)
 
-  data_set %<>% select_data(model$select_data)
+  data_set %<>% select_data(model$select)
   data_set %<>% rescale::rescale(center = model$center, scale = model$scale)
   data_set %<>% as.list()
 
@@ -39,8 +39,8 @@ analyse.tmb_model <- function(model, data_set, beep = TRUE, debug = FALSE, ...) 
 
   dyn.load(TMB::dynlib(tempfile))
 
-  ad_fun <- TMB::MakeADFun(data = data_set,  parameters = parameters(model),
-                           random = random_effects(model),
+  ad_fun <- TMB::MakeADFun(data = data_set,  parameters = inits(model),
+                           random = parameters(model, "random"),
                            DLL = basename(tempfile), silent = !debug)
 
   opt <- do.call("optim", ad_fun)

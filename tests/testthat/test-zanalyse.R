@@ -1,23 +1,23 @@
 context("analyse")
 
 test_that("analyse", {
-  model <- tmb_model(model_code_example2, parameters = parameters_example2)
+  model <- tmb_model(model_code_example2, inits = inits_example2)
 
   analysis <- analyse(model, data_set_example2, beep = FALSE)
 
   expect_true(is.tmb_analysis(analysis))
 
   expect_identical(model_code(analysis), model_code_example2)
-  expect_identical(parameters(analysis), parameters_example2)
+  expect_identical(inits(analysis), inits_example2)
   expect_equal(data_set(analysis), data_set_example2)
 
-  model <- tmb_model(model_code_example2, parameters = parameters_example2,
-                     select_data = c("x", "y", "z"))
+  model <- tmb_model(model_code_example2, inits = inits_example2,
+                     select = c("x", "y", "z"))
 
   expect_error(tmb_analysis(data_set_example2, model, beep = FALSE), "column names in data_set must include 'x', 'y' and 'z'")
 
-  model <- tmb_model(model_code_example2, parameters = parameters_example2,
-                     select_data = list(x = 1, y = TRUE))
+  model <- tmb_model(model_code_example2, inits = inits_example2,
+                     select = list(x = 1, y = TRUE))
   expect_error(tmb_analysis(data_set_example2, model, beep = FALSE), "column y in data_set must be of class 'logical'")
 
   expect_equal(logLik(analysis), -32.31632, tolerance = 1e-7)

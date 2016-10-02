@@ -4,22 +4,21 @@
 \alias{tmb_model}
 \title{TMB Model}
 \usage{
-tmb_model(model_code, parameters, select_data = character(0),
-  center = character(0), scale = character(0),
-  random_effects = character(0))
+tmb_model(model_code, inits, select = character(0), center = character(0),
+  scale = character(0), random = character(0))
 }
 \arguments{
-\item{model_code}{A string of the model template.}
+\item{model_code}{A string of the model template code.}
 
-\item{parameters}{A list of all parameter objects required by the user template (both random and fixed) with initial values.}
+\item{inits}{A named list of initial values for all fixed and random parameters.}
 
-\item{select_data}{A character vector or a named list specifying the columns to select (and in the case of a named list the associated classes and values).}
+\item{select}{A character vector or a named list specifying the columns to select (and in the case of a named list the associated classes and values).}
 
 \item{center}{A character vector of the columns to center.}
 
 \item{scale}{A character vector of the columns to scale (after centering).}
 
-\item{random_effects}{A character vector specifying the random effects parameters.}
+\item{random}{A character vector naming the random effects parameters.}
 }
 \value{
 An object of class tmb_model.

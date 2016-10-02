@@ -22,7 +22,7 @@ for(int i = 0; i < n; i++){
 return nll;
 }"
 
-parameters_example1 <- list(a = 0, b = 0, log_sigma = 0)
+inits_example1 <- list(a = 0, b = 0, log_sigma = 0)
 
 model_code_example2 <- "
 #include <TMB.hpp>
@@ -51,5 +51,5 @@ ADREPORT(fit);
 return nll;
 }"
 
-parameters_example2 <- list(a = 0, b = 0, log_sigma = 0)
+inits_example2 <- list(a = 0, b = 0, log_sigma = 0)
 

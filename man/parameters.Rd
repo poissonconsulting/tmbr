@@ -4,15 +4,18 @@
 \alias{parameters}
 \title{Parameters}
 \usage{
-parameters(x)
+parameters(x, terms = "fixed")
 }
 \arguments{
 \item{x}{The object.}
+
+\item{terms}{A string of the terms to get the parameter names for.}
 }
 \value{
-The parameters as a list.
+The parameter names as a character vector.
 }
 \description{
-Gets the parameters for an object.
+Gets the fixed or random or both (and in the case of analysis report and all)
+parameter names for an object.
 }
 
