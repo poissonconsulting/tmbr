@@ -1,5 +1,5 @@
 check_select <- function(select) {
-  if (!(is.character(select) || is.named_list(select)))
+  if (!(is.character(select) || is_named_list(select)))
     stop("select must be a character vector or named list specifying the columns and their associated classes and values", call. = FALSE)
 
   if (is.character(select)) {
@@ -16,7 +16,7 @@ check_center <- function(center, select) {
   check_unique(center)
 
   if (length(select)) {
-    if (is.named_list(select)) select %<>% names()
+    if (is_named_list(select)) select %<>% names()
     if (!all(center %in% select)) stop("columns in center must also be in select")
   }
   center
@@ -28,14 +28,14 @@ check_scale <- function(scale, select) {
   check_unique(scale)
 
   if (length(select)) {
-    if (is.named_list(select)) select %<>% names()
+    if (is_named_list(select)) select %<>% names()
     if (!all(scale %in% select)) stop("columns in scale must also be in select")
   }
   scale
 }
 
 check_inits <- function(inits) {
-  if (!is.named_list(inits))
+  if (!is_named_list(inits))
     stop("inits must be a named list specifying the parameters and their starting values" ,call. = FALSE)
 
   check_unique(names(inits))
@@ -43,7 +43,7 @@ check_inits <- function(inits) {
 }
 
 check_random <- function(random, select, inits) {
-  if (!is.character(random) && !is.named_list(random))
+  if (!is.character(random) && !is_named_list(random))
     stop("random must be a character vector or named list specifying the random effects and their associated factors" ,call. = FALSE)
 
   if (!length(random)) return(random)

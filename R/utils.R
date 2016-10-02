@@ -1,11 +1,11 @@
 dims <- function(x) if (is.vector(x)) length(x) else dim(x)
 
-is.named <- function(x) {
+is_named <- function(x) {
   !is.null(names(x))
 }
 
-is.named_list <- function(x) {
-  is.list(x) && is.named(x)
+is_named_list <- function(x) {
+  is.list(x) && is_named(x)
 }
 
 #' Is a TMB Model?
@@ -33,7 +33,7 @@ is.tmb_analysis <- function(x) {
 }
 
 sort_by_names <- function(x) {
-  stopifnot(is.character(x) || is.named_list(x))
+  stopifnot(is.character(x) || is_named_list(x))
   if (is.character(x)) return(sort(x))
   x[order(names(x))]
   x[order(names(x))]
