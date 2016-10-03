@@ -16,7 +16,7 @@ confints <- function(obj, terms, level) {
 }
 
 sds <- function(obj, terms) {
-  sds <- obj$sd
+  sds <- TMB::sdreport(obj$ad_fun)
   sds %<>% summary(select = terms, p.value = TRUE) %>% as.data.frame()
   sds %<>% mutate_(term = ~row.names(sds))
   sds %<>% select_(term = ~term, estimate = ~Estimate, std.error = ~`Std. Error`,
