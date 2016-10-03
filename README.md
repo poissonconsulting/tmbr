@@ -8,7 +8,7 @@ tmbr0
 Introduction
 ------------
 
-`tmbr0` (pronounced timber-naut) is an R package to facilitate analyse using Template Model Builder (TMB).
+`tmbr0` (pronounced timber-naut) is an R package to facilitate analyses using Template Model Builder (TMB).
 
 Demonstration
 -------------
@@ -46,12 +46,11 @@ for(int i = 0; i < n; i++){
 return nll;
 }"
 
-parameters <- list(bIntercept = 0, bWt = 0, bHp = 0, bDisp = 0, bDisp2 = 0, log_sigma = 0)
+inits <- list(bIntercept = 0, bWt = 0, bHp = 0, bDisp = 0, bDisp2 = 0, log_sigma = 0)
 
-model <- tmb_model(model_code, parameters = parameters, scale = c("wt", "hp", "disp"))
+model <- tmb_model(model_code, inits = inits, scale = c("wt", "hp", "disp"))
 
-analysis <- analyse(model, data = datasets::mtcars)
-#> Note: Using Makevars in /Users/joe/.R/Makevars
+analysis <- analyse(model, data = mtcars)
 
 tidy(analysis)
 #>         term  estimate std.error statistic       p.value
@@ -61,16 +60,25 @@ tidy(analysis)
 #> 4      bDisp -1.388636 1.0699325 -1.297872  1.943312e-01
 #> 5     bDisp2  1.659380 0.4582492  3.621131  2.933177e-04
 #> 6  log_sigma  0.731897 0.1249999  5.855180  4.764933e-09
+glance(analysis)
+#>      logLik
+#> 1 -68.82675
 
-lm <- lm(mpg ~ wt + hp + poly(disp,2), 
-        data = rescale::rescale(datasets::mtcars, scale = c("wt", "hp", "disp")))
-tidy(lm)
+analysis2 <- lm(mpg ~ wt + hp + poly(disp,2), 
+        data = rescale::rescale(mtcars, scale = c("wt", "hp", "disp")))
+
+tidy(analysis2)
 #>             term  estimate std.error  statistic      p.value
 #> 1    (Intercept) 20.090625 0.4001079 50.2130198 3.336645e-28
 #> 2             wt -3.633150 0.8951208 -4.0588374 3.787112e-04
 #> 3             hp -1.450218 0.7033923 -2.0617489 4.897818e-02
 #> 4 poly(disp, 2)1 -4.091950 6.2124626 -0.6586679 5.156872e-01
 #> 5 poly(disp, 2)2  7.875696 2.3677784  3.3261962 2.546081e-03
+glance(analysis2)
+#>   r.squared adj.r.squared    sigma statistic      p.value df    logLik
+#> 1  0.877168     0.8589707 2.263352  48.20313 6.521212e-12  5 -68.82675
+#>        AIC      BIC deviance df.residual
+#> 1 149.6535 158.4479 138.3146          27
 ```
 
 Installation

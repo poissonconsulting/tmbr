@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-`tmbr0` (pronounced timber-naut) is an R package to facilitate analyse using Template Model Builder (TMB).
+`tmbr0` (pronounced timber-naut) is an R package to facilitate analyses using Template Model Builder (TMB).
 
 ## Demonstration
 
@@ -56,9 +56,9 @@ for(int i = 0; i < n; i++){
 return nll;
 }"
 
-parameters <- list(bIntercept = 0, bWt = 0, bHp = 0, bDisp = 0, bDisp2 = 0, log_sigma = 0)
+inits <- list(bIntercept = 0, bWt = 0, bHp = 0, bDisp = 0, bDisp2 = 0, log_sigma = 0)
 
-model <- tmb_model(model_code, parameters = parameters, scale = c("wt", "hp", "disp"))
+model <- tmb_model(model_code, inits = inits, scale = c("wt", "hp", "disp"))
 
 analysis <- analyse(model, data = mtcars)
 
