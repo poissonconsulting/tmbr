@@ -21,9 +21,15 @@ test_that("model", {
   expect_error(tmb_model("", inits = list(a = 1, b = 1:2), select = "Year", scale = "Year", random = list(b = c("Year"))), "random effects factors must not be scaled")
 })
 
-test_that("model data", {
+test_that("model data_set", {
   model <- tmb_model(model_code_example2, inits = inits_example2,
                      scale = "z")
   expect_error(tmb_analysis(data_set_example2, model, beep = FALSE), "column names in data_set must include 'z'")
 })
+
+test_that("model modify", {
+  model <- tmb_model(model_code_example2, inits = inits_example2, modify = function(x) stop("Houston..."))
+  expect_error(tmb_analysis(data_set_example2, model, beep = FALSE), "Houston...")
+})
+
 

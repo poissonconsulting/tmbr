@@ -30,6 +30,7 @@ analyse.tmb_model <- function(model, data_set, beep = TRUE, debug = FALSE, ...) 
   data_set %<>% select_data(model)
   data_set %<>% rescale::rescale(center = model$center, scale = model$scale)
   data_set %<>% as.list()
+  data_set %<>% model$modify()
 
   tempfile <- tempfile()
 

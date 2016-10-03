@@ -86,26 +86,30 @@ check_random <- function(random, select, center, scale, inits) {
 #' @param inits A named list of initial values for all fixed and random parameters.
 #' @param select A character vector or a named list specifying the columns to select (and in the case of a named list the associated classes and values).
 #' @param random A character vector or a named list specifying of the random effects (and in the case of a named list the associated factors).
+#' @param modify A single argument function to modify the data (in list form) immediately prior to the analysis.
 #' @inheritParams rescale::rescale
 #' @return An object of class tmb_model.
 #' @seealso \code{\link[datacheckr]{check_data}} \code{\link[rescale]{rescale}}
 #' @export
 tmb_model <- function(model_code, inits, select = character(0),
                       center = character(0), scale = character(0),
-                      random = character(0)) {
+                      random = character(0), modify = function(x) x) {
   check_string(model_code)
   check_select(select)
   check_center(center, select)
   check_scale(scale, select)
   check_inits(inits)
   check_random(random, select, center, scale, inits)
+  if (!is.function(modify)) error("modify must be a function")
+  if (length(formals(modify)) != 1)  error("modify must take a single argument")
 
   obj <- list(model_code = model_code,
               inits = sort_by_names(inits),
               select = select,
               center = sort_by_names(center),
               scale = sort_by_names(scale),
-              random = sort_by_names(random))
+              random = sort_by_names(random),
+              modify = modify)
   class(obj) <- "tmb_model"
   obj
 }
