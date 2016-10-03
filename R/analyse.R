@@ -1,3 +1,11 @@
+process_data <- function(data_set, model) {
+  data_set %<>% select_data(model)
+  data_set %<>% rescale::rescale(center = model$center, scale = model$scale)
+  data_set %<>% as.list()
+  data_set %<>% model$modify()
+  data_set
+}
+
 #' Analyse
 #'
 #' Analyse a data set and model.
@@ -27,10 +35,7 @@ analyse.tmb_model <- function(model, data_set, beep = TRUE, debug = FALSE, ...) 
 
   obj <- list(model = model, data_set = data_set)
 
-  data_set %<>% select_data(model)
-  data_set %<>% rescale::rescale(center = model$center, scale = model$scale)
-  data_set %<>% as.list()
-  data_set %<>% model$modify()
+  data_set %<>% process_data(model)
 
   tempfile <- tempfile()
 
