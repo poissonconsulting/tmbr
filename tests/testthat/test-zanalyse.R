@@ -41,4 +41,7 @@ test_that("analyse", {
   expect_identical(nrow(all), 23L)
 
   expect_identical(fixed, tidy(analysis))
+  fit <- fitted(analysis)
+  expect_identical(names(fit), c("x", "y", "fit.estimate", "fit.std.error",
+                                 "fit.statistic", "fit.p.value", "fit.lower", "fit.upper"))
 })

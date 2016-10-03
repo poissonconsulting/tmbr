@@ -3,6 +3,7 @@
 S3method(analyse,tmb_model)
 S3method(coef,tmb_analysis)
 S3method(data_set,tmb_analysis)
+S3method(fitted,tmb_analysis)
 S3method(glance,tmb_analysis)
 S3method(inits,tmb_analysis)
 S3method(inits,tmb_model)
