@@ -1,20 +1,20 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-[![Travis-CI Build Status](https://travis-ci.org/poissonconsulting/tmbr0.svg?branch=master)](https://travis-ci.org/poissonconsulting/tmbr0) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/poissonconsulting/tmbr0?branch=master&svg=true)](https://ci.appveyor.com/project/poissonconsulting/tmbr0) [![codecov](https://codecov.io/gh/poissonconsulting/tmbr0/branch/master/graph/badge.svg)](https://codecov.io/gh/poissonconsulting/tmbr0)
+[![Travis-CI Build Status](https://travis-ci.org/poissonconsulting/tmbr.svg?branch=master)](https://travis-ci.org/poissonconsulting/tmbr) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/poissonconsulting/tmbr?branch=master&svg=true)](https://ci.appveyor.com/project/poissonconsulting/tmbr) [![codecov](https://codecov.io/gh/poissonconsulting/tmbr/branch/master/graph/badge.svg)](https://codecov.io/gh/poissonconsulting/tmbr)
 
-tmbr0
-=====
+tmbr
+====
 
 Introduction
 ------------
 
-`tmbr0` (pronounced timber-naut) is an R package to facilitate analyses using Template Model Builder (TMB).
+`tmbr` (pronounced timber) is an R package to facilitate analyses using Template Model Builder (TMB).
 
 Demonstration
 -------------
 
 ``` r
-library(tmbr0)
+library(tmbr)
 #> Loading required package: broom
 
 model_code <- "
@@ -87,14 +87,14 @@ Installation
 To install from GitHub
 
     # install.packages("devtools")
-    devtools::install_github("poissonconsulting/tmbr0")
+    devtools::install_github("poissonconsulting/tmbr")
 
 Contribution
 ------------
 
-Please report any [issues](https://github.com/poissonconsulting/tmbr0/issues).
+Please report any [issues](https://github.com/poissonconsulting/tmbr/issues).
 
-[Pull requests](https://github.com/poissonconsulting/tmbr0/pulls) are always welcome.
+[Pull requests](https://github.com/poissonconsulting/tmbr/pulls) are always welcome.
 
 Inspiration
 -----------
