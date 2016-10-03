@@ -19,6 +19,7 @@ test_that("model", {
   expect_error(tmb_model("", inits = list(a = 1, b = 1:2), select = "x", random = list(b = c("Year"))), "random effects factors must also be in select")
   expect_is(tmb_model("", inits = list(a = 1, b = 1:2), select = "Year", random = list(b = c("Year"))), "tmb_model")
   expect_error(tmb_model("", inits = list(a = 1, b = 1:2), select = "Year", scale = "Year", random = list(b = c("Year"))), "random effects factors must not be scaled")
+  expect_error(tmb_model("", inits = list(a = 1, report = 1:2)), "inits names cannot be 'all', 'both', 'fixed', 'random' or 'report'")
 })
 
 test_that("model data_set", {
