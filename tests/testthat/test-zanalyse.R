@@ -26,6 +26,8 @@ test_that("analyse", {
   coef <- coef(analysis, conf_int = TRUE)
   expect_is(coef, "data.frame")
   expect_identical(colnames(coef), c("term", "estimate", "std.error", "statistic", "p.value", "lower", "upper"))
+  expect_equal(coef$lower, coef$estimate - coef$std.error * qnorm(0.975))
+  expect_equal(coef$upper, coef$estimate + coef$std.error * qnorm(0.975))
   expect_identical(coef[c("term", "estimate", "std.error", "statistic", "p.value")], coef(analysis, conf_level = 0))
   expect_identical(coef, tidy(analysis, conf.int = TRUE))
 
@@ -40,5 +42,5 @@ test_that("analyse", {
 
   expect_identical(fixed, tidy(analysis, conf.int = TRUE))
 
-  expect_error(coef(analysis, terms = "report", conf_int = TRUE))
+  expect_identical(colnames(coef(analysis, terms = "report", conf_int = TRUE)), c("term", "estimate", "std.error", "statistic", "p.value", "lower", "upper"))
 })

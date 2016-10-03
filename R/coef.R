@@ -15,15 +15,6 @@ confints <- function(obj, terms, level) {
   confints
 }
 
-sds <- function(obj, terms) {
-  sds <- TMB::sdreport(obj$ad_fun)
-  sds %<>% summary(select = terms, p.value = TRUE) %>% as.data.frame()
-  sds %<>% mutate_(term = ~row.names(sds))
-  sds %<>% select_(term = ~term, estimate = ~Estimate, std.error = ~`Std. Error`,
-                  statistic = ~`z value`, p.value = ~`Pr(>|z^2|)`)
-  sds
-}
-
 #' Coef TMB Analysis
 #'
 #' Coefficients for a TMB analysis.
@@ -32,7 +23,7 @@ sds <- function(obj, terms) {
 #'
 #' @param terms A string of the terms to tidy. Permitted values are 'all', 'fixed',
 #' 'random' and 'report'.
-#' @param conf_int A flag specifying whether to calculate confidence intervals.
+#' @param conf_int A flag specifying whether to calculate (approximate) confidence intervals.
 #' @param conf_level A number specifying the confidence level. By default 0.95.
 #' @param ... unused.
 #' @export
@@ -42,10 +33,14 @@ coef.tmb_analysis <- function(object, terms = "fixed", conf_int = FALSE,
   check_flag(conf_int)
   check_number(conf_level, c(0.5, 0.99))
 
-  sds <- sds(obj = object, terms)
+  coef <- TMB::sdreport(object$ad_fun)
+  coef %<>% summary(select = terms, p.value = TRUE) %>% as.data.frame()
+  coef %<>% mutate_(term = ~row.names(coef))
+  coef %<>% select_(term = ~term, estimate = ~Estimate, std.error = ~`Std. Error`,
+                   statistic = ~`z value`, p.value = ~`Pr(>|z^2|)`)
   if (conf_int) {
-    confints <- confints(obj = object, terms = sds$term, level = conf_level)
-    sds %<>% bind_cols(confints)
+    coef %<>% mutate_(lower = ~estimate + std.error * qnorm((1 - conf_level) / 2),
+                      upper = ~estimate + std.error * qnorm((1 - conf_level) / 2 + conf_level))
   }
-  sds
+  coef
 }

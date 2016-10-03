@@ -13,7 +13,7 @@
 \item{terms}{A string of the terms to tidy. Permitted values are 'all', 'fixed',
 'random' and 'report'.}
 
-\item{conf_int}{A flag specifying whether to calculate confidence intervals.}
+\item{conf_int}{A flag specifying whether to calculate (approximate) confidence intervals.}
 
 \item{conf_level}{A number specifying the confidence level. By default 0.95.}
 
