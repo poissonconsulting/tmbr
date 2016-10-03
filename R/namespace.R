@@ -1,5 +1,5 @@
 #' @import datacheckr dplyr TMB
-#' @importFrom broom glance tidy
+#' @importFrom broom augment glance tidy
 #' @importFrom magrittr %<>% %>%
-#' @importFrom stats coef confint logLik
+#' @importFrom stats coef confint fitted logLik residuals
 NULL

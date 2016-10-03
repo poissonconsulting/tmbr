@@ -34,13 +34,16 @@ test_that("analyse", {
   expect_identical(nrow(fixed), 3L)
 
   report <- coef(analysis, terms = "report")
-  expect_identical(nrow(report), 20L)
+  expect_identical(nrow(report), 40L)
 
   all <- coef(analysis, terms = "all")
-  expect_identical(nrow(all), 23L)
+  expect_identical(nrow(all), 43L)
 
   expect_identical(fixed, tidy(analysis))
   fit <- fitted(analysis)
   expect_identical(names(fit), c("x", "y", "fit.estimate", "fit.std.error",
                                  "fit.statistic", "fit.p.value", "fit.lower", "fit.upper"))
+  expect_error(fitted(analysis, "blah"), "term 'blah' is not in reported terms")
+  expect_identical(residuals(analysis), augment(analysis, "residual"))
+  expect_identical(ncol(augment(analysis)), 14L)
 })

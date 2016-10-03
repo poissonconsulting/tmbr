@@ -37,6 +37,7 @@ PARAMETER(b); // slope
 PARAMETER(log_sigma);
 
 vector<Type> fit = x;
+vector<Type> residual = x;
 
 Type sigma = exp(log_sigma);
 
@@ -45,9 +46,11 @@ int n = y.size();
 Type nll = 0.0;
 for(int i = 0; i < n; i++){
   fit[i] = a + b * x[i];
+  residual[i] = y[i] - fit[i];
   nll -= dnorm(y[i], fit[i], sigma, true);
 }
 ADREPORT(fit);
+ADREPORT(residual);
 return nll;
 }"
 
