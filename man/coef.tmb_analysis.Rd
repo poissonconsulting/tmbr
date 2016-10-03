@@ -4,16 +4,13 @@
 \alias{coef.tmb_analysis}
 \title{Coef TMB Analysis}
 \usage{
-\method{coef}{tmb_analysis}(object, terms = "fixed", conf_int = TRUE,
-  conf_level = 0.95, ...)
+\method{coef}{tmb_analysis}(object, terms = "fixed", conf_level = 0.95, ...)
 }
 \arguments{
 \item{object}{The tmb_analysis object.}
 
 \item{terms}{A string of the terms to tidy. Permitted values are 'all', 'fixed',
 'random' and 'report'.}
-
-\item{conf_int}{A flag specifying whether to calculate (approximate) confidence intervals.}
 
 \item{conf_level}{A number specifying the confidence level. By default 0.95.}
 

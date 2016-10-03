@@ -9,11 +9,10 @@
 #' @inheritParams coef.tmb_analysis
 #' @return The data_set with the fitted values.
 #' @export
-fitted.tmb_analysis <- function(object, term = "fit", conf_int = TRUE,
-                              conf_level = 0.95, ...) {
+fitted.tmb_analysis <- function(object, term = "fit", conf_level = 0.95, ...) {
   check_string(term)
 
-  fit <- coef(object, terms = "report", conf_int = conf_int, conf_level = conf_level)
+  fit <- coef(object, terms = "report", conf_level = conf_level)
   fit <- fit[fit$term == term,]
 
   if (!nrow(fit)) error("term '", fit, "' is not in reported terms")

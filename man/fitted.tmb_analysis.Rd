@@ -4,16 +4,13 @@
 \alias{fitted.tmb_analysis}
 \title{Fitted Values}
 \usage{
-\method{fitted}{tmb_analysis}(object, term = "fit", conf_int = TRUE,
-  conf_level = 0.95, ...)
+\method{fitted}{tmb_analysis}(object, term = "fit", conf_level = 0.95, ...)
 }
 \arguments{
 \item{object}{The tmb_analysis object.}
 
 \item{term}{A string of the terms to tidy. Permitted values are 'all', 'fixed',
 'random' and 'report'.}
-
-\item{conf_int}{A flag specifying whether to calculate (approximate) confidence intervals.}
 
 \item{conf_level}{A number specifying the confidence level. By default 0.95.}
 

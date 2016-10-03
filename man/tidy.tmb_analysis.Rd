@@ -4,16 +4,13 @@
 \alias{tidy.tmb_analysis}
 \title{Tidy TMB Analysis}
 \usage{
-\method{tidy}{tmb_analysis}(x, terms = "fixed", conf.int = TRUE,
-  conf.level = 0.95, ...)
+\method{tidy}{tmb_analysis}(x, terms = "fixed", conf.level = 0.95, ...)
 }
 \arguments{
 \item{x}{The tmb_analysis object to tidy.}
 
 \item{terms}{A string of the terms to tidy. Permitted values are 'all', 'fixed',
 'random' and 'report'.}
-
-\item{conf.int}{A flag indictating whether to calculate confidence intervals.}
 
 \item{conf.level}{A number specifying the confidence level. By default 0.95.}
 

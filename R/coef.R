@@ -1,6 +1,6 @@
 profile <- function(term, obj) {
   ad_fun <- obj$ad_fun
-#  ad_fun$retape()
+  #  ad_fun$retape()
   TMB::tmbprofile(obj = ad_fun, name = term, trace = FALSE)
 }
 
@@ -28,23 +28,19 @@ confints <- function(obj, terms, level) {
 #'
 #' @param terms A string of the terms to tidy. Permitted values are 'all', 'fixed',
 #' 'random' and 'report'.
-#' @param conf_int A flag specifying whether to calculate (approximate) confidence intervals.
 #' @param conf_level A number specifying the confidence level. By default 0.95.
 #' @param ... unused.
 #' @export
-coef.tmb_analysis <- function(object, terms = "fixed", conf_int = TRUE,
+coef.tmb_analysis <- function(object, terms = "fixed",
                               conf_level = 0.95, ...) {
   check_vector(terms, c("^all$", "^fixed$", "^random$", "^report$"), max_length = 1)
-  check_flag(conf_int)
   check_number(conf_level, c(0.5, 0.99))
 
   coef <- summary(object$sd, select = terms, p.value = TRUE) %>% as.data.frame()
   coef %<>% mutate_(term = ~row.names(coef))
   coef %<>% select_(term = ~term, estimate = ~Estimate, std.error = ~`Std. Error`,
-                   statistic = ~`z value`, p.value = ~`Pr(>|z^2|)`)
-  if (conf_int) {
-    coef %<>% mutate_(lower = ~estimate + std.error * qnorm((1 - conf_level) / 2),
-                      upper = ~estimate + std.error * qnorm((1 - conf_level) / 2 + conf_level))
-  }
+                    statistic = ~`z value`, p.value = ~`Pr(>|z^2|)`)
+  coef %<>% mutate_(lower = ~estimate + std.error * qnorm((1 - conf_level) / 2),
+                    upper = ~estimate + std.error * qnorm((1 - conf_level) / 2 + conf_level))
   coef
 }
