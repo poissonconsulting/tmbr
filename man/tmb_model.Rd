@@ -4,21 +4,21 @@
 \alias{tmb_model}
 \title{TMB Model}
 \usage{
-tmb_model(model_code, inits, select = character(0), center = character(0),
-  scale = character(0), random = character(0), modify = function(x) x)
+tmb_model(model_code, inits, random = character(0), select = character(0),
+  center = character(0), scale = character(0), modify = function(x) x)
 }
 \arguments{
 \item{model_code}{A string of the model template code.}
 
 \item{inits}{A named list of initial values for all fixed and random parameters.}
 
+\item{random}{A character vector or a named list specifying of the random effects (and in the case of a named list the associated factors).}
+
 \item{select}{A character vector or a named list specifying the columns to select (and in the case of a named list the associated classes and values).}
 
 \item{center}{A character vector of the columns to center.}
 
 \item{scale}{A character vector of the columns to scale (after centering).}
-
-\item{random}{A character vector or a named list specifying of the random effects (and in the case of a named list the associated factors).}
 
 \item{modify}{A single argument function to modify the data (in list form) immediately prior to the analysis.}
 }
