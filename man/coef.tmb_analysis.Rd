@@ -4,7 +4,7 @@
 \alias{coef.tmb_analysis}
 \title{Coef TMB Analysis}
 \usage{
-\method{coef}{tmb_analysis}(object, terms = "fixed", conf_int = FALSE,
+\method{coef}{tmb_analysis}(object, terms = "fixed", conf_int = TRUE,
   conf_level = 0.95, ...)
 }
 \arguments{

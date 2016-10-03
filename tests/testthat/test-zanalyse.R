@@ -23,15 +23,15 @@ test_that("analyse", {
   expect_equal(logLik(analysis), -32.31632, tolerance = 1e-7)
   expect_equal(glance(analysis), data.frame(logLik = -32.31632), tolerance = 1e-7)
 
-  coef <- coef(analysis, conf_int = TRUE)
+  coef <- coef(analysis)
   expect_is(coef, "data.frame")
   expect_identical(colnames(coef), c("term", "estimate", "std.error", "statistic", "p.value", "lower", "upper"))
-  expect_equal(coef$lower, coef$estimate - coef$std.error * qnorm(0.975))
+  expect_identical(coef$lower, coef$estimate - coef$std.error * qnorm(0.975))
   expect_equal(coef$upper, coef$estimate + coef$std.error * qnorm(0.975))
-  expect_identical(coef[c("term", "estimate", "std.error", "statistic", "p.value")], coef(analysis, conf_level = 0))
-  expect_identical(coef, tidy(analysis, conf.int = TRUE))
+  expect_identical(coef[c("term", "estimate", "std.error", "statistic", "p.value")], coef(analysis, conf_int = FALSE))
+  expect_identical(coef, tidy(analysis))
 
-  fixed <- coef(analysis, conf_int = TRUE)
+  fixed <- coef(analysis)
   expect_identical(nrow(fixed), 3L)
 
   report <- coef(analysis, terms = "report")
@@ -40,7 +40,5 @@ test_that("analyse", {
   all <- coef(analysis, terms = "all")
   expect_identical(nrow(all), 23L)
 
-  expect_identical(fixed, tidy(analysis, conf.int = TRUE))
-
-  expect_identical(colnames(coef(analysis, terms = "report", conf_int = TRUE)), c("term", "estimate", "std.error", "statistic", "p.value", "lower", "upper"))
+  expect_identical(fixed, tidy(analysis))
 })

@@ -11,7 +11,7 @@
 #' @param ... Unused.
 #' @seealso \code{\link[broom]{tidy}}.
 #' @export
-tidy.tmb_analysis <- function(x, terms = "fixed", conf.int = FALSE, conf.level = 0.95, ...) {
+tidy.tmb_analysis <- function(x, terms = "fixed", conf.int = TRUE, conf.level = 0.95, ...) {
   check_flag(conf.int)
   check_number(conf.level, c(0.5, 0.99))
   coef(x, term = terms, conf_int = conf.int, conf_level = conf.level)

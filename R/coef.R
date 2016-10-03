@@ -27,7 +27,7 @@ confints <- function(obj, terms, level) {
 #' @param conf_level A number specifying the confidence level. By default 0.95.
 #' @param ... unused.
 #' @export
-coef.tmb_analysis <- function(object, terms = "fixed", conf_int = FALSE,
+coef.tmb_analysis <- function(object, terms = "fixed", conf_int = TRUE,
                               conf_level = 0.95, ...) {
   check_vector(terms, c("^all$", "^fixed$", "^random$", "^report$"), max_length = 1)
   check_flag(conf_int)

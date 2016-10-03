@@ -4,7 +4,7 @@
 \alias{tidy.tmb_analysis}
 \title{Tidy TMB Analysis}
 \usage{
-\method{tidy}{tmb_analysis}(x, terms = "fixed", conf.int = FALSE,
+\method{tidy}{tmb_analysis}(x, terms = "fixed", conf.int = TRUE,
   conf.level = 0.95, ...)
 }
 \arguments{
