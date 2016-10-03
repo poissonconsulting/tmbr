@@ -19,6 +19,11 @@ confints <- function(obj, terms, level) {
 #'
 #' Coefficients for a TMB analysis.
 #'
+#' The \code{statistic} is the z value.
+#' The \code{p.value} is \code{Pr(>|z^2|)}.
+#' The (95\%) \code{lower} and \code{upper} confidence intervals are
+#' the \code{estimate} +/- 1.96 * \code{std.error}.
+#'
 #' @param object The tmb_analysis object.
 #'
 #' @param terms A string of the terms to tidy. Permitted values are 'all', 'fixed',
@@ -33,8 +38,7 @@ coef.tmb_analysis <- function(object, terms = "fixed", conf_int = TRUE,
   check_flag(conf_int)
   check_number(conf_level, c(0.5, 0.99))
 
-  coef <- TMB::sdreport(object$ad_fun)
-  coef %<>% summary(select = terms, p.value = TRUE) %>% as.data.frame()
+  coef <- summary(object$sd, select = terms, p.value = TRUE) %>% as.data.frame()
   coef %<>% mutate_(term = ~row.names(coef))
   coef %<>% select_(term = ~term, estimate = ~Estimate, std.error = ~`Std. Error`,
                    statistic = ~`z value`, p.value = ~`Pr(>|z^2|)`)

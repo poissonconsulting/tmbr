@@ -22,4 +22,10 @@
 \description{
 Coefficients for a TMB analysis.
 }
+\details{
+The \code{statistic} is the z value.
+The \code{p.value} is \code{Pr(>|z^2|)}.
+The (95\%) \code{lower} and \code{upper} confidence intervals are
+the \code{estimate} +/- 1.96 * \code{std.error}.
+}
 
