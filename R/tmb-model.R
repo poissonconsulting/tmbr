@@ -82,20 +82,21 @@ check_random <- function(random, select, center, scale, inits) {
 #'
 #' Creates TMB model.
 #'
-#' With the exception of \code{model_code} and \code{select} all arguments are sorted.
-#'
 #' @param model_code A string of the model template code.
 #' @param inits A named list of initial values for all fixed and random parameters.
 #' @param random A character vector or a named list specifying of the random effects (and in the case of a named list the associated factors).
 #' @param select A character vector or a named list specifying the columns to select (and in the case of a named list the associated classes and values).
 #' @inheritParams rescale::rescale
 #' @param modify A single argument function to modify the data (in list form) immediately prior to the analysis.
+#' @param predict_code A string of the R code specifying the predictive relationships.
+#' @param modify_new A single argument function to modify the new_data (in list form) immediately prior to the predictions.
 #' @return An object of class tmb_model.
 #' @seealso \code{\link[datacheckr]{check_data}} \code{\link[rescale]{rescale}}
 #' @export
 tmb_model <- function(
   model_code, inits, random = character(0), select = character(0),
-  center = character(0), scale = character(0), modify = function(x) x)
+  center = character(0), scale = character(0), modify = function(x) x,
+  predict_code = character(0), modify_new = modify)
 {
   check_string(model_code)
   check_select(select)
@@ -103,8 +104,13 @@ tmb_model <- function(
   check_scale(scale, select)
   check_inits(inits)
   check_random(random, select, center, scale, inits)
+  check_vector(predict_code, "", min_length = 0, max_length = 1)
+
   if (!is.function(modify)) error("modify must be a function")
   if (length(formals(modify)) != 1)  error("modify must take a single argument")
+
+  if (!is.function(modify_new)) error("modify_new must be a function")
+  if (length(formals(modify_new)) != 1)  error("modify_new must take a single argument")
 
   obj <- list(model_code = model_code,
               inits = sort_by_names(inits),
@@ -112,7 +118,9 @@ tmb_model <- function(
               center = sort_by_names(center),
               scale = sort_by_names(scale),
               random = sort_by_names(random),
-              modify = modify)
+              modify = modify,
+              predict_code = predict_code,
+              modify_new = modify_new)
   class(obj) <- "tmb_model"
   obj
 }

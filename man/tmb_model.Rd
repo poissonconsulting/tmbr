@@ -5,7 +5,8 @@
 \title{TMB Model}
 \usage{
 tmb_model(model_code, inits, random = character(0), select = character(0),
-  center = character(0), scale = character(0), modify = function(x) x)
+  center = character(0), scale = character(0), modify = function(x) x,
+  predict_code = character(0), modify_new = modify)
 }
 \arguments{
 \item{model_code}{A string of the model template code.}
@@ -21,15 +22,16 @@ tmb_model(model_code, inits, random = character(0), select = character(0),
 \item{scale}{A character vector of the columns to scale (after centering).}
 
 \item{modify}{A single argument function to modify the data (in list form) immediately prior to the analysis.}
+
+\item{predict_code}{A string of the R code specifying the predictive relationships.}
+
+\item{modify_new}{A single argument function to modify the new_data (in list form) immediately prior to the predictions.}
 }
 \value{
 An object of class tmb_model.
 }
 \description{
 Creates TMB model.
-}
-\details{
-With the exception of \code{model_code} and \code{select} all arguments are sorted.
 }
 \seealso{
 \code{\link[datacheckr]{check_data}} \code{\link[rescale]{rescale}}
