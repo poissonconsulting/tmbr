@@ -1,9 +1,7 @@
-select_data <- function(data_set, model) {
-  select_data <- model$select_data
-
+select_data <- function(data_set, select_data, center, scale, random_effects) {
   if (!length(select_data)) {
-    cols <- c(model$center, model$scale)
-    if (is_named_list(model$random_effects)) cols %<>% c(unlist(model$random_effects))
+    cols <- c(center, scale)
+    if (is_named_list(random_effects)) cols %<>% c(unlist(random_effects))
     check_cols(data_set, sort(cols))
     return(data_set)
   }
@@ -19,10 +17,10 @@ select_data <- function(data_set, model) {
   data_set
 }
 
-process_data <- function(data_set, data_set2, model, fun) {
-  data_set %<>% select_data(model)
-  data_set %<>% rescale::rescale(data2 = data_set2, center = model$center, scale = model$scale)
+process_data <- function(data_set, data_set2, select_data, center, scale, random_effects, modify_data) {
+  data_set %<>% select_data(select_data, center, scale, random_effects)
+  data_set %<>% rescale::rescale(data2 = data_set2, center = center, scale = scale)
   data_set %<>% as.list()
-  data_set %<>% fun()
+  data_set %<>% modify_data()
   data_set
 }

@@ -7,7 +7,7 @@
 tmb_model(model_code, inits, random_effects = character(0),
   select_data = character(0), center = character(0), scale = character(0),
   modify_data = function(x) x, new_code = character(0),
-  modify_new_data = modify_data)
+  select_new_data = select_data, modify_new_data = modify_data)
 }
 \arguments{
 \item{model_code}{A string of the model template code.}
@@ -25,6 +25,8 @@ tmb_model(model_code, inits, random_effects = character(0),
 \item{modify_data}{A single argument function to modify the data (in list form) immediately prior to the analysis.}
 
 \item{new_code}{A string of the R code specifying the predictive relationships.}
+
+\item{select_new_data}{A character vector or a named list specifying the columns in a new data frame to select (and in the case of a named list the associated classes and values).}
 
 \item{modify_new_data}{A single argument function to modify the new_data (in list form) immediately prior to the predictions.}
 }

@@ -27,7 +27,10 @@ analyse.tmb_model <- function(model, data_set, beep = TRUE, debug = FALSE, ...) 
 
   obj <- list(model = model, data_set = data_set)
 
-  data_set %<>% process_data(data_set2 = data_set, model, fun = model$modify_data)
+  data_set %<>% process_data(data_set2 = data_set, select_data = model$select_data,
+                             center = model$center, scale = model$scale,
+                             random_effects = model$random_effects,
+                             modify_data = model$modify_data)
 
   tempfile <- tempfile()
 
