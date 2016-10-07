@@ -4,7 +4,7 @@
 \alias{tmb_model}
 \title{TMB Model}
 \usage{
-tmb_model(model_code, inits, random = character(0),
+tmb_model(model_code, inits, random_effects = character(0),
   select_data = character(0), center = character(0), scale = character(0),
   modify_data = function(x) x, predict_code = character(0),
   modify_new_data = modify_data)
@@ -14,7 +14,7 @@ tmb_model(model_code, inits, random = character(0),
 
 \item{inits}{A named list of initial values for all fixed and random parameters.}
 
-\item{random}{A character vector or a named list specifying of the random effects (and in the case of a named list the associated factors).}
+\item{random_effects}{A character vector or a named list specifying of the random effects (and in the case of a named list the associated factors).}
 
 \item{select_data}{A character vector or a named list specifying the columns to select (and in the case of a named list the associated classes and values).}
 

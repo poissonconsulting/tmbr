@@ -15,7 +15,7 @@ parameters.tmb_model <- function(x, terms = "fixed") {
   check_vector(terms, c("^both$", "^fixed$", "^random$"), max_length = 1)
 
   fixed <- names(x$inits)
-  random <- x$random
+  random <- x$random_effects
   fixed <- fixed[!fixed %in% random]
 
   if (terms == "fixed") return(sort(fixed))

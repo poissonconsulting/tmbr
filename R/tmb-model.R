@@ -44,38 +44,38 @@ check_inits <- function(inits) {
   inits
 }
 
-check_random <- function(random, select_data, center, scale, inits) {
-  if (!is.character(random) && !is_named_list(random))
-    error("random must be a character vector or named list specifying the random effects and their associated factors" )
+check_random_effects <- function(random_effects, select_data, center, scale, inits) {
+  if (!is.character(random_effects) && !is_named_list(random_effects))
+    error("random_effects must be a character vector or named list specifying the random effects and their associated factors" )
 
-  if (!length(random)) return(random)
+  if (!length(random_effects)) return(random_effects)
 
-  if (is.character(random)) {
-    check_unique(random)
-    if (!all(random %in% names(inits))) error("random effects must also be in inits")
-    return(random)
+  if (is.character(random_effects)) {
+    check_unique(random_effects)
+    if (!all(random_effects %in% names(inits))) error("random effects must also be in inits")
+    return(random_effects)
   }
 
- # random is a named list
+ # random_effects is a named list
 
-  check_unique(names(random))
+  check_unique(names(random_effects))
 
-  if (!all(names(random) %in% names(inits))) error("random effects must also be in inits")
+  if (!all(names(random_effects) %in% names(inits))) error("random effects must also be in inits")
 
-  class <- lapply(random, class) %>% unlist()
+  class <- lapply(random_effects, class) %>% unlist()
 
   if (!all(class == "character")) error("random effects factors must named as character vectors")
 
   if (length(select_data)) {
-    if (!all(unlist(random) %in% select_data)) error("random effects factors must also be in select_data")
-    if (any(unlist(random) %in% center)) error("random effects factors must not be centered")
-    if (any(unlist(random) %in% scale)) error("random effects factors must not be scaled")
+    if (!all(unlist(random_effects) %in% select_data)) error("random effects factors must also be in select_data")
+    if (any(unlist(random_effects) %in% center)) error("random effects factors must not be centered")
+    if (any(unlist(random_effects) %in% scale)) error("random effects factors must not be scaled")
   }
 
   inits %<>% lapply(dims) %<>% lapply(length)
-  inits <- inits[names(random)]
-  if (!identical(inits, lapply(random, length))) error("random effects must have the same number of dimensions as corresponding inits")
-  random
+  inits <- inits[names(random_effects)]
+  if (!identical(inits, lapply(random_effects, length))) error("random effects must have the same number of dimensions as corresponding inits")
+  random_effects
 }
 
 #' TMB Model
@@ -84,7 +84,7 @@ check_random <- function(random, select_data, center, scale, inits) {
 #'
 #' @param model_code A string of the model template code.
 #' @param inits A named list of initial values for all fixed and random parameters.
-#' @param random A character vector or a named list specifying of the random effects (and in the case of a named list the associated factors).
+#' @param random_effects A character vector or a named list specifying of the random effects (and in the case of a named list the associated factors).
 #' @param select_data A character vector or a named list specifying the columns to select (and in the case of a named list the associated classes and values).
 #' @inheritParams rescale::rescale
 #' @param modify_data A single argument function to modify the data (in list form) immediately prior to the analysis.
@@ -94,7 +94,7 @@ check_random <- function(random, select_data, center, scale, inits) {
 #' @seealso \code{\link[datacheckr]{check_data}} \code{\link[rescale]{rescale}}
 #' @export
 tmb_model <- function(
-  model_code, inits, random = character(0), select_data = character(0),
+  model_code, inits, random_effects = character(0), select_data = character(0),
   center = character(0), scale = character(0), modify_data = function(x) x,
   predict_code = character(0), modify_new_data = modify_data)
 {
@@ -103,7 +103,7 @@ tmb_model <- function(
   check_center(center, select_data)
   check_scale(scale, select_data)
   check_inits(inits)
-  check_random(random, select_data, center, scale, inits)
+  check_random_effects(random_effects, select_data, center, scale, inits)
   check_vector(predict_code, "", min_length = 0, max_length = 1)
 
   if (!is.function(modify_data)) error("modify_data must be a function")
@@ -117,7 +117,7 @@ tmb_model <- function(
               select_data = select_data,
               center = sort_by_names(center),
               scale = sort_by_names(scale),
-              random = sort_by_names(random),
+              random_effects = sort_by_names(random_effects),
               modify_data = modify_data,
               predict_code = predict_code,
               modify_new_data = modify_new_data)

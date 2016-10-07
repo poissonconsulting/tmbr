@@ -3,7 +3,7 @@ select_data <- function(data_set, model) {
 
   if (!length(select_data)) {
     cols <- c(model$center, model$scale)
-    if (is_named_list(model$random)) cols %<>% c(unlist(model$random))
+    if (is_named_list(model$random_effects)) cols %<>% c(unlist(model$random_effects))
     check_cols(data_set, sort(cols))
     return(data_set)
   }
