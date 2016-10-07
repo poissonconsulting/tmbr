@@ -1,21 +1,21 @@
 select_data <- function(data_set, model) {
-  select <- model$select
+  select_data <- model$select_data
 
-  if (!length(select)) {
+  if (!length(select_data)) {
     cols <- c(model$center, model$scale)
     if (is_named_list(model$random)) cols %<>% c(unlist(model$random))
     check_cols(data_set, sort(cols))
     return(data_set)
   }
 
-  if (is.character(select)) {
-    select %<>% unique()
-    check_cols(data_set, select)
-    data_set <- data_set[select]
+  if (is.character(select_data)) {
+    select_data %<>% unique()
+    check_cols(data_set, select_data)
+    data_set <- data_set[select_data]
     return(data_set)
   }
-  check_data2(data_set, select)
-  data_set <- data_set[names(select)]
+  check_data2(data_set, select_data)
+  data_set <- data_set[names(select_data)]
   data_set
 }
 

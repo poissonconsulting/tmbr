@@ -4,9 +4,10 @@
 \alias{tmb_model}
 \title{TMB Model}
 \usage{
-tmb_model(model_code, inits, random = character(0), select = character(0),
-  center = character(0), scale = character(0), modify = function(x) x,
-  predict_code = character(0), modify_new = modify)
+tmb_model(model_code, inits, random = character(0),
+  select_data = character(0), center = character(0), scale = character(0),
+  modify = function(x) x, predict_code = character(0),
+  modify_new = modify)
 }
 \arguments{
 \item{model_code}{A string of the model template code.}
@@ -15,7 +16,7 @@ tmb_model(model_code, inits, random = character(0), select = character(0),
 
 \item{random}{A character vector or a named list specifying of the random effects (and in the case of a named list the associated factors).}
 
-\item{select}{A character vector or a named list specifying the columns to select (and in the case of a named list the associated classes and values).}
+\item{select_data}{A character vector or a named list specifying the columns to select (and in the case of a named list the associated classes and values).}
 
 \item{center}{A character vector of the columns to center.}
 
