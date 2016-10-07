@@ -17,7 +17,7 @@ predict.tmb_analysis <- function(
   new_code = new_code(object), select_new_data = select_new_data(object),
   modify_new_data = modify_new_data(object),
   profile = FALSE, conf_level = 0.95,  ...) {
-  #check_data(new_data)
+  check_data1(new_data)
   check_string(term)
   check_string(new_code)
   check_select_data(select_new_data)
