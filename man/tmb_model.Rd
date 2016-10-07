@@ -6,7 +6,7 @@
 \usage{
 tmb_model(model_code, inits, random_effects = character(0),
   select_data = character(0), center = character(0), scale = character(0),
-  modify_data = function(x) x, predict_code = character(0),
+  modify_data = function(x) x, new_code = character(0),
   modify_new_data = modify_data)
 }
 \arguments{
@@ -24,7 +24,7 @@ tmb_model(model_code, inits, random_effects = character(0),
 
 \item{modify_data}{A single argument function to modify the data (in list form) immediately prior to the analysis.}
 
-\item{predict_code}{A string of the R code specifying the predictive relationships.}
+\item{new_code}{A string of the R code specifying the predictive relationships.}
 
 \item{modify_new_data}{A single argument function to modify the new_data (in list form) immediately prior to the predictions.}
 }

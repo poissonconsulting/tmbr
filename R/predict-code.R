@@ -1,15 +1,15 @@
-#' Predict Code
+#' New Code
 #'
-#' Gets the predict_code for an object.
+#' Gets the new_code for an object.
 #'
 #' @param x The object.
 #'
 #' @return The predict code as a character vector for an object
 #' @export
-predict_code <- function(x) {UseMethod("predict_code")}
+new_code <- function(x) {UseMethod("new_code")}
 
 #' @export
-predict_code.tmb_model <- function(x) x$predict_code
+new_code.tmb_model <- function(x) x$new_code
 
 #' @export
-predict_code.tmb_analysis <- function(x) predict_code(x$model)
+new_code.tmb_analysis <- function(x) new_code(model(model))

@@ -88,7 +88,7 @@ check_random_effects <- function(random_effects, select_data, center, scale, ini
 #' @param select_data A character vector or a named list specifying the columns to select (and in the case of a named list the associated classes and values).
 #' @inheritParams rescale::rescale
 #' @param modify_data A single argument function to modify the data (in list form) immediately prior to the analysis.
-#' @param predict_code A string of the R code specifying the predictive relationships.
+#' @param new_code A string of the R code specifying the predictive relationships.
 #' @param modify_new_data A single argument function to modify the new_data (in list form) immediately prior to the predictions.
 #' @return An object of class tmb_model.
 #' @seealso \code{\link[datacheckr]{check_data}} \code{\link[rescale]{rescale}}
@@ -96,7 +96,7 @@ check_random_effects <- function(random_effects, select_data, center, scale, ini
 tmb_model <- function(
   model_code, inits, random_effects = character(0), select_data = character(0),
   center = character(0), scale = character(0), modify_data = function(x) x,
-  predict_code = character(0), modify_new_data = modify_data)
+  new_code = character(0), modify_new_data = modify_data)
 {
   check_string(model_code)
   check_select_data(select_data)
@@ -104,7 +104,7 @@ tmb_model <- function(
   check_scale(scale, select_data)
   check_inits(inits)
   check_random_effects(random_effects, select_data, center, scale, inits)
-  check_vector(predict_code, "", min_length = 0, max_length = 1)
+  check_vector(new_code, "", min_length = 0, max_length = 1)
 
   if (!is.function(modify_data)) error("modify_data must be a function")
   if (length(formals(modify_data)) != 1)  error("modify_data must take a single argument")
@@ -119,7 +119,7 @@ tmb_model <- function(
               scale = sort_by_names(scale),
               random_effects = sort_by_names(random_effects),
               modify_data = modify_data,
-              predict_code = predict_code,
+              new_code = new_code,
               modify_new_data = modify_new_data)
   class(obj) <- "tmb_model"
   obj
