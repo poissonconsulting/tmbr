@@ -6,8 +6,8 @@
 \usage{
 \method{predict}{tmb_analysis}(object, new_data = data_set(object),
   term = "prediction", predict_code = predict_code(object),
-  modify_new = modify_new(object), profile = FALSE, conf_level = 0.95,
-  ...)
+  modify_new_data = modify_new_data(object), profile = FALSE,
+  conf_level = 0.95, ...)
 }
 \arguments{
 \item{object}{The tmb_analysis object.}
@@ -18,7 +18,7 @@
 
 \item{predict_code}{A string of the R code specifying the predictive relationships.}
 
-\item{modify_new}{A single argument function to modify the new_data (in list form) immediately prior to the predictions.}
+\item{modify_new_data}{A single argument function to modify the new_data (in list form) immediately prior to the predictions.}
 
 \item{profile}{A flag indicating whether to calculate the predictions using likelihood profiling.}
 

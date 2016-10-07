@@ -28,8 +28,8 @@ test_that("model data_set", {
   expect_error(tmb_analysis(data_set_example2, model, beep = FALSE), "column names in data_set must include 'z'")
 })
 
-test_that("model modify", {
-  model <- tmb_model(model_code_example2, inits = inits_example2, modify = function(x) stop("Houston..."))
+test_that("model modify data", {
+  model <- tmb_model(model_code_example2, inits = inits_example2, modify_data = function(x) stop("Houston..."))
   expect_error(tmb_analysis(data_set_example2, model, beep = FALSE), "Houston...")
 })
 
