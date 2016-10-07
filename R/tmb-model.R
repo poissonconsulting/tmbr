@@ -78,6 +78,15 @@ check_random_effects <- function(random_effects, select_data, center, scale, ini
   random_effects
 }
 
+check_modify_data_function <- function(modify_data) {
+
+  name <- deparse(substitute(modify_data))
+
+if (!is.function(modify_data)) error(name, "must be a function")
+if (length(formals(modify_data)) != 1)  error(name, "must take a single argument")
+  modify_data
+}
+
 #' TMB Model
 #'
 #' Creates TMB model.
@@ -105,12 +114,8 @@ tmb_model <- function(
   check_inits(inits)
   check_random_effects(random_effects, select_data, center, scale, inits)
   check_vector(new_code, "", min_length = 0, max_length = 1)
-
-  if (!is.function(modify_data)) error("modify_data must be a function")
-  if (length(formals(modify_data)) != 1)  error("modify_data must take a single argument")
-
-  if (!is.function(modify_new_data)) error("modify_new_data must be a function")
-  if (length(formals(modify_new_data)) != 1)  error("modify_new_data must take a single argument")
+  check_modify_data_function(modify_data)
+  check_modify_data_function(modify_new_data)
 
   obj <- list(model_code = model_code,
               inits = sort_by_names(inits),
