@@ -10,14 +10,14 @@
 \arguments{
 \item{x}{The tmb_analysis object to augment.}
 
-\item{terms}{The terms to augment the data_set with.}
+\item{terms}{The terms to augment the data with.}
 
 \item{conf_level}{A number specifying the confidence level. By default 0.95.}
 
 \item{...}{Unused.}
 }
 \description{
-Augments the data_set of a TMB analysis object.
+Augments the data of a TMB analysis object.
 }
 \seealso{
 \code{\link[broom]{augment}}.

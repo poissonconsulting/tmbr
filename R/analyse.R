@@ -2,17 +2,17 @@
 #'
 #' Analyse a data set and model.
 #'
-#' @param data_set The data frame to analyse.
+#' @param data The data frame to analyse.
 #' @param model The model to use for the analysis.
 #' @param beep A flag indicating whether to beep on completion of the analysis.
 #' @param debug A flag indicating whether to run in debug mode.
 #' @param ...  Not used.
 #' @export
-analyse <- function(model, data_set, beep = TRUE, debug = FALSE, ...) {UseMethod("analyse")}
+analyse <- function(model, data, beep = TRUE, debug = FALSE, ...) {UseMethod("analyse")}
 
 #' @export
-analyse.tmb_model <- function(model, data_set, beep = TRUE, debug = FALSE, ...) {
-  check_data1(data_set)
+analyse.tmb_model <- function(model, data, beep = TRUE, debug = FALSE, ...) {
+  check_data1(data)
   check_flag(beep)
   check_flag(debug)
 
@@ -25,9 +25,9 @@ analyse.tmb_model <- function(model, data_set, beep = TRUE, debug = FALSE, ...) 
   timer <- timer::Timer$new()
   timer$start()
 
-  obj <- list(model = model, data_set = data_set)
+  obj <- list(model = model, data = data)
 
-  data_set %<>% process_data(data_set2 = data_set, select_data = model$select_data,
+  data %<>% process_data(data2 = data, select_data = model$select_data,
                              center = model$center, scale = model$scale,
                              random_effects = model$random_effects,
                              modify_data = model$modify_data)
@@ -40,7 +40,7 @@ analyse.tmb_model <- function(model, data_set, beep = TRUE, debug = FALSE, ...) 
 
   dyn.load(TMB::dynlib(tempfile))
 
-  ad_fun <- TMB::MakeADFun(data = data_set,  parameters = inits(model),
+  ad_fun <- TMB::MakeADFun(data = data,  parameters = inits(model),
                            random = parameters(model, "random"),
                            DLL = basename(tempfile), silent = !debug)
 

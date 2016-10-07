@@ -10,7 +10,7 @@ reported <- function(object, term, conf_level, ...) {
   names(reported) <- paste(term, names(reported), sep = ".")
 
   if (nrow(reported) != nrow(data_set(object))) {
-    error("the length of term '", term, "' does not match the number of rows of data_set")
+    error("the length of term '", term, "' does not match the number of rows of data")
   }
   reported <- dplyr::bind_cols(data_set(object), reported)
   reported

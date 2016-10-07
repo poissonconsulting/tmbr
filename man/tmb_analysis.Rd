@@ -4,10 +4,10 @@
 \alias{tmb_analysis}
 \title{TMB Analysis}
 \usage{
-tmb_analysis(data_set, model, beep = TRUE, debug = FALSE, ...)
+tmb_analysis(data, model, beep = TRUE, debug = FALSE, ...)
 }
 \arguments{
-\item{data_set}{The data frame to analyse.}
+\item{data}{The data frame to analyse.}
 
 \item{model}{The model to use for the analysis.}
 

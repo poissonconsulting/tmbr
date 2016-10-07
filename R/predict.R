@@ -25,7 +25,7 @@ predict.tmb_analysis <- function(
   check_flag(profile)
   check_number(conf_level, c(0.5, 0.99))
 
-  new_data %<>% process_data(data_set2 = data_set(object),
+  new_data %<>% process_data(data2 = data_set(object),
                              select_data = select_new_data,
                              center = model$center, scale = model$scale,
                              random_effects = model$random_effects,

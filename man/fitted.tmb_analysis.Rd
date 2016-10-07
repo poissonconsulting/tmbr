@@ -16,7 +16,7 @@
 \item{...}{unused.}
 }
 \value{
-The data_set with the fitted values.
+The data with the fitted values.
 }
 \description{
 Extract fitted values for a TMB analysis.

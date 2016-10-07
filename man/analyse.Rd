@@ -4,12 +4,12 @@
 \alias{analyse}
 \title{Analyse}
 \usage{
-analyse(model, data_set, beep = TRUE, debug = FALSE, ...)
+analyse(model, data, beep = TRUE, debug = FALSE, ...)
 }
 \arguments{
 \item{model}{The model to use for the analysis.}
 
-\item{data_set}{The data frame to analyse.}
+\item{data}{The data frame to analyse.}
 
 \item{beep}{A flag indicating whether to beep on completion of the analysis.}
 

@@ -17,7 +17,7 @@
 \item{...}{unused.}
 }
 \value{
-The data_set with the residual values.
+The data with the residual values.
 }
 \description{
 Extract residual values for a TMB analysis.

@@ -22,10 +22,10 @@ test_that("model", {
   expect_error(tmb_model("", inits = list(a = 1, report = 1:2)), "inits names cannot be 'all', 'both', 'fixed', 'random' or 'report'")
 })
 
-test_that("model data_set", {
+test_that("model data", {
   model <- tmb_model(model_code_example2, inits = inits_example2,
                      scale = "z")
-  expect_error(tmb_analysis(data_set_example2, model, beep = FALSE, debug = TRUE), "column names in data_set must include 'z'")
+  expect_error(tmb_analysis(data_set_example2, model, beep = FALSE, debug = TRUE), "column names in data must include 'z'")
 })
 
 test_that("model modify data", {

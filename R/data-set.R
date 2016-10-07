@@ -9,4 +9,4 @@
 data_set <- function(x) {UseMethod("data_set")}
 
 #' @export
-data_set.tmb_analysis <- function(x) x$data_set %>% as.tbl()
+data_set.tmb_analysis <- function(x) x$data %>% as.tbl()
