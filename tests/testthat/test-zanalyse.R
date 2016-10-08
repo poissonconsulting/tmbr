@@ -51,6 +51,9 @@ test_that("analyse", {
   expect_identical(colnames(prediction), c("x", "y", "prediction"))
   expect_identical(data_set_example2, as.data.frame(prediction[c("x", "y")]))
 
+  expect_identical(fit$fit, prediction$prediction)
+  expect_identical(fit$fit, report$estimate[report$term == "fit"])
+
   prediction2 <- predict(analysis, term = "other", new_code =
                            "for (i in 1:length(x)) {
     prediction[i] <- a + b * x[i]
