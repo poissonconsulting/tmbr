@@ -16,6 +16,7 @@ Imports:
     magrittr,
     newdata,
     rescale,
+    tibble,
     timer,
     TMB (>= 1.7.4)
 Suggests:

@@ -47,5 +47,5 @@ test_that("analyse", {
   expect_identical(residuals(analysis), augment(analysis, "residual"))
   expect_identical(ncol(augment(analysis)), 14L)
 
-#  predict(analysis)
+#  predict(analysis, new_code = "for (i in 1:length(x)) prediction[i] <- a + b * x[i]")
 })

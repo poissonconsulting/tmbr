@@ -2,7 +2,7 @@ check_select_data <- function(select_data) {
   name <- deparse(substitute(select_data))
 
   if (!(is.character(select_data) || is_named_list(select_data)))
-    error(name, "must be a character vector or named list specifying the columns and their associated classes and values")
+    error(name, " must be a character vector or named list specifying the columns and their associated classes and values")
 
   if (is.character(select_data)) {
     check_unique(select_data, name)
@@ -84,7 +84,7 @@ check_modify_data <- function(modify_data) {
 
   name <- deparse(substitute(modify_data))
 
-  if (!is.function(modify_data)) error(name, "must be a function")
-  if (length(formals(modify_data)) != 1)  error(name, "must take a single argument")
+  if (!is.function(modify_data)) error(name, " must be a function")
+  if (length(formals(modify_data)) != 1)  error(name, " must take a single argument")
   modify_data
 }

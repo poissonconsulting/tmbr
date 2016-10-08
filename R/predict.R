@@ -17,9 +17,11 @@ predict.tmb_analysis <- function(
   new_code = NULL, select_new_data = NULL, modify_new_data = NULL,
   profile = FALSE, conf_level = 0.95,  ...) {
 
-  if (is.null(new_code)) new_code <- object$new_code
-  if (is.null(select_new_data)) select_new_data <- object$select_new_data
-  if (is.null(modify_new_data)) modify_new_data <- object$modify_new_data
+  model <- model(object)
+
+  if (is.null(new_code)) new_code <- model$new_code
+  if (is.null(select_new_data)) select_new_data <- model$select_new_data
+  if (is.null(modify_new_data)) modify_new_data <- model$modify_new_data
 
   check_data1(new_data)
   check_string(term)
@@ -37,14 +39,23 @@ predict.tmb_analysis <- function(
                              random_effects = model$random_effects,
                              modify_data = modify_new_data)
 
-  data %<>% c(inits(object))
+  data %<>% c(object$opt$par)
+  if (!tibble::has_name(data, term)) data[term] <- NA
 
-  print(data)
+  new_code <- parse(text = new_code)
 
-  # no likelihood profiling so no confidence intervals
   if (!profile) {
     print(data)
-#    with(data)
+    data %<>% within(new_code)
+
+    if (!is.vector(data[[term]])) {
+      error("term '", term, "' in new code must be a vector")
+    }
+    if (!length(data[[term]]) %in% c(1, nrow(new_data))) {
+      error("term '", term, "' in new code must be a scalar or a vector of length ", nrow(new_data))
+    }
+
+    new_data[term] <- data[[term]]
   }
-  data
+  new_data
 }
