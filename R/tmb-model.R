@@ -4,7 +4,7 @@
 #'
 #' @param model_code A string of the model template code.
 #' @param inits A named list of initial values for all fixed and random parameters.
-#' @param random_effects A character vector or a named list specifying of the random effects (and in the case of a named list the associated factors).
+#' @param random_effects A character vector or a named list specifying the random effects (and in the case of a named list the associated factors).
 #' @param select_data A character vector or a named list specifying the columns to select (and in the case of a named list the associated classes and values).
 #' @inheritParams rescale::rescale
 #' @param modify_data A single argument function to modify the data (in list form) immediately prior to the analysis.
