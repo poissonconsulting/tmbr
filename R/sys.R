@@ -49,7 +49,7 @@ for(int i = 0; i < n; i++){
   residual[i] = y[i] - fit[i];
   nll -= dnorm(y[i], fit[i], sigma, true);
 }
-ADREPORT(fit);
+REPORT(fit);
 ADREPORT(residual);
 return nll;
 }"

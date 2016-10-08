@@ -35,10 +35,10 @@ test_that("analyse", {
   expect_identical(nrow(fixed), 3L)
 
   report <- coef(analysis, terms = "report")
-  expect_identical(nrow(report), 40L)
+  expect_identical(nrow(report), 20L)
 
   all <- coef(analysis, terms = "all")
-  expect_identical(nrow(all), 43L)
+  expect_identical(nrow(all), 23L)
 
   expect_identical(fixed, tidy(analysis))
   fit <- fitted(analysis)
