@@ -34,16 +34,20 @@ predict.tmb_analysis <- function(
   if (profile) error("profile predicting is not currently implemented")
 
   data <- process_data(new_data, data2 = data_set(object),
-                             select_data = select_new_data,
-                             center = model$center, scale = model$scale,
-                             random_effects = model$random_effects,
-                             modify_data = modify_new_data)
+                       select_data = select_new_data,
+                       center = model$center, scale = model$scale,
+                       random_effects = model$random_effects,
+                       modify_data = modify_new_data)
 
-  data %<>% c(object$opt$par)
-  if (!tibble::has_name(data, term)) data[term] <- NA
 
   if (!profile) {
-    data %<>% within(eval(parse(text = new_code)))
+    data %<>% c(object$opt$par)
+    new_code %<>% parse(text = .)
+
+    vars <- all.vars(new_code)
+    data[vars[!vars %in% names(data)]] <- NA
+
+    data %<>% within(eval(new_code))
 
     if (!is.vector(data[[term]])) {
       error("term '", term, "' in new code must be a vector")

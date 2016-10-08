@@ -56,3 +56,6 @@ return nll;
 
 inits_example2 <- list(a = 0, b = 0, log_sigma = 0)
 
+. <- NULL
+
+
