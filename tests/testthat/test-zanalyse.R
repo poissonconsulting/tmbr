@@ -11,6 +11,10 @@ test_that("analyse", {
   expect_identical(model_code(analysis), model_code_example2)
   expect_identical(inits(analysis), inits_example2)
   expect_equal(data_set(analysis), data_set_example2)
+  expect_equal(parameters(analysis), c("a", "b", "log_sigma"))
+  expect_equal(parameters(analysis, "report"), c("fit"))
+  expect_equal(parameters(analysis, "adreport"), c("residual"))
+  expect_equal(parameters(analysis, "random"), character(0))
 
   model <- tmb_model(model_code_example2, inits = inits_example2,
                      select_data = c("x", "y", "z"))
