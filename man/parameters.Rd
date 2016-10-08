@@ -4,12 +4,14 @@
 \alias{parameters}
 \title{Parameters}
 \usage{
-parameters(x, terms = "fixed")
+parameters(x, terms = "fixed", ...)
 }
 \arguments{
 \item{x}{The object.}
 
 \item{terms}{A string of the terms to get the parameter names for.}
+
+\item{...}{Unused.}
 }
 \value{
 The parameter names as a character vector.

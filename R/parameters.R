@@ -5,13 +5,13 @@
 #'
 #' @param x The object.
 #' @param terms A string of the terms to get the parameter names for.
-#'
+#' @param ... Unused.
 #' @return The parameter names as a character vector.
 #' @export
-parameters <- function(x, terms = "fixed") {UseMethod("parameters")}
+parameters <- function(x, terms = "fixed", ...) {UseMethod("parameters")}
 
 #' @export
-parameters.tmb_model <- function(x, terms = "fixed") {
+parameters.tmb_model <- function(x, terms = "fixed", ...) {
   check_vector(terms, c("^both$", "^fixed$", "^random$"), max_length = 1)
 
   fixed <- names(x$inits)
@@ -28,7 +28,7 @@ parameters.tmb_model <- function(x, terms = "fixed") {
 }
 
 #' @export
-parameters.tmb_analysis <- function(x, terms = "fixed") {
+parameters.tmb_analysis <- function(x, terms = "fixed", ...) {
   check_vector(terms, c("$all$", "^both$", "^fixed$", "^random$", "^report$"), max_length = 1)
 
   random <- unique(names(x$sd$par.random))
