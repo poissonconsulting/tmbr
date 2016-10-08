@@ -5,10 +5,8 @@
 \title{Predict}
 \usage{
 \method{predict}{tmb_analysis}(object, new_data = data_set(object),
-  term = "prediction", new_code = new_code(object),
-  select_new_data = select_new_data(object),
-  modify_new_data = modify_new_data(object), profile = FALSE,
-  conf_level = 0.95, ...)
+  term = "prediction", new_code = NULL, select_new_data = NULL,
+  modify_new_data = NULL, profile = FALSE, conf_level = 0.95, ...)
 }
 \arguments{
 \item{object}{The tmb_analysis object.}

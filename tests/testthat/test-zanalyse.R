@@ -46,4 +46,6 @@ test_that("analyse", {
   expect_error(fitted(analysis, "blah"), "term 'blah' is not in reported terms")
   expect_identical(residuals(analysis), augment(analysis, "residual"))
   expect_identical(ncol(augment(analysis)), 14L)
+
+#  predict(analysis)
 })

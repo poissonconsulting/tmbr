@@ -14,9 +14,13 @@
 #' @export
 predict.tmb_analysis <- function(
   object, new_data = data_set(object), term = "prediction",
-  new_code = new_code(object), select_new_data = select_new_data(object),
-  modify_new_data = modify_new_data(object),
+  new_code = NULL, select_new_data = NULL, modify_new_data = NULL,
   profile = FALSE, conf_level = 0.95,  ...) {
+
+  if (is.null(new_code)) new_code <- object$new_code
+  if (is.null(select_new_data)) select_new_data <- object$select_new_data
+  if (is.null(modify_new_data)) modify_new_data <- object$modify_new_data
+
   check_data1(new_data)
   check_string(term)
   check_string(new_code)
@@ -34,6 +38,8 @@ predict.tmb_analysis <- function(
                              modify_data = modify_new_data)
 
   data %<>% c(inits(object))
+
+  print(data)
 
   # no likelihood profiling so no confidence intervals
   if (!profile) {
