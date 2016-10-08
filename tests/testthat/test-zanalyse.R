@@ -1,7 +1,8 @@
 context("analyse")
 
 test_that("analyse", {
-  model <- tmb_model(model_code_example2, inits = inits_example2)
+  model <- tmb_model(model_code_example2, inits = inits_example2,
+                     new_code = "fit <- a + b * x; residual <- y - fit")
 
   analysis <- analyse(model, data_set_example2, beep = FALSE)
 
@@ -41,11 +42,9 @@ test_that("analyse", {
 
   expect_identical(fixed, tidy(analysis))
   fit <- fitted(analysis)
-  expect_identical(names(fit), c("x", "y", "fit.estimate", "fit.std.error",
-                                 "fit.statistic", "fit.p.value", "fit.lower", "fit.upper"))
-  expect_error(fitted(analysis, "blah"), "term 'blah' is not in reported terms")
-  expect_identical(residuals(analysis), augment(analysis, "residual"))
-  expect_identical(ncol(augment(analysis)), 14L)
+  expect_identical(names(fit), c("x", "y", "fit"))
+  expect_identical(residuals(analysis)$residual, augment(analysis)$residual)
+  expect_identical(ncol(augment(analysis)), 4L)
 
   prediction <- predict(analysis, new_code = "for (i in 1:length(x)) prediction[i] <- a + b * x[i]")
   expect_is(prediction, "tbl")
@@ -67,5 +66,5 @@ other <- a + b * x")
 other <- a + b * x")
   expect_equal(prediction2[3,], prediction3)
 
-  expect_error(predict(analysis, new_code = "prediction <- a + b * x", profile = TRUE), "profile predicting is not currently implemented")
+  expect_error(predict(analysis, new_code = "prediction <- a + b * x", conf_int = TRUE), "profile predicting is not currently implemented")
 })

@@ -6,7 +6,7 @@
 \usage{
 \method{predict}{tmb_analysis}(object, new_data = data_set(object),
   term = "prediction", new_code = NULL, select_new_data = NULL,
-  modify_new_data = NULL, profile = FALSE, conf_level = 0.95, ...)
+  modify_new_data = NULL, conf_int = FALSE, conf_level = 0.95, ...)
 }
 \arguments{
 \item{object}{The tmb_analysis object.}
@@ -21,11 +21,11 @@
 
 \item{modify_new_data}{A single argument function to modify the new_data (in list form) immediately prior to the predictions.}
 
-\item{profile}{A flag indicating whether to calculate the predictions using likelihood profiling.}
+\item{conf_int}{A flag indicating whether to calculate confidence intervals (using likelihood profiling).}
 
 \item{conf_level}{A number specifying the confidence level. By default 0.95.}
 
-\item{...}{unused.}
+\item{...}{Unused.}
 }
 \value{
 The new data with the predictions.

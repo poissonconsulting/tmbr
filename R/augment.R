@@ -2,20 +2,15 @@
 #'
 #' Augments the data of a TMB analysis object.
 #'
-#' @param x The tmb_analysis object to augment.
-#' @param terms The terms to augment the data with.
-#' @param conf_level A number specifying the confidence level. By default 0.95.
+#' @param x The tmb_analysis object.
+#' @inheritParams predict.tmb_analysis
+#' @return The data with the fitted and residual values.
 #' @param ... Unused.
 #' @seealso \code{\link[broom]{augment}}.
 #' @export
-augment.tmb_analysis <- function(x, terms = c("fit", "residual"), conf_level = 0.95, ...) {
-  check_vector(terms, "", min_length = 1)
-  check_unique(terms)
-  data <- data_set(x)
-  for (term in terms) {
-    reported <- reported(x, term = term, conf_level = conf_level)
-    reported <- reported[!colnames(reported) %in% colnames(data)]
-    data %<>% dplyr::bind_cols(reported)
-  }
-  data
+augment.tmb_analysis <- function(x, conf_int = FALSE, conf_level = 0.95, ...) {
+  fit <- fitted(x, conf_int = conf_int, conf_level = conf_level)
+  residual <- residuals(x, conf_int = conf_int, conf_level = conf_level)
+  fit %<>% bind_cols(residual[!names(residual) %in% names(fit)])
+  fit
 }
