@@ -9,8 +9,8 @@
 \arguments{
 \item{x}{The tmb_analysis object to tidy.}
 
-\item{terms}{A string of the terms to tidy. Permitted values are 'all', 'fixed',
-'random' and 'report'.}
+\item{terms}{A string of the terms to tidy. Permitted values are 'fixed',
+'random' and 'adreport'.}
 
 \item{conf_level}{A number specifying the confidence level. By default 0.95.}
 

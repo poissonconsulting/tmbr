@@ -41,8 +41,8 @@ check_inits <- function(inits) {
     error("inits must be a named list specifying the parameters and their starting values" )
 
   check_unique(names(inits))
-  if (any(names(inits) %in% c("all", "both", "fixed", "random", "report")))
-    error("inits names cannot be 'all', 'both', 'fixed', 'random' or 'report'")
+  if (any(names(inits) %in% c("fixed", "random", "report", "adreport")))
+    error("inits names cannot be 'fixed', 'random', 'report' or 'adreport'")
   inits
 }
 

@@ -1,6 +1,6 @@
 #' Parameters
 #'
-#' Gets the fixed or random or both (and in the case of analysis report and all)
+#' Gets the fixed or random (and in the case of an analysis report or adreport)
 #' parameter names for an object.
 #'
 #' @param x The object.
@@ -12,7 +12,7 @@ parameters <- function(x, terms = "fixed", ...) {UseMethod("parameters")}
 
 #' @export
 parameters.tmb_model <- function(x, terms = "fixed", ...) {
-  check_vector(terms, c("^both$", "^fixed$", "^random$"), max_length = 1)
+  check_vector(terms, c("^fixed$", "^fixed$", "^random$"), max_length = 1)
 
   fixed <- names(x$inits)
   if (is.character(x$random_effects)) {
@@ -23,21 +23,24 @@ parameters.tmb_model <- function(x, terms = "fixed", ...) {
   fixed <- fixed[!fixed %in% random]
 
   if (terms == "fixed") return(sort(fixed))
-  if (terms == "random") return(sort(random))
-  sort(c(fixed, random))
+  sort(random)
 }
 
 #' @export
 parameters.tmb_analysis <- function(x, terms = "fixed", ...) {
-  check_vector(terms, c("$all$", "^both$", "^fixed$", "^random$", "^report$"), max_length = 1)
+  check_vector(terms, c("^fixed$", "^random$", "^report$", "^adreport$"), max_length = 1)
 
   random <- unique(names(x$sd$par.random))
   fixed <- unique(names(x$sd$par.fixed))
-  report <- unique(names(x$sd$value))
+  report <- unique(names(x$ad_fun$report()))
+  adreport <- unique(names(x$sd$value))
+
+  if (is.null(random)) random <- character(0)
+  if (is.null(report)) report <- character(0)
+  if (is.null(adreport)) adreport <- character(0)
 
   if (terms == "fixed") return(sort(fixed))
   if (terms == "random") return(sort(random))
   if (terms == "report") return(sort(report))
-  if (terms == "both") return(sort(c(fixed, random)))
-  sort(c(fixed, random, report))
+  sort(adreport)
 }

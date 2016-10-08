@@ -34,11 +34,10 @@ test_that("analyse", {
   fixed <- coef(analysis)
   expect_identical(nrow(fixed), 3L)
 
-  report <- coef(analysis, terms = "report")
+  report <- coef(analysis, terms = "adreport")
   expect_identical(nrow(report), 20L)
 
-  all <- coef(analysis, terms = "all")
-  expect_identical(nrow(all), 23L)
+  expect_error(coef(analysis, terms = "report"), "terms must only include values which match the regular expressions")
 
   expect_identical(fixed, tidy(analysis))
   fit <- fitted(analysis)

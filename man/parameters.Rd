@@ -17,7 +17,7 @@ parameters(x, terms = "fixed", ...)
 The parameter names as a character vector.
 }
 \description{
-Gets the fixed or random or both (and in the case of analysis report and all)
+Gets the fixed or random (and in the case of an analysis report or adreport)
 parameter names for an object.
 }
 

@@ -4,8 +4,8 @@
 #'
 #' @param x The tmb_analysis object to tidy.
 #'
-#' @param terms A string of the terms to tidy. Permitted values are 'all', 'fixed',
-#' 'random' and 'report'.
+#' @param terms A string of the terms to tidy. Permitted values are 'fixed',
+#' 'random' and 'adreport'.
 #' @param conf_level A number specifying the confidence level. By default 0.95.
 #' @param ... Unused.
 #' @seealso \code{\link[broom]{tidy}}.
