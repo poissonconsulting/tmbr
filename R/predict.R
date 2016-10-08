@@ -42,11 +42,8 @@ predict.tmb_analysis <- function(
   data %<>% c(object$opt$par)
   if (!tibble::has_name(data, term)) data[term] <- NA
 
-  new_code <- parse(text = new_code)
-
   if (!profile) {
-    print(data)
-    data %<>% within(new_code)
+    data %<>% within(eval(parse(text = new_code)))
 
     if (!is.vector(data[[term]])) {
       error("term '", term, "' in new code must be a vector")

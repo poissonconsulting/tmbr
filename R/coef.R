@@ -25,5 +25,6 @@ coef.tmb_analysis <- function(object, terms = "fixed",
                     statistic = ~`z value`, p.value = ~`Pr(>|z^2|)`)
   coef %<>% mutate_(lower = ~estimate + std.error * qnorm((1 - conf_level) / 2),
                     upper = ~estimate + std.error * qnorm((1 - conf_level) / 2 + conf_level))
+  coef %<>% as.tbl()
   coef
 }

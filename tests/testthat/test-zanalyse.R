@@ -24,7 +24,7 @@ test_that("analyse", {
   expect_equal(glance(analysis), data.frame(logLik = -32.31632), tolerance = 1e-7)
 
   coef <- coef(analysis)
-  expect_is(coef, "data.frame")
+  expect_is(coef, "tbl")
   expect_identical(colnames(coef), c("term", "estimate", "std.error", "statistic", "p.value", "lower", "upper"))
   expect_identical(coef$lower, coef$estimate - coef$std.error * qnorm(0.975))
   expect_equal(coef$upper, coef$estimate + coef$std.error * qnorm(0.975))
@@ -47,5 +47,25 @@ test_that("analyse", {
   expect_identical(residuals(analysis), augment(analysis, "residual"))
   expect_identical(ncol(augment(analysis)), 14L)
 
-#  predict(analysis, new_code = "for (i in 1:length(x)) prediction[i] <- a + b * x[i]")
+  prediction <- predict(analysis, new_code = "for (i in 1:length(x)) prediction[i] <- a + b * x[i]")
+  expect_is(prediction, "tbl")
+  expect_identical(colnames(prediction), c("x", "y", "prediction"))
+  expect_identical(data_set_example2, as.data.frame(prediction[c("x", "y")]))
+
+  prediction2 <- predict(analysis, term = "other", new_code =
+                           "for (i in 1:length(x)) {
+    prediction[i] <- a + b * x[i]
+  }
+other <- a + b * x")
+  expect_identical(colnames(prediction2), c("x", "y", "other"))
+  expect_identical(prediction$prediction, prediction2$other)
+
+  prediction3 <- predict(analysis, new_data = data_set_example2[3,], term = "other", new_code =
+                           "for (i in 1:length(x)) {
+    prediction[i] <- a + b * x[i]
+  }
+other <- a + b * x")
+  expect_equal(prediction2[3,], prediction3)
+
+  expect_error(predict(analysis, new_code = "prediction <- a + b * x", profile = TRUE), "profile predicting is not currently implemented")
 })
