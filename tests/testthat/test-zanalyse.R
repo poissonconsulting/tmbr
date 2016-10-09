@@ -71,6 +71,4 @@ other <- a + b * x")
   }
 other <- a + b * x")
   expect_equal(prediction2[3,], prediction3)
-
-  expect_error(predict(analysis, new_code = "prediction <- a + b * x", conf_int = TRUE), "profile predicting is not currently implemented")
 })

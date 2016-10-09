@@ -4,14 +4,10 @@
 \alias{augment.tmb_analysis}
 \title{Augment TMB Analysis}
 \usage{
-\method{augment}{tmb_analysis}(x, conf_int = FALSE, conf_level = 0.95, ...)
+\method{augment}{tmb_analysis}(x, ...)
 }
 \arguments{
 \item{x}{The tmb_analysis object.}
-
-\item{conf_int}{A flag indicating whether to calculate confidence intervals (using likelihood profiling).}
-
-\item{conf_level}{A number specifying the confidence level. By default 0.95.}
 
 \item{...}{Unused.}
 }

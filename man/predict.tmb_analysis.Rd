@@ -6,7 +6,7 @@
 \usage{
 \method{predict}{tmb_analysis}(object, new_data = data_set(object),
   term = "prediction", new_code = NULL, select_new_data = NULL,
-  modify_new_data = NULL, conf_int = FALSE, conf_level = 0.95, ...)
+  modify_new_data = NULL, ...)
 }
 \arguments{
 \item{object}{The tmb_analysis object.}
@@ -20,10 +20,6 @@
 \item{select_new_data}{A character vector or a named list specifying the columns in a new data frame to select (and in the case of a named list the associated classes and values).}
 
 \item{modify_new_data}{A single argument function to modify the new_data (in list form) immediately prior to the predictions.}
-
-\item{conf_int}{A flag indicating whether to calculate confidence intervals (using likelihood profiling).}
-
-\item{conf_level}{A number specifying the confidence level. By default 0.95.}
 
 \item{...}{Unused.}
 }

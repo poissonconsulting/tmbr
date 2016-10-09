@@ -4,15 +4,10 @@
 \alias{fitted.tmb_analysis}
 \title{Fitted Values}
 \usage{
-\method{fitted}{tmb_analysis}(object, conf_int = FALSE, conf_level = 0.95,
-  ...)
+\method{fitted}{tmb_analysis}(object, ...)
 }
 \arguments{
 \item{object}{The tmb_analysis object.}
-
-\item{conf_int}{A flag indicating whether to calculate confidence intervals (using likelihood profiling).}
-
-\item{conf_level}{A number specifying the confidence level. By default 0.95.}
 
 \item{...}{Unused.}
 }
