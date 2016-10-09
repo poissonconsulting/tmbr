@@ -9,7 +9,6 @@ test_that("analyse", {
   expect_true(is.tmb_analysis(analysis))
 
   expect_identical(model_code(analysis), model_code_example2)
-  expect_identical(inits(analysis), inits_example2)
   expect_equal(data_set(analysis), data_set_example2)
   expect_equal(parameters(analysis), c("a", "b", "log_sigma"))
   expect_equal(parameters(analysis, "report"), c("fit"))

@@ -40,7 +40,7 @@ analyse.tmb_model <- function(model, data, beep = TRUE, debug = FALSE, ...) {
 
   dyn.load(TMB::dynlib(tempfile))
 
-  ad_fun <- TMB::MakeADFun(data = data,  parameters = inits(model),
+  ad_fun <- TMB::MakeADFun(data = data,  parameters = model$inits,
                            random = parameters(model, "random"),
                            DLL = basename(tempfile), silent = !debug)
 
