@@ -1,3 +1,11 @@
+by_dims <- function(x, dims) {
+  stopifnot(is.vector(x))
+  stopifnot(is.integer(dims))
+  if (length(dims) == 1) return(x)
+  if (length(dims) == 2) return(as.matrix(x, nrow = dims[1], ncol = dims[2]))
+  return(array(x, dim = dims))
+}
+
 dims <- function(x) if (is.vector(x)) length(x) else dim(x)
 
 error <- function(...) stop(..., call. = FALSE)
@@ -8,6 +16,16 @@ is_named <- function(x) {
 
 is_named_list <- function(x) {
   is.list(x) && (is_named(x) || !length(x))
+}
+
+list_by_name <- function(x) {
+  list <- list()
+  names <- unique(names(x))
+  for (name in names) {
+    list %<>% c(list(unname(x[names(x) == name])))
+  }
+  names(list) <- names
+  list
 }
 
 #' Is a TMB Model?

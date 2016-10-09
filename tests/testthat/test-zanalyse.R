@@ -34,8 +34,11 @@ test_that("analyse", {
   fixed <- coef(analysis)
   expect_identical(nrow(fixed), 4L)
 
-  report <- coef(analysis, terms = "adreport")
-  expect_identical(nrow(report), 1000L)
+  adreport <- coef(analysis, terms = "adreport")
+  expect_identical(nrow(adreport), 1000L)
+
+  random <- coef(analysis, terms = "random")
+  expect_identical(nrow(random), 10L)
 
   expect_error(coef(analysis, terms = "report"), "terms must only include values which match the regular expressions")
 
@@ -67,4 +70,13 @@ other <- a + b * x")
   }
 other <- a + b * x")
   expect_equal(prediction2[3,], prediction3)
+
+  estimates <- estimates(analysis)
+  expect_identical(lapply(estimates, dims), lapply(analysis$inits[names(estimates)], dims))
+  estimates <- estimates(analysis, "random")
+  expect_identical(estimates$bYear, random$estimate)
+  estimates <- estimates(analysis, "report")
+#  expect_identical(estimates$fit, fit$fit)
+  estimates <- estimates(analysis, "adreport")
+#  expect_identical(estimates$residual, residual$residual)
 })

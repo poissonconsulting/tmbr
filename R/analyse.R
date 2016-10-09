@@ -40,15 +40,19 @@ analyse.tmb_model <- function(model, data, beep = TRUE, debug = FALSE, ...) {
 
   dyn.load(TMB::dynlib(tempfile))
 
-  ad_fun <- TMB::MakeADFun(data = data, inits(data, model$gen_inits, model$random_effects),
+  inits <- inits(data, model$gen_inits, model$random_effects)
+
+  ad_fun <- TMB::MakeADFun(data = data, inits,
                            random = names(model$random_effects),
                            DLL = basename(tempfile), silent = !debug)
 
   opt <- do.call("optim", ad_fun)
 
   sd <- TMB::sdreport(ad_fun)
+  report <- ad_fun$report()
 
-  obj %<>% c(ad_fun = list(ad_fun), opt = list(opt), sd = list(sd), duration = timer$elapsed())
+  obj %<>% c(inits = list(inits), ad_fun = list(ad_fun), opt = list(opt),
+             sd = list(sd), report = list(report), duration = timer$elapsed())
   class(obj) <- "tmb_analysis"
   obj
 }

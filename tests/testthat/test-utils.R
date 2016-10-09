@@ -1,5 +1,15 @@
 context("utils")
 
+test_that("dims", {
+  expect_identical(dims(1), 1L)
+  expect_identical(dims(1:2), 2L)
+  expect_identical(dims(matrix(1:2)), c(2L:1L))
+})
+
+test_that("list_by_name", {
+  expect_identical(list_by_name(c(bYear = 1, bYear = 2)), list(bYear = c(1,2)))
+})
+
 test_that("is_named", {
   expect_true(is_named(c(x = 1)))
   expect_false(is_named(c(1)))
@@ -14,8 +24,4 @@ test_that("is_named_list", {
   expect_false(is_named_list(list(1)))
 })
 
-test_that("dims", {
-  expect_identical(dims(1), 1L)
-  expect_identical(dims(1:2), 2L)
-  expect_identical(dims(matrix(1:2)), c(2L:1L))
-})
+
