@@ -11,14 +11,14 @@ test_that("model", {
   expect_is(tmb_model(model_code_example2, gen_inits = gen_inits_example2, select_data = list(y = 1, x = 1)), "tmb_model")
   expect_error(tmb_model(model_code_example2, gen_inits = gen_inits_example2,
                          select_data = list(y = 1, x = 1),
-                         scale = "z"), "names in scale must also be in names of select_data")
+                         scale = "z"), "values in scale must also be in names of select_data")
   expect_error(tmb_model("", gen_inits = list(a = 1, b = 1:2), random_effects = "c"), "gen_inits must be a function")
   expect_error(tmb_model("", gen_inits = function () list(a = 1, b = 1:2), random_effects = "c"), "gen_inits must take a single argument")
   expect_error(tmb_model("", gen_inits = function(data) list(a = 1, b = 1:2), random_effects = "c"), "random_effects must be a named list")
   expect_is(tmb_model("", gen_inits = function(data) list(a = 1, b = 1:2), random_effects = list(c = "bYear")), "tmb_model")
   expect_error(tmb_model("", gen_inits = function(data) list(a = 1, b = 1:2), select_data = list(x = 1), random_effects = list(b = c("Year"))), "elements in random_effects must also be in names of select_data")
   expect_is(tmb_model("", gen_inits = function(data) list(a = 1, b = 1:2), select_data = list(Year = 1), random_effects = list(b = c("Year"))), "tmb_model")
-  expect_error(tmb_model("", gen_inits = function(data) list(a = 1, b = 1:2), select_data = list(Year = 1), scale = "Year", random_effects = list(b = c("Year"))), "elements in random_effects must not be in names of scale")
+  expect_error(tmb_model("", gen_inits = function(data) list(a = 1, b = 1:2), select_data = list(Year = 1), scale = "Year", random_effects = list(b = c("Year"))), "elements in random_effects must not be in values of scale")
 })
 
 test_that("model data", {

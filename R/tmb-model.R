@@ -33,23 +33,23 @@ tmb_model <- function(
   check_single_arg_fun(modify_new_data)
 
   check_all_elements_class_character(random_effects)
-  check_all_x_in_vector(unlist(random_effects), names(select_data),
-                        x_name = "random_effects", vector_name = "select_data",
-                        elements_x = "elements")
-  check_all_x_in_vector(unlist(random_effects), names(select_new_data),
-                        x_name = "random_effects", vector_name = "select_new_data",
-                        elements_x = "elements")
+  check_x_in_y(unlist(random_effects), names(select_data),
+                        x_name = "random_effects", y_name = "select_data",
+                        type_x = "elements", type_y = "names")
+  check_x_in_y(unlist(random_effects), names(select_new_data),
+                        x_name = "random_effects", y_name = "select_new_data",
+                        type_x = "elements", type_y = "names")
 
-  check_no_x_in_vector(unlist(random_effects), center, x_name = "random_effects",
-                       elements_x = "elements")
-  check_no_x_in_vector(unlist(random_effects), scale, x_name = "random_effects",
-                       elements_x = "elements")
+  check_x_not_in_y(unlist(random_effects), center, x_name = "random_effects",
+                       type_x = "elements")
+  check_x_not_in_y(unlist(random_effects), scale, x_name = "random_effects",
+                      type_x = "elements")
 
-  check_all_x_in_vector(center, names(select_data), vector_name = "select_data")
-  check_all_x_in_vector(center, names(select_new_data), vector_name = "select_new_data")
+  check_x_in_y(center, names(select_data), y_name = "select_data", type_y = "names")
+  check_x_in_y(center, names(select_new_data), y_name = "select_new_data", type_y = "names")
 
-  check_all_x_in_vector(scale, names(select_data), vector_name = "select_data")
-  check_all_x_in_vector(scale, names(select_new_data), vector_name = "select_new_data")
+  check_x_in_y(scale, names(select_data), y_name = "select_data", type_y = "names")
+  check_x_in_y(scale, names(select_new_data), y_name = "select_new_data", type_y = "names")
 
   center %<>% sort()
   scale %<>% sort()

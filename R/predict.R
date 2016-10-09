@@ -29,12 +29,13 @@ predict.tmb_analysis <- function(
   check_uniquely_named_list(select_new_data)
   check_single_arg_fun(modify_new_data)
 
-  check_all_x_in_vector(center, names(select_new_data), vector_name = "select_new_data")
-  check_all_x_in_vector(scale, names(select_new_data), vector_name = "select_new_data")
-  check_all_x_in_vector(unlist(random_effects), names(select_new_data),
-                        x_name = "random_effects", vector_name = "select_new_data")
-  check_no_x_in_vector(unlist(random_effects), center, x_name = "random_effects")
-  check_no_x_in_vector(unlist(random_effects), scale, x_name = "random_effects")
+  check_x_in_y(center, names(select_new_data), y_name = "select_new_data", type_y = "names")
+  check_x_in_y(scale, names(select_new_data), y_name = "select_new_data", type_y = "names")
+  check_x_in_y(unlist(random_effects), names(select_new_data),
+               x_name = "random_effects", y_name = "select_new_data",
+               type_x = "elements", type_y = "names")
+  check_x_not_in_y(unlist(random_effects), center, x_name = "random_effects", type_x = "elements")
+  check_x_not_in_y(unlist(random_effects), scale, x_name = "random_effects", type_x = "elements")
 
   data <- process_data(new_data, data2 = data_set(object),
                        select_data = select_new_data,
