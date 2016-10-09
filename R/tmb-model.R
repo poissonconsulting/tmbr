@@ -10,7 +10,7 @@
 #' @param select_data A named list specifying the columns to select and their associated classes and values.
 #' @inheritParams rescale::rescale
 #' @param modify_data A single argument function to modify the data (in list form) immediately prior to the analysis.
-#' @param new_code A string of the R code specifying the predictive relationships.
+#' @param new_expr A string of the R code specifying the predictive relationships.
 #' @param select_new_data A named list specifying the columns in a new data frame to select and their associated classes and values.
 #' @param modify_new_data A single argument function to modify the new_data (in list form) immediately prior to the predictions.
 #' @return An object of class tmb_model.
@@ -19,7 +19,7 @@
 tmb_model <- function(
   model_code, gen_inits, random_effects = list(), select_data = list(),
   center = character(0), scale = character(0), modify_data = function(x) x,
-  new_code = character(0), select_new_data = select_data, modify_new_data = modify_data)
+  new_expr = character(0), select_new_data = select_data, modify_new_data = modify_data)
 {
   check_string(model_code)
   check_single_arg_fun(gen_inits)
@@ -28,7 +28,7 @@ tmb_model <- function(
   check_unique_character_vector(center)
   check_unique_character_vector(scale)
   check_single_arg_fun(modify_data)
-  check_vector(new_code, "", min_length = 0, max_length = 1)
+  check_vector(new_expr, "", min_length = 0, max_length = 1)
   check_uniquely_named_list(select_new_data)
   check_single_arg_fun(modify_new_data)
 
@@ -62,7 +62,7 @@ tmb_model <- function(
               scale = scale,
               random_effects =  random_effects,
               modify_data = modify_data,
-              new_code = new_code,
+              new_expr = new_expr,
               select_new_data = select_new_data,
               modify_new_data = modify_new_data)
   class(obj) <- "tmb_model"

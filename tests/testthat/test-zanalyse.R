@@ -2,7 +2,7 @@ context("analyse")
 
 test_that("analyse", {
   model <- tmb_model(model_code_example2, gen_inits = gen_inits_example2, random = list(bYear = "Year"),
-                     new_code = "fit <- a + b * x;
+                     new_expr = "fit <- a + b * x;
                      for(i in 1:length(x)) residual[i] <- y[i] - (a + b * x[i] + bYear[Year[i]]) ")
 
   analysis <- analyse(model, data_set_example2, beep = FALSE)
@@ -48,7 +48,7 @@ test_that("analyse", {
   expect_identical(residuals(analysis)$residual, augment(analysis)$residual)
   expect_identical(ncol(augment(analysis)), 5L)
 
-  prediction <- predict(analysis, new_code = "for (i in 1:length(x)) prediction[i] <- a + b * x[i]")
+  prediction <- predict(analysis, new_expr = "for (i in 1:length(x)) prediction[i] <- a + b * x[i]")
   expect_is(prediction, "tbl")
   expect_identical(colnames(prediction), c("x", "y", "Year", "prediction"))
   expect_identical(data_set_example2, as.data.frame(prediction[c("x", "y", "Year")]))
@@ -56,7 +56,7 @@ test_that("analyse", {
   expect_identical(fit$fit, prediction$prediction)
 #  expect_equal(residuals(analysis)$residual, report$estimate[report$term == "residual"])
 
-  prediction2 <- predict(analysis, term = "other", new_code =
+  prediction2 <- predict(analysis, term = "other", new_expr =
                            "for (i in 1:length(x)) {
     prediction[i] <- a + b * x[i]
   }
@@ -64,7 +64,7 @@ other <- a + b * x")
   expect_identical(colnames(prediction2), c("x", "y", "Year", "other"))
   expect_identical(prediction$prediction, prediction2$other)
 
-  prediction3 <- predict(analysis, new_data = data_set_example2[3,], term = "other", new_code =
+  prediction3 <- predict(analysis, new_data = data_set_example2[3,], term = "other", new_expr =
                            "for (i in 1:length(x)) {
     prediction[i] <- a + b * x[i]
   }

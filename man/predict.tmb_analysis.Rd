@@ -5,7 +5,7 @@
 \title{Predict}
 \usage{
 \method{predict}{tmb_analysis}(object, new_data = data_set(object),
-  term = "prediction", new_code = NULL, select_new_data = NULL,
+  term = "prediction", new_expr = NULL, select_new_data = NULL,
   modify_new_data = NULL, ...)
 }
 \arguments{
@@ -13,9 +13,9 @@
 
 \item{new_data}{The data frame to calculate the predictions for.}
 
-\item{term}{A string of the term in new_code.}
+\item{term}{A string of the term in new_expr.}
 
-\item{new_code}{A string of the R code specifying the predictive relationships.}
+\item{new_expr}{A string of the R code specifying the predictive relationships.}
 
 \item{select_new_data}{A named list specifying the columns in a new data frame to select and their associated classes and values.}
 

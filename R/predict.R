@@ -4,18 +4,18 @@
 #'
 #' @param object The tmb_analysis object.
 #' @param new_data The data frame to calculate the predictions for.
-#' @param term A string of the term in new_code.
+#' @param term A string of the term in new_expr.
 #' @inheritParams tmb_model
 #' @param ... Unused.
 #' @return The new data with the predictions.
 #' @export
 predict.tmb_analysis <- function(
   object, new_data = data_set(object), term = "prediction",
-  new_code = NULL, select_new_data = NULL, modify_new_data = NULL, ...) {
+  new_expr = NULL, select_new_data = NULL, modify_new_data = NULL, ...) {
 
   model <- model(object)
 
-  if (is.null(new_code)) new_code <- model$new_code
+  if (is.null(new_expr)) new_expr <- model$new_expr
   if (is.null(select_new_data)) select_new_data <- model$select_new_data
   if (is.null(modify_new_data)) modify_new_data <- model$modify_new_data
 
@@ -25,7 +25,7 @@ predict.tmb_analysis <- function(
 
   check_data1(new_data)
   check_string(term)
-  check_string(new_code)
+  check_string(new_expr)
   check_uniquely_named_list(select_new_data)
   check_single_arg_fun(modify_new_data)
 
@@ -44,12 +44,12 @@ predict.tmb_analysis <- function(
                        modify_data = modify_new_data)
 
   data %<>% c(object$opt$par)
-  new_code %<>% parse(text = .)
+  new_expr %<>% parse(text = .)
 
-  vars <- all.vars(new_code)
+  vars <- all.vars(new_expr)
   data[vars[!vars %in% names(data)]] <- NA
 
-  data %<>% within(eval(new_code))
+  data %<>% within(eval(new_expr))
 
   if (!is.vector(data[[term]])) {
     error("term '", term, "' in new code must be a vector")

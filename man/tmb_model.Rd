@@ -6,7 +6,7 @@
 \usage{
 tmb_model(model_code, gen_inits, random_effects = list(),
   select_data = list(), center = character(0), scale = character(0),
-  modify_data = function(x) x, new_code = character(0),
+  modify_data = function(x) x, new_expr = character(0),
   select_new_data = select_data, modify_new_data = modify_data)
 }
 \arguments{
@@ -26,7 +26,7 @@ Missing random parameters are assigned the value 0.}
 
 \item{modify_data}{A single argument function to modify the data (in list form) immediately prior to the analysis.}
 
-\item{new_code}{A string of the R code specifying the predictive relationships.}
+\item{new_expr}{A string of the R code specifying the predictive relationships.}
 
 \item{select_new_data}{A named list specifying the columns in a new data frame to select and their associated classes and values.}
 
