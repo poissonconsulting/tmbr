@@ -30,8 +30,8 @@ parameters.tmb_model <- function(x, terms = "fixed", ...) {
 parameters.tmb_analysis <- function(x, terms = "fixed", ...) {
   check_vector(terms, c("^fixed$", "^random$", "^report$", "^adreport$"), max_length = 1)
 
-  random <- unique(names(x$sd$par.random))
   fixed <- unique(names(x$sd$par.fixed))
+  random <- unique(names(x$sd$par.random))
   report <- unique(names(x$ad_fun$report()))
   adreport <- unique(names(x$sd$value))
 
@@ -39,8 +39,13 @@ parameters.tmb_analysis <- function(x, terms = "fixed", ...) {
   if (is.null(report)) report <- character(0)
   if (is.null(adreport)) adreport <- character(0)
 
-  if (terms == "fixed") return(sort(fixed))
-  if (terms == "random") return(sort(random))
-  if (terms == "report") return(sort(report))
-  sort(adreport)
+  fixed %<>% sort()
+  random %<>% sort()
+  report %<>% sort()
+  adreport %<>% sort()
+
+  if (terms == "fixed") return(fixed)
+  if (terms == "random") return(random)
+  if (terms == "report") return(report)
+  adreport
 }
