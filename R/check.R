@@ -1,4 +1,4 @@
-check_all_x_in_vector <- function(x, vector, x_name = substitute(x), vector_name = substitute(vector), elements_x = FALSE, elements_vector = FALSE) {
+check_all_x_in_vector <- function(x, vector, x_name = substitute(x), vector_name = substitute(vector), elements_x = "names", elements_vector = "names") {
   if (is.name(x_name)) x_name %<>% deparse()
   if (is.name(vector_name)) vector_name %<>% deparse()
 
@@ -6,16 +6,13 @@ check_all_x_in_vector <- function(x, vector, x_name = substitute(x), vector_name
   if (!length(x)) return(x)
 
   stopifnot(is.vector(vector))
-
-  elements_x <- ifelse(elements_x, "elements", "names")
-  elements_vector <- ifelse(elements_vector, "elements", "names")
 
   if (!all(x %in% vector)) error(elements_x, " in ", x_name, " must also be in ", elements_vector, " of ", vector_name)
   x
 }
 
 check_no_x_in_vector <- function(x, vector, x_name = substitute(x), vector_name = substitute(vector),
-                                 elements_x = FALSE, elements_vector = FALSE) {
+                                 elements_x = "names", elements_vector = "names") {
   if (is.name(x_name)) x_name %<>% deparse()
   if (is.name(vector_name)) vector_name %<>% deparse()
 
@@ -23,9 +20,6 @@ check_no_x_in_vector <- function(x, vector, x_name = substitute(x), vector_name 
   if (!length(x)) return(x)
 
   stopifnot(is.vector(vector))
-
-  elements_x <- ifelse(elements_x, "elements", "names")
-  elements_vector <- ifelse(elements_vector, "elements", "names")
 
   if (any(x %in% vector)) error(elements_x, " in ", x_name, " must not be in ", elements_vector, " of ", vector_name)
   x

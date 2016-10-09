@@ -35,15 +35,15 @@ tmb_model <- function(
   check_all_elements_class_character(random_effects)
   check_all_x_in_vector(unlist(random_effects), names(select_data),
                         x_name = "random_effects", vector_name = "select_data",
-                        elements_x = TRUE)
+                        elements_x = "elements")
   check_all_x_in_vector(unlist(random_effects), names(select_new_data),
                         x_name = "random_effects", vector_name = "select_new_data",
-                        elements_x = TRUE)
+                        elements_x = "elements")
 
   check_no_x_in_vector(unlist(random_effects), center, x_name = "random_effects",
-                       elements_x = TRUE)
+                       elements_x = "elements")
   check_no_x_in_vector(unlist(random_effects), scale, x_name = "random_effects",
-                       elements_x = TRUE)
+                       elements_x = "elements")
 
   check_all_x_in_vector(center, names(select_data), vector_name = "select_data")
   check_all_x_in_vector(center, names(select_new_data), vector_name = "select_new_data")
