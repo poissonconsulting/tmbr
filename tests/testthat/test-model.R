@@ -31,3 +31,15 @@ test_that("model modify data", {
   model <- tmb_model(model_code_example2, gen_inits = gen_inits_example2, modify_data = function(x) stop("Houston..."))
   expect_error(tmb_analysis(data_set_example2, model, beep = FALSE), "Houston...")
 })
+
+test_that("tmb_analysis error", {
+  model <- tmb_model(model_code_example2, gen_inits = gen_inits_example2,
+                     select_data = list(x = 1, y = 1, z = 1))
+
+  expect_error(tmb_analysis(data_set_example2, model, beep = FALSE), "data must have column 'z'")
+
+  model <- tmb_model(model_code_example2, gen_inits = gen_inits_example2,
+                     select_data = list(x = 1, y = TRUE))
+
+  expect_error(tmb_analysis(data_set_example2, model, beep = FALSE), "column y in data must be of class 'logical'")
+})

@@ -43,7 +43,11 @@ predict.tmb_analysis <- function(
                        random_effects = random_effects,
                        modify_data = modify_new_data)
 
-  data %<>% c(object$opt$par)
+  data %<>% lapply(as.numeric)
+
+  data %<>% c(estimates(object, "fixed"), estimates(object, "random"),
+              estimates(object, "report"), estimates(object, "adreport"))
+
   new_expr %<>% parse(text = .)
 
   vars <- all.vars(new_expr)
@@ -52,10 +56,10 @@ predict.tmb_analysis <- function(
   data %<>% within(eval(new_expr))
 
   if (!is.vector(data[[term]])) {
-    error("term '", term, "' in new code must be a vector")
+    error("term '", term, "' in new_expr must be a vector")
   }
   if (!length(data[[term]]) %in% c(1, nrow(new_data))) {
-    error("term '", term, "' in new code must be a scalar or a vector of length ", nrow(new_data))
+    error("term '", term, "' in new_expr must be a scalar or a vector of length ", nrow(new_data))
   }
 
   new_data[term] <- data[[term]]

@@ -14,10 +14,7 @@ estimates.tmb_analysis <- function(object, terms = "fixed", ...) {
   check_vector(terms, c("^fixed$", "^random$", "^report$", "^adreport$"), max_length = 1)
 
   if (terms == "report") return(sort_by_names(object$report))
-  if (terms == "adreport") {
-    message("adreport parameters treated as vectors")
-    return(sort_by_names(list_by_name(object$sd$value)))
-  }
+  if (terms == "adreport") return(sort_by_names(list_by_name(object$sd$value)))
 
   if (terms == "fixed") {
     estimates <- object$sd$par.fixed
