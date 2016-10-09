@@ -22,7 +22,7 @@ for(int i = 0; i < n; i++){
 return nll;
 }"
 
-inits_example1 <- list(a = 0, b = 0, log_sigma = 0)
+gen_inits_example1 <- function(data) list(a = 0, b = 0, log_sigma = 0)
 
 model_code_example2 <- "
 #include <TMB.hpp>
@@ -66,7 +66,7 @@ ADREPORT(residual);
 return nll;
 }"
 
-inits_example2 <- list(a = 0, b = 0, log_sigma = 0, bYear = rep(0, 10), log_sYear = 0)
+gen_inits_example2 <- function(data) list(a = 0, b = 0, log_sigma = 0, bYear = rep(0, 10), log_sYear = 0)
 
 . <- NULL
 

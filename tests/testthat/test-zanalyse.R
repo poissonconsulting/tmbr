@@ -1,7 +1,7 @@
 context("analyse")
 
 test_that("analyse", {
-  model <- tmb_model(model_code_example2, inits = inits_example2, random = "bYear",
+  model <- tmb_model(model_code_example2, gen_inits = gen_inits_example2, random = list(bYear = "Year"),
                      new_code = "fit <- a + b * x;
                      for(i in 1:length(x)) residual[i] <- y[i] - (a + b * x[i] + bYear[Year[i]]) ")
 
@@ -11,17 +11,13 @@ test_that("analyse", {
 
   expect_identical(model_code(analysis), model_code_example2)
   expect_equal(data_set(analysis), data_set_example2)
-  expect_equal(parameters(analysis), sort(c("a", "b", "log_sigma", "log_sYear")))
-  expect_equal(parameters(analysis, "report"), c("fit"))
-  expect_equal(parameters(analysis, "adreport"), c("residual"))
-  expect_equal(parameters(analysis, "random"), c("bYear"))
 
-  model <- tmb_model(model_code_example2, inits = inits_example2,
-                     select_data = c("x", "y", "z"))
+  model <- tmb_model(model_code_example2, gen_inits = gen_inits_example2,
+                     select_data = list(x = 1, y = 1, z = 1))
 
-  expect_error(tmb_analysis(data_set_example2, model, beep = FALSE), "column names in data must include 'x', 'y' and 'z'")
+  expect_error(tmb_analysis(data_set_example2, model, beep = FALSE), "data must have column 'z'")
 
-  model <- tmb_model(model_code_example2, inits = inits_example2,
+  model <- tmb_model(model_code_example2, gen_inits = gen_inits_example2,
                      select_data = list(x = 1, y = TRUE))
   expect_error(tmb_analysis(data_set_example2, model, beep = FALSE), "column y in data must be of class 'logical'")
 

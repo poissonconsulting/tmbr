@@ -5,9 +5,7 @@
 #' @param object The tmb_analysis object.
 #' @param new_data The data frame to calculate the predictions for.
 #' @param term A string of the term in new_code.
-#' @param new_code A string of the R code specifying the predictive relationships.
-#' @param select_new_data A character vector or a named list specifying the columns in a new data frame to select (and in the case of a named list the associated classes and values).
-#' @param modify_new_data A single argument function to modify the new_data (in list form) immediately prior to the predictions.
+#' @inheritParams tmb_model
 #' @param ... Unused.
 #' @return The new data with the predictions.
 #' @export
@@ -21,16 +19,27 @@ predict.tmb_analysis <- function(
   if (is.null(select_new_data)) select_new_data <- model$select_new_data
   if (is.null(modify_new_data)) modify_new_data <- model$modify_new_data
 
+  center <- model$center
+  scale <- model$scale
+  random_effects <- model$random_effects
+
   check_data1(new_data)
   check_string(term)
   check_string(new_code)
-  check_select_data(select_new_data)
-  check_modify_data(modify_new_data)
+  check_uniquely_named_list(select_new_data)
+  check_single_arg_fun(modify_new_data)
+
+  check_all_x_in_vector(center, names(select_new_data), vector_name = "select_new_data")
+  check_all_x_in_vector(scale, names(select_new_data), vector_name = "select_new_data")
+  check_all_x_in_vector(unlist(random_effects), names(select_new_data),
+                        x_name = "random_effects", vector_name = "select_new_data")
+  check_no_x_in_vector(unlist(random_effects), center, x_name = "random_effects")
+  check_no_x_in_vector(unlist(random_effects), scale, x_name = "random_effects")
 
   data <- process_data(new_data, data2 = data_set(object),
                        select_data = select_new_data,
-                       center = model$center, scale = model$scale,
-                       random_effects = model$random_effects,
+                       center = center, scale = scale,
+                       random_effects = random_effects,
                        modify_data = modify_new_data)
 
   data %<>% c(object$opt$par)

@@ -1,90 +1,65 @@
-check_select_data <- function(select_data) {
-  name <- deparse(substitute(select_data))
+check_all_x_in_vector <- function(x, vector, x_name = substitute(x), vector_name = substitute(vector), elements_x = FALSE, elements_vector = FALSE) {
+  if (is.name(x_name)) x_name %<>% deparse()
+  if (is.name(vector_name)) vector_name %<>% deparse()
 
-  if (!(is.character(select_data) || is_named_list(select_data)))
-    error(name, " must be a character vector or named list specifying the columns and their associated classes and values")
+  if (is.null(vector)) return(x)
+  if (!length(x)) return(x)
 
-  if (is.character(select_data)) {
-    check_unique(select_data, name)
-    return(TRUE)
-  }
-  check_unique(names(select_data), name)
-  select_data
+  stopifnot(is.vector(vector))
+
+  elements_x <- ifelse(elements_x, "elements", "names")
+  elements_vector <- ifelse(elements_vector, "elements", "names")
+
+  if (!all(x %in% vector)) error(elements_x, " in ", x_name, " must also be in ", elements_vector, " of ", vector_name)
+  x
 }
 
-check_center <- function(center, select_data) {
-  check_vector(center, "", min_length = 0)
+check_no_x_in_vector <- function(x, vector, x_name = substitute(x), vector_name = substitute(vector),
+                                 elements_x = FALSE, elements_vector = FALSE) {
+  if (is.name(x_name)) x_name %<>% deparse()
+  if (is.name(vector_name)) vector_name %<>% deparse()
 
-  check_unique(center)
+  if (is.null(vector)) return(x)
+  if (!length(x)) return(x)
 
-  if (length(select_data)) {
-    if (is_named_list(select_data)) select_data %<>% names()
-    if (!all(center %in% select_data)) error("columns in center must also be in select_data")
-  }
-  center
+  stopifnot(is.vector(vector))
+
+  elements_x <- ifelse(elements_x, "elements", "names")
+  elements_vector <- ifelse(elements_vector, "elements", "names")
+
+  if (any(x %in% vector)) error(elements_x, " in ", x_name, " must not be in ", elements_vector, " of ", vector_name)
+  x
 }
 
-check_scale <- function(scale, select_data) {
-  check_vector(scale, "", min_length = 0)
+check_single_arg_fun <- function(fun) {
+  fun_name <- deparse(substitute(fun))
 
-  check_unique(scale)
-
-  if (length(select_data)) {
-    if (is_named_list(select_data)) select_data %<>% names()
-    if (!all(scale %in% select_data)) error("columns in scale must also be in select_data")
-  }
-  scale
+  if (!is.function(fun)) error(fun_name, " must be a function")
+  if (length(formals(fun)) != 1)  error(fun_name, " must take a single argument")
+  fun
 }
 
-check_inits <- function(inits) {
-  if (!is_named_list(inits))
-    error("inits must be a named list specifying the parameters and their starting values" )
-
-  check_unique(names(inits))
-  if (any(names(inits) %in% c("fixed", "random", "report", "adreport")))
-    error("inits names cannot be 'fixed', 'random', 'report' or 'adreport'")
-  inits
+check_unique_character_vector <- function(x, x_name = substitute(x)) {
+  check_vector(x, "", min_length = 0, vector_name = x_name)
+  check_unique(x, x_name = x_name)
+  x
 }
 
-check_random_effects <- function(random_effects, select_data, center, scale, inits) {
-  if (!is.character(random_effects) && !is_named_list(random_effects))
-    error("random_effects must be a character vector or named list specifying the random effects and their associated factors" )
+check_uniquely_named_list <- function(x, x_name = substitute(x)) {
+  if (is.name(x)) x_name %<>% deparse()
 
-  if (!length(random_effects)) return(random_effects)
-
-  if (is.character(random_effects)) {
-    check_unique(random_effects)
-    if (!all(random_effects %in% names(inits))) error("random effects must also be in inits")
-    return(random_effects)
-  }
-
-  # random_effects is a named list
-
-  check_unique(names(random_effects))
-
-  if (!all(names(random_effects) %in% names(inits))) error("random effects must also be in inits")
-
-  class <- lapply(random_effects, class) %>% unlist()
-
-  if (!all(class == "character")) error("random effects factors must named as character vectors")
-
-  if (length(select_data)) {
-    if (!all(unlist(random_effects) %in% select_data)) error("random effects factors must also be in select_data")
-    if (any(unlist(random_effects) %in% center)) error("random effects factors must not be centered")
-    if (any(unlist(random_effects) %in% scale)) error("random effects factors must not be scaled")
-  }
-
-  inits %<>% lapply(dims) %<>% lapply(length)
-  inits <- inits[names(random_effects)]
-  if (!identical(inits, lapply(random_effects, length))) error("random effects must have the same number of dimensions as corresponding inits")
-  random_effects
+  if (!is_named_list(x))
+    error(x_name, " must be a named list")
+  check_unique(names(x), x_name = x_name)
+  x
 }
 
-check_modify_data <- function(modify_data) {
+check_all_elements_class_character <- function(x, x_name = substitute(x)) {
+  if (is.name(x)) x_name %<>% deparse()
 
-  name <- deparse(substitute(modify_data))
+  if (!length(x)) return(x)
 
-  if (!is.function(modify_data)) error(name, " must be a function")
-  if (length(formals(modify_data)) != 1)  error(name, " must take a single argument")
-  modify_data
+  if (!all(unlist(lapply(x, class)) == "character"))
+    error("elements of ", x_name, "must be character vectors")
+  x
 }

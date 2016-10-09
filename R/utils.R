@@ -7,7 +7,7 @@ is_named <- function(x) {
 }
 
 is_named_list <- function(x) {
-  is.list(x) && is_named(x)
+  is.list(x) && (is_named(x) || !length(x))
 }
 
 #' Is a TMB Model?
@@ -35,8 +35,7 @@ is.tmb_analysis <- function(x) {
 }
 
 sort_by_names <- function(x) {
-  stopifnot(is.character(x) || is_named_list(x))
-  if (is.character(x)) return(sort(x))
-  x[order(names(x))]
+  stopifnot(is_named_list(x))
+  if(!length(x)) return(x)
   x[order(names(x))]
 }

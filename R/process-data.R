@@ -1,17 +1,11 @@
 select_data <- function(data, select_data, center, scale, random_effects) {
   if (!length(select_data)) {
     cols <- c(center, scale)
-    if (is_named_list(random_effects)) cols %<>% c(unlist(random_effects))
+    cols %<>% c(unlist(random_effects))
     check_cols(data, sort(cols))
     return(data)
   }
 
-  if (is.character(select_data)) {
-    select_data %<>% unique()
-    check_cols(data, select_data)
-    data <- data[select_data]
-    return(data)
-  }
   check_data2(data, select_data)
   data <- data[names(select_data)]
   data
