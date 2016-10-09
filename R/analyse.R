@@ -32,6 +32,8 @@ analyse.tmb_model <- function(model, data, beep = TRUE, debug = FALSE, ...) {
                              random_effects = model$random_effects,
                              modify_data = model$modify_data)
 
+  inits <- inits(data, model$gen_inits, model$random_effects)
+
   tempfile <- tempfile()
 
   write(model_code(model), file = paste0(tempfile, ".cpp"))
@@ -39,8 +41,6 @@ analyse.tmb_model <- function(model, data, beep = TRUE, debug = FALSE, ...) {
   TMB::compile(paste0(tempfile, ".cpp"))
 
   dyn.load(TMB::dynlib(tempfile))
-
-  inits <- inits(data, model$gen_inits, model$random_effects)
 
   ad_fun <- TMB::MakeADFun(data = data, inits,
                            random = names(model$random_effects),
