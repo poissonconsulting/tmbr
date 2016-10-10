@@ -6,8 +6,8 @@
 \usage{
 tmb_model(model_code, gen_inits, random_effects = list(),
   select_data = list(), center = character(0), scale = character(0),
-  modify_data = function(x) x, new_expr = character(0),
-  select_new_data = select_data, modify_new_data = modify_data)
+  modify_data = identity, predict_expr = character(0),
+  profile_expr = character(0))
 }
 \arguments{
 \item{model_code}{A string of the model template code.}
@@ -26,11 +26,9 @@ Missing random parameters are assigned the value 0.}
 
 \item{modify_data}{A single argument function to modify the data (in list form) immediately prior to the analysis.}
 
-\item{new_expr}{A string of the R code specifying the predictive relationships.}
+\item{predict_expr}{A string of R code specifying the predictive relationships.}
 
-\item{select_new_data}{A named list specifying the columns in a new data frame to select and their associated classes and values.}
-
-\item{modify_new_data}{A single argument function to modify the new_data (in list form) immediately prior to the predictions.}
+\item{profile_expr}{A string of R code specifying the linear relationships.}
 }
 \value{
 An object of class tmb_model.

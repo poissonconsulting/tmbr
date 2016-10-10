@@ -17,6 +17,7 @@ Imports:
     newdata,
     purrr,
     rescale,
+    stringr,
     tibble,
     timer,
     TMB (>= 1.7.4)

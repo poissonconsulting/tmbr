@@ -1,3 +1,7 @@
+any_blank <- function(x) {
+  return(any(x == ""))
+}
+
 by_dims <- function(x, dims) {
   stopifnot(is.vector(x))
   stopifnot(is.integer(dims))
@@ -50,6 +54,20 @@ is.tmb_model <- function(x) {
 #' @export
 is.tmb_analysis <- function(x) {
   inherits(x, "tmb_analysis")
+}
+
+replace_values <- function(string, list) {
+  for (i in seq_along(list)) {
+    pattern <- names(list)[i]
+    pattern %<>% str_c("(^|(?<!\\w))", ., "((?!\\w)|$)")
+    string %<>% str_replace_all(pattern, list[i])
+  }
+  string
+}
+
+parse_string <- function(string) {
+  string <- str_split(string, "\\s*[+]\\s*")[[1]] %>% str_split("\\s*[*]\\s*") %>% lapply(str_trim)
+  string
 }
 
 sort_by_names <- function(x) {

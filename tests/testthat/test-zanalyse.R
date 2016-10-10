@@ -2,7 +2,7 @@ context("analyse")
 
 test_that("analyse", {
   model <- tmb_model(model_code_example2, gen_inits = gen_inits_example2, random = list(bYear = "Year"),
-                     new_expr = " fit2 <- a + b * x
+                     predict_expr = " fit2 <- a + b * x
                     for(i in 1:length(x)) {
                      fit[i] <- a + b * x[i] + bYear[Year[i]]
                      residual[i] <- y[i] - fit[i]
@@ -50,7 +50,7 @@ test_that("analyse", {
   expect_equal(residuals$residual, adreport$estimate[adreport$term == "residual"])
   expect_equal(data_set_example2$y, fit$fit + residuals$residual)
 
-  prediction2 <- predict(analysis, term = "other", new_expr =
+  prediction2 <- predict(analysis, term = "other", predict_expr =
                            "for (i in 1:length(x)) {
     prediction[i] <- a + b * x[i] + bYear[Year[i]]
   }
@@ -58,7 +58,7 @@ other <- prediction")
   expect_identical(colnames(prediction2), c("x", "y", "Year", "other"))
   expect_identical(prediction$prediction, prediction2$other)
 
-  prediction3 <- predict(analysis, new_data = data_set_example2[3,], term = "other", new_expr =
+  prediction3 <- predict(analysis, new_data = data_set_example2[3,], term = "other", predict_expr =
                            "for (i in 1:length(x)) {
     other[i] <- a + b * x[i] + bYear[Year[i]]
   }")
