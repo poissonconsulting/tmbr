@@ -72,4 +72,28 @@ other <- prediction")
   expect_equal(estimates$fit, fit$fit, tolerance = 1e-5)
   estimates <- estimates(analysis, "adreport")
   expect_equal(estimates$residual, residuals$residual)
+
+  expect_identical(lincomb_names(analysis),
+                   c("log_sigma", "a", "b", "log_sYear"))
+
+  expect_identical(names(named_estimates(analysis, "random")), paste0("bYear[", 1:10, "]"))
+  expect_equal(named_estimates(analysis, "random"), estimates(analysis, "random")$bYear,
+               check.attributes = FALSE)
+
+  profile <- profile(analysis, data_set_example2[1:2,], "2 * 3 + - 7", back_transform = exp)
+  expect_identical(colnames(profile), c("x", "y", "Year", "estimate", "lower", "upper"))
+  expect_identical(profile$lower, rep(exp(2 * 3 + - 7), 2))
+  expect_identical(profile$lower, profile$upper)
+  profile <- profile(analysis, data_set_example2[1:2,], "2 * 3 + - 7  + 2 * bYear[Year]", back_transform = exp)
+  expect_identical(profile$lower, profile$estimate)
+  expect_equal(profile$lower, exp(2 * 3 + -7 + 2 * estimates(analysis, "random")$bYear[as.integer(data_set_example2$Year[1:2])]))
+
+  expect_error(profile(analysis, data_set_example2[1:2,], "a + b * x + bYear2[Year]"), "unrecognised parameter name")
+  expect_equal(predict(analysis, data_set_example2[3,], "for(i in 1:length(Year)) prediction[i] <- fit[Year[i]] + bYear[Year[i]]")$prediction,
+                   profile(analysis, data_set_example2[3,], "fit[Year] + bYear[Year]")$estimate)
+  profile <- profile(analysis, data_set_example2[1:2,], "a + b * x + bYear[Year] + 1 + -1")
+  expect_equal(profile$estimate, prediction$prediction[1:2])
+  expect_equal(profile$lower[2], 45.36208, tolerance = 1e-6)
+  expect_equal(profile$estimate[2], 53.05689, tolerance = 1e-6)
+  expect_equal(profile$upper[2], 60.69323, tolerance = 1e-6)
 })

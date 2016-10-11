@@ -34,7 +34,7 @@ check_single_arg_fun <- function(fun) {
   fun_name <- deparse(substitute(fun))
 
   if (!is.function(fun)) error(fun_name, " must be a function")
-  if (length(formals(fun)) != 1)  error(fun_name, " must take a single argument")
+  if (length(formals(args(fun))) != 1)  error(fun_name, " must take a single argument")
   fun
 }
 

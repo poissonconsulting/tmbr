@@ -10,9 +10,33 @@ by_dims <- function(x, dims) {
   return(array(x, dim = dims))
 }
 
+is_dims <- function(x) {
+  is.integer(x) && length(dims) && all(x >= 1)
+}
+
 dims <- function(x) if (is.vector(x)) length(x) else dim(x)
 
 error <- function(...) stop(..., call. = FALSE)
+
+seq_to <- function(to) {
+  seq(from = 1, to = to)
+}
+
+paste_rows <- function (x) {
+  x %<>% unlist()
+  x %<>% str_c(collapse = ",")
+  data.frame(x = x)
+}
+
+dims_to_dimensions_vector <- function(dims) {
+  if(identical(dims, 1L)) return("")
+  dims %<>% lapply(seq_to)
+  dims %<>% expand.grid()
+  dims %<>% plyr::adply(1, paste_rows)
+  dims <- dims$x
+  dims %<>% str_c("[", ., "]")
+  dims
+}
 
 is_named <- function(x) {
   !is.null(names(x))
@@ -54,20 +78,6 @@ is.tmb_model <- function(x) {
 #' @export
 is.tmb_analysis <- function(x) {
   inherits(x, "tmb_analysis")
-}
-
-replace_values <- function(string, list) {
-  for (i in seq_along(list)) {
-    pattern <- names(list)[i]
-    pattern %<>% str_c("(^|(?<!\\w))", ., "((?!\\w)|$)")
-    string %<>% str_replace_all(pattern, list[i])
-  }
-  string
-}
-
-parse_string <- function(string) {
-  string <- str_split(string, "\\s*[+]\\s*")[[1]] %>% str_split("\\s*[*]\\s*") %>% lapply(str_trim)
-  string
 }
 
 sort_by_names <- function(x) {

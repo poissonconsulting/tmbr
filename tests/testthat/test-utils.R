@@ -1,14 +1,32 @@
 context("utils")
 
-test_that("replace_values", {
-  expect_identical(replace_values("Year", list(Year = 1)), "1")
-  expect_identical(replace_values("Year2", list(Year = 1)), "Year2")
-  expect_identical(replace_values("Year[Year]", list(Year = 1)), "1[1]")
-  expect_identical(replace_values("Year[Year,Year2]", list(Year = 1,Year2 = 2)), "1[1,2]")
+test_that("dims_to_names", {
+  expect_identical(dims_to_dimensions_vector(c(1L)), "")
+  expect_identical(dims_to_dimensions_vector(c(3L)), c("[1]", "[2]", "[3]"))
+  expect_identical(dims_to_dimensions_vector(c(2L, 1L)), c("[1,1]", "[2,1]"))
+  expect_identical(dims_to_dimensions_vector(c(1L, 1L, 3L)), c("[1,1,1]", "[1,1,2]", "[1,1,3]"))
+})
+
+test_that("get_name_weight", {
+  expect_identical(get_name_weight(c("b", "2.05")), c(b = 2.05))
+  expect_identical(get_name_weight("b"), c(b = 1))
+  expect_identical(get_name_weight("2"), c(all = 2))
+  expect_identical(get_name_weight(c("2", "3")), c(all = 6))
+  expect_identical(get_name_weight(c("2", "3", "bee")), c(bee = 6))
+  expect_error(get_name_weight(c("b", "3", "bee")), "profile_expr must be linear")
+})
+
+test_that("replace_names_with_values", {
+  expect_identical(replace_names_with_values("Year", list(Year = 1)), "1")
+  expect_identical(replace_names_with_values("Year2", list(Year = 1)), "Year2")
+  expect_identical(replace_names_with_values("Year[Year]", list(Year = 1)), "1[1]")
+  expect_identical(replace_names_with_values("Year[Year,Year2]", list(Year = 1,Year2 = 2)), "1[1,2]")
+  expect_identical(replace_names_with_values("bYear[1]", list(`bYear[1]` = 3)), "3")
 })
 
 test_that("parse_string", {
   expect_identical(parse_string("bYear * Year"), list(c("bYear", "Year")))
+  expect_identical(parse_string("1 + - 7"), list("1", "-7"))
   expect_identical(parse_string(" bYear*Year "), list(c("bYear", "Year")))
   expect_identical(parse_string(" bYear*Year+Year "), list(c("bYear", "Year"), "Year"))
   expect_identical(parse_string(" bYear*Year+ "), list(c("bYear", "Year"), ""))

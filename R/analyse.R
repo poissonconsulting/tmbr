@@ -34,6 +34,9 @@ analyse.tmb_model <- function(model, data, beep = TRUE, debug = FALSE, ...) {
 
   inits <- inits(data, model$gen_inits, model$random_effects)
 
+  if (any(names(inits) %in% c("fixed", "random", "report", "adreport", "all")))
+    error("parameters cannot be named 'fixed', 'random', 'report', 'adreport' or 'all'")
+
   tempfile <- tempfile()
 
   write(model_code(model), file = paste0(tempfile, ".cpp"))

@@ -10,8 +10,7 @@
 #' @return The new data with the predictions.
 #' @export
 predict.tmb_analysis <- function(
-  object, new_data = data_set(object), term = "prediction",
-  predict_expr = NULL, ...) {
+  object, new_data = data_set(object), predict_expr = NULL, term = "prediction", ...) {
 
   model <- model(object)
 

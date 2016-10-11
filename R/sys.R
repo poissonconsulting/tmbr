@@ -33,10 +33,10 @@ DATA_VECTOR(x);
 DATA_VECTOR(y);
 DATA_FACTOR(Year);
 
+PARAMETER(log_sigma);
+PARAMETER_VECTOR(bYear);
 PARAMETER(a); // intercept
 PARAMETER(b); // slope
-PARAMETER_VECTOR(bYear);
-PARAMETER(log_sigma);
 PARAMETER(log_sYear);
 
 vector<Type> fit = x;
