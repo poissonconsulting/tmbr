@@ -26,7 +26,7 @@ seq_to <- function(to) {
 
 paste_rows <- function (x) {
   x %<>% unlist()
-  x %<>% str_c(collapse = ",")
+  x %<>% stringr::str_c(collapse = ",")
   data.frame(x = x)
 }
 
@@ -36,7 +36,7 @@ dims_to_dimensions_vector <- function(dims) {
   dims %<>% expand.grid()
   dims %<>% plyr::adply(1, paste_rows)
   dims <- dims$x
-  dims %<>% str_c("[", ., "]")
+  dims %<>% stringr::str_c("[", ., "]")
   dims
 }
 

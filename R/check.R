@@ -1,5 +1,5 @@
 check_profile_expr <- function(profile_expr) {
-  if (str_detect(profile_expr, "[(]|[)]")) error("profile_expr contains round brackets")
+  if (stringr::str_detect(profile_expr, "[(]|[)]")) error("profile_expr contains round brackets")
   string <- parse_string(profile_expr)
   string %<>% vapply(any_blank, TRUE)
   if (any(string)) error("profile_expr is incomplete")

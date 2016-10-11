@@ -1,17 +1,17 @@
 replace_names_with_values <- function(string, list) {
   for (i in seq_along(list)) {
     pattern <- names(list)[i]
-    pattern %<>% str_replace_all("(.*)(\\[)(.*)", "\\1\\\\\\2\\3")
-    pattern %<>% str_replace_all("(.*)(\\])(.*)", "\\1\\\\\\2\\3")
-    pattern %<>% str_c("(^|(?<!\\w))", ., "((?!\\w)|$)")
-    string %<>% str_replace_all(pattern, list[i])
+    pattern %<>% stringr::str_replace_all("(.*)(\\[)(.*)", "\\1\\\\\\2\\3")
+    pattern %<>% stringr::str_replace_all("(.*)(\\])(.*)", "\\1\\\\\\2\\3")
+    pattern %<>% stringr::str_c("(^|(?<!\\w))", ., "((?!\\w)|$)")
+    string %<>% stringr::str_replace_all(pattern, list[i])
   }
   string
 }
 
 parse_string <- function(string) {
-  string %<>% str_replace_all("\\s", "")
-  string <- str_split(string, "[+]")[[1]] %>% str_split("[*]")
+  string %<>% stringr::str_replace_all("\\s", "")
+  string <- stringr::str_split(string, "[+]")[[1]] %>% stringr::str_split("[*]")
   string
 }
 
@@ -29,7 +29,7 @@ get_name_weight <- function(x) {
 }
 
 c_name <- function(x) {
-  x[[1]] %<>% str_c(names(x), .)
+  x[[1]] %<>% stringr::str_c(names(x), .)
   x
 }
 
@@ -92,10 +92,10 @@ profile_row <- function(data, profile_expr, analysis, conf_level, fixed, random,
 
   lincomb[names(profile_expr)] <- profile_expr
 
-  profile <- tmbprofile(analysis$ad_fun, lincomb = lincomb, trace = FALSE) %>%
+  profile <- TMB::tmbprofile(analysis$ad_fun, lincomb = lincomb, trace = FALSE) %>%
     confint(level = conf_level) %>% as.data.frame()
 
-  profile_expr <- str_c(names(profile_expr), " * ", profile_expr, collapse = " + ") %>%
+  profile_expr <- stringr::str_c(names(profile_expr), " * ", profile_expr, collapse = " + ") %>%
     calculate_expr(fixed)
 
   estimate <- sum(profile_expr)
