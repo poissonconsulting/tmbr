@@ -64,14 +64,10 @@ named_estimates <- function(analysis, terms = "fixed") {
   estimates
 }
 
-profile_row <- function(data, profile_expr, analysis, conf_level) {
+profile_row <- function(data, profile_expr, analysis, conf_level, fixed, random, report, adreport) {
   stopifnot(nrow(data) == 1)
 
   data %<>% as.list()
-  random <- named_estimates(analysis, "random") %>% as.list()
-  report <- named_estimates(analysis, "report") %>% as.list()
-  adreport <- named_estimates(analysis, "adreport") %>% as.list()
-
   data %<>% c(random, report, adreport)
 
   profile_expr %<>% replace_names_with_values(data)
@@ -94,7 +90,6 @@ profile_row <- function(data, profile_expr, analysis, conf_level) {
   profile %<>% confint(level = conf_level) %>% as.data.frame()
 
   profile_expr <- str_c(names(profile_expr), " * ", profile_expr, collapse = " + ")
-  fixed <- named_estimates(analysis, "fixed") %>% as.list()
 
   profile_expr %<>% replace_names_with_values(fixed)
   profile_expr %<>% parse_string()
@@ -131,14 +126,21 @@ profile <- function(object, new_data, profile_expr = NULL, back_transform = iden
                        random_effects = model$random_effects,
                        modify_data = identity)
 
-  data %<>% lapply(as.numeric)
-  data %<>% as.data.frame()
+  data %<>% lapply(as.numeric) %>% as.data.frame()
 
-  data %<>% plyr::adply(1,  profile_row, profile_expr = profile_expr, analysis = object, conf_level = conf_level)
+  fixed <- named_estimates(object) %>% as.list()
+  random <- named_estimates(object, "random") %>% as.list()
 
-  data[] %<>% purrr::map_at(c("estimate", "lower", "upper"), back_transform)
+  report <- named_estimates(object, "report") %>% as.list()
+  adreport <- named_estimates(object, "adreport") %>% as.list()
+
+  data %<>% plyr::adply(1,  profile_row, profile_expr = profile_expr,
+                        analysis = object, conf_level = conf_level,
+                        fixed = fixed, random = random, report = report, adreport = adreport)
 
   data %<>% select_(~estimate, ~lower, ~upper)
+
+  data[] %<>% purrr::map(back_transform)
 
   new_data %<>% bind_cols(data)
   new_data
