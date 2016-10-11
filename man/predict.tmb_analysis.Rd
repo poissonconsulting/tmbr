@@ -31,7 +31,7 @@ Calculate predictions.
 }
 \details{
 If \code{conf_int = TRUE} then the confidence intervals are calculated by profiling.
-The profiling only takes into account uncertainty in the fixed parameters.
+The profiling only takes uncertainty in the fixed parameters into account.
 When profiling \code{new_expr} must be linear (the sum of a series of terms)
 and can only include one function that encompasses the whole expression,
 i.e., \code{prediction <- exp(bIntercept + bSlope * y)}.

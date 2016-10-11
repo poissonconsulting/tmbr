@@ -34,13 +34,16 @@ test_that("parse_string", {
 })
 
 test_that("check_profile_expr", {
-  expect_error(select_profile_expr("prediction <- bYear * Year", term = "prediction2"),
+  expect_error(check_new_expr("prediction <- bYear * Year", term = "prediction2"),
                "term 'prediction2' is not defined in new_expr")
-  expect_error(select_profile_expr("prediction <- bYear * Year
+  expect_error(check_new_expr("prediction <- bYear * Year
                       prediction <- bYear", term = "prediction"),
                "term 'prediction' is defined more than once in new_expr")
-  expect_error(select_profile_expr("exp(a <- b * b)", term = "a"),
+  expect_error(check_new_expr("exp(a <- b * b)", term = "a"),
                "term 'a' is not defined in new_expr")
+})
+
+test_that("select_profile_expr", {
   expect_identical(select_profile_expr("b <- a * a", term = "b"), c(identity = "a*a"))
   expect_identical(select_profile_expr("b <- a * a
                                        c <- a * d", term = "b"), c(identity = "a*a"))

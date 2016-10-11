@@ -3,13 +3,9 @@ context("analyse")
 test_that("analyse", {
   model <- tmb_model(model_code_example2, gen_inits = gen_inits_example2, random_effects = list(bYear = "Year"),
                      new_expr = "
-                     fit <- NA
-                    residual <- NA
                     fit2 <- a + b * x
-                    for(i in 1:length(x)) {
-                     fit[i] <- a + b * x[i] + bYear[Year[i]]
-                     residual[i] <- y[i] - fit[i]
-                     }
+                    fit <- a + b * x + bYear[Year]
+                     residual <- y - fit
                      prediction <- fit")
 
   analysis <- analyse(model, data_set_example2, beep = FALSE)
@@ -51,17 +47,13 @@ test_that("analyse", {
   expect_equal(data_set_example2$y, fit$fit + residuals$residual)
 
   prediction2 <- predict(analysis, new_data = data_set(analysis), term = "other", new_expr =
-                           "for (i in 1:length(x)) {
-    prediction[i] <- a + b * x[i] + bYear[Year[i]]
-  }
-other <- prediction")
+                           "prediction <- a + b * x + bYear[Year]
+                            other <- prediction")
   expect_identical(colnames(prediction2), c("x", "y", "Year", "other"))
   expect_identical(prediction$prediction, prediction2$other)
 
   prediction3 <- predict(analysis, new_data = data_set_example2[3,], term = "other", new_expr =
-                           "for (i in 1:length(x)) {
-    other[i] <- a + b * x[i] + bYear[Year[i]]
-  }")
+                           "other <- a + b * x + bYear[Year]")
   expect_equal(prediction2[3,], prediction3)
 
   estimates <- estimates(analysis)
@@ -89,7 +81,7 @@ other <- prediction")
   expect_equal(profile$lower, exp(2 * 3 + -7 + 2 * estimates(analysis, "random")$bYear[as.integer(data_set_example2$Year[1:2])]))
 
   expect_error(predict(analysis, data_set_example2[1:2,], "prediction <- a + b * x + bYear2[Year]", conf_int = TRUE), "unrecognised parameter name")
-  expect_equal(predict(analysis, data_set_example2[3,], "for(i in 1:length(Year)) prediction[i] <- fit[Year[i]] + bYear[Year[i]]")$prediction,
+  expect_equal(predict(analysis, data_set_example2[3,], "prediction <- fit[Year] + bYear[Year]")$prediction,
                    predict(analysis, data_set_example2[3,], "prediction <- fit[Year] + bYear[Year]", conf_int = TRUE)$estimate)
   profile <- predict(analysis, data_set_example2[1:2,], "prediction <- a + b * x + bYear[Year] + 1 + -1", conf_int = TRUE)
   expect_equal(profile$estimate, prediction$prediction[1:2])

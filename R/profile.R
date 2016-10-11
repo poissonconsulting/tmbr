@@ -4,8 +4,8 @@ select_profile_expr <- function(string, term) {
   string <- string[[1]]
   pattern <- stringr::str_c("^", term, "(<-)|(=)")
   string <- string[stringr::str_detect(string, pattern)]
-  if (!length(string)) error("term '", term, "' is not defined in new_expr")
-  if (length(string) == 2) error("term '", term, "' is defined more than once in new_expr")
+
+  stopifnot(length(string) == 1)
 
   string %<>% stringr::str_replace(pattern, "")
   names(string) <- "identity"

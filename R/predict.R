@@ -3,7 +3,7 @@
 #' Calculate predictions.
 #'
 #' If \code{conf_int = TRUE} then the confidence intervals are calculated by profiling.
-#' The profiling only takes into account uncertainty in the fixed parameters.
+#' The profiling only takes uncertainty in the fixed parameters into account.
 #' When profiling \code{new_expr} must be linear (the sum of a series of terms)
 #' and can only include one function that encompasses the whole expression,
 #' i.e., \code{prediction <- exp(bIntercept + bSlope * y)}.
@@ -28,9 +28,9 @@ predict.tmb_analysis <- function(
 
   model <- model(object)
 
-  if (is.null(new_expr)) new_expr <- ifelse(conf_int, model$profile_expr, model$new_expr)
-
+  if (is.null(new_expr)) new_expr <- model$new_expr
   check_string(new_expr)
+  check_new_expr(new_expr, term)
 
   if (conf_int) {
     new_expr %<>% select_profile_expr(term)

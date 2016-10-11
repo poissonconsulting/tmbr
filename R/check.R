@@ -1,3 +1,14 @@
+check_new_expr <- function(string, term) {
+  string2 <- stringr::str_replace_all(string, " ", "")
+  string2 %<>% stringr::str_split(pattern = "\\n")
+  string2 <- string2[[1]]
+  pattern <- stringr::str_c("^", term, "(<-)|(=)")
+  string2 <- string2[stringr::str_detect(string2, pattern)]
+  if (!length(string2)) error("term '", term, "' is not defined in new_expr")
+  if (length(string2) == 2) error("term '", term, "' is defined more than once in new_expr")
+  string
+}
+
 check_x_in_y <- function(x, y, x_name = substitute(x), y_name = substitute(y), type_x = "values", type_y = "values") {
   if (is.name(x_name)) x_name %<>% deparse()
   if (is.name(y_name)) y_name %<>% deparse()
