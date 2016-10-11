@@ -16,14 +16,12 @@ test_that("analyse", {
   expect_identical(model_code(analysis), model_code_example2)
   expect_equal(data_set(analysis), data_set_example2)
   expect_equal(logLik(analysis), -3213.379, tolerance = 1e-7)
-  expect_equal(glance(analysis), data.frame(logLik = -3213.379), tolerance = 1e-7)
 
   coef <- coef(analysis)
   expect_is(coef, "tbl")
   expect_identical(colnames(coef), c("term", "estimate", "std.error", "statistic", "p.value", "lower", "upper"))
   expect_identical(coef$lower, coef$estimate - coef$std.error * qnorm(0.975))
   expect_equal(coef$upper, coef$estimate + coef$std.error * qnorm(0.975))
-  expect_identical(coef, tidy(analysis))
   expect_identical(nrow(coef), 4L)
 
   adreport <- coef(analysis, terms = "adreport")
@@ -34,12 +32,9 @@ test_that("analyse", {
 
   expect_error(coef(analysis, terms = "report"), "terms must only include values which match the regular expressions")
 
-  expect_identical(coef, tidy(analysis))
   fit <- fitted(analysis)
   residuals <- residuals(analysis)
   expect_identical(names(fit), c("x", "y", "Year", "fit"))
-  expect_identical(residuals$residual, augment(analysis)$residual)
-  expect_identical(ncol(augment(analysis)), 5L)
 
   prediction <- predict(analysis)
   expect_is(prediction, "tbl")

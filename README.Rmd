@@ -56,20 +56,20 @@ for(int i = 0; i < n; i++){
 return nll;
 }"
 
-inits <- list(bIntercept = 0, bWt = 0, bHp = 0, bDisp = 0, bDisp2 = 0, log_sigma = 0)
+gen_inits <- function(data) list(bIntercept = 0, bWt = 0, bHp = 0, bDisp = 0, bDisp2 = 0, log_sigma = 0)
 
-model <- tmb_model(model_code, inits = inits, scale = c("wt", "hp", "disp"))
+model <- tmb_model(model_code, gen_inits = gen_inits, scale = c("wt", "hp", "disp"))
 
 analysis <- analyse(model, data = mtcars)
 
-tidy(analysis)
-glance(analysis)
+coef(analysis)
+logLik(analysis)
 
 analysis2 <- lm(mpg ~ wt + hp + poly(disp,2), 
         data = rescale::rescale(mtcars, scale = c("wt", "hp", "disp")))
 
-tidy(analysis2)
-glance(analysis2)
+summary(analysis2)
+logLik(analysis)
 ```
 
 ## Installation
@@ -86,9 +86,10 @@ Please report any [issues](https://github.com/poissonconsulting/tmbr/issues).
 
 [Pull requests](https://github.com/poissonconsulting/tmbr/pulls) are always welcome.
 
+Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
+
 ## Inspiration
 
-- [broom](https://github.com/dgrtwo/broom)
 - [jaggernaut](https://github.com/poissonconsulting/jaggernaut)
 
 ## Documentation

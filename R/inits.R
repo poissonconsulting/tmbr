@@ -10,12 +10,12 @@ check_dims_inits <- function(x, y) {
 
 inits <- function(data, gen_inits, random_effects) {
   inits <- gen_inits(data)
-  random_inits <- random_inits(data, random_effects)
-
-  check_dims_inits(inits, random_inits)
-
-  random_inits <- random_inits[!names(random_inits) %in% names(inits)]
-  inits %<>% c(random_inits)
+  if (length(random_effects)) {
+    random_inits <- random_inits(data, random_effects)
+    check_dims_inits(inits, random_inits)
+    random_inits <- random_inits[!names(random_inits) %in% names(inits)]
+    inits %<>% c(random_inits)
+  }
   inits %<>% sort_by_names()
   inits
 }

@@ -44,8 +44,8 @@ test_that("tmb_analysis error", {
   expect_error(tmb_analysis(data_set_example2, model, beep = FALSE), "column y in data must be of class 'logical'")
 
   model <- tmb_model(model_code_example2, gen_inits =
-                       function(data) list(a = 0, b = 0, log_sigma = 0, bYear = rep(0, 10), log_sYear = 0, bYear = c(0,0,0)),
-                     select_data = list(x = 1, y = 1))
+                       function(data) list(a = 0, b = 0, log_sigma = 0, bYear = rep(0, 10), log_sYear = 0, bYear = c(0,0,0)), random_effects = list(bYear = "Year"),
+                     select_data = list(x = 1, y = 1, Year = factor(1)))
 
   expect_error(tmb_analysis(data_set_example2, model, beep = FALSE), "dimensions of user-provided random inits must match those of random effects")
 })
