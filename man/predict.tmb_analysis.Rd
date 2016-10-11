@@ -5,16 +5,16 @@
 \title{Predict}
 \usage{
 \method{predict}{tmb_analysis}(object, new_data = data_set(object),
-  predict_expr = NULL, term = "prediction", ...)
+  new_expr = NULL, term = "prediction", ...)
 }
 \arguments{
 \item{object}{The tmb_analysis object.}
 
 \item{new_data}{The data frame to calculate the predictions for.}
 
-\item{predict_expr}{A string of R code specifying the predictive relationships.}
+\item{new_expr}{A string of R code specifying the predictive relationship.}
 
-\item{term}{A string of the term in predict_expr.}
+\item{term}{A string of the term in new_expr.}
 
 \item{...}{Unused.}
 }

@@ -117,7 +117,7 @@ profile <- function(object, new_data, profile_expr = NULL, back_transform = iden
 
   if (is.null(profile_expr)) profile_expr <- model$profile_expr
 
-  check_data1(new_data)
+  check_data2(new_data)
   check_string(profile_expr)
   check_single_arg_fun(back_transform)
 

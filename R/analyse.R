@@ -1,6 +1,6 @@
 #' @export
 analyse.tmb_model <- function(model, data, beep = TRUE, debug = FALSE, ...) {
-  check_data1(data)
+  check_data2(data)
   check_flag(beep)
   check_flag(debug)
 

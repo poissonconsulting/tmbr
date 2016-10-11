@@ -45,7 +45,7 @@ test_that("analyse", {
   expect_equal(residuals$residual, adreport$estimate[adreport$term == "residual"])
   expect_equal(data_set_example2$y, fit$fit + residuals$residual)
 
-  prediction2 <- predict(analysis, term = "other", predict_expr =
+  prediction2 <- predict(analysis, term = "other", new_expr =
                            "for (i in 1:length(x)) {
     prediction[i] <- a + b * x[i] + bYear[Year[i]]
   }
@@ -53,7 +53,7 @@ other <- prediction")
   expect_identical(colnames(prediction2), c("x", "y", "Year", "other"))
   expect_identical(prediction$prediction, prediction2$other)
 
-  prediction3 <- predict(analysis, new_data = data_set_example2[3,], term = "other", predict_expr =
+  prediction3 <- predict(analysis, new_data = data_set_example2[3,], term = "other", new_expr =
                            "for (i in 1:length(x)) {
     other[i] <- a + b * x[i] + bYear[Year[i]]
   }")
