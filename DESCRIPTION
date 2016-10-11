@@ -8,13 +8,13 @@ License: MIT + file LICENSE
 Depends:
     R (>= 3.3.1),
     mbr (>= 0.0.0.9001),
+    newdata,
     stats,
 Imports:
     beepr,
     dplyr,
     datacheckr (>= 0.1.1.9002),
     magrittr,
-    newdata,
     plyr,
     purrr,
     rescale,

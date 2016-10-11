@@ -4,8 +4,10 @@
 \alias{predict.tmb_analysis}
 \title{Predict}
 \usage{
-\method{predict}{tmb_analysis}(object, new_data = data_set(object),
-  new_expr = NULL, term = "prediction", ...)
+\method{predict}{tmb_analysis}(object,
+  new_data = newdata::new_data(data_set(object)), new_expr = NULL,
+  term = "prediction", back_transform = identity, conf_int = FALSE,
+  conf_level = 0.95, ...)
 }
 \arguments{
 \item{object}{The tmb_analysis object.}
@@ -16,6 +18,12 @@
 
 \item{term}{A string of the term in new_expr.}
 
+\item{back_transform}{A single argument function specifying the transformation for the estimate and confidence intervals.}
+
+\item{conf_int}{A flag indicating whether to calculate confidence intervals.}
+
+\item{conf_level}{A number specifying the confidence level. By default 0.95.}
+
 \item{...}{Unused.}
 }
 \value{
@@ -23,5 +31,9 @@ The new data with the predictions.
 }
 \description{
 Calculate predictions.
+}
+\details{
+If \code{conf_int = TRUE} then the confidence intervals are calculated by profiling.
+The profiling only takes into account uncertainty in the fixed parameters.
 }
 
