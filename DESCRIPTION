@@ -26,7 +26,6 @@ Suggests:
 Remotes:
     poissonconsulting/datacheckr,
     poissonconsulting/mbr,
-    poissonconsulting/newdata,
     poissonconsulting/rescale,
     poissonconsulting/timer
 Encoding: UTF-8
