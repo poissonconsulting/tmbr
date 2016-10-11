@@ -64,38 +64,45 @@ named_estimates <- function(analysis, terms = "fixed") {
   estimates
 }
 
-profile_row <- function(data, profile_expr, analysis, conf_level, fixed, random, report, adreport) {
-  stopifnot(nrow(data) == 1)
+lincomb0 <- function(analysis) {
+  names <- lincomb_names(analysis)
+  lincomb <- rep(0, length(names))
+  names(lincomb) <- names
+  lincomb
+}
 
-  data %<>% as.list()
-  data %<>% c(random, report, adreport)
-
+calculate_expr <- function(profile_expr, data) {
   profile_expr %<>% replace_names_with_values(data)
   profile_expr %<>% parse_string()
   profile_expr %<>% lapply(get_name_weight) %>% unlist()
+  profile_expr
+}
+
+profile_row <- function(data, profile_expr, analysis, conf_level, fixed, random, report, adreport) {
+  stopifnot(nrow(data) == 1)
+
+  data %<>% as.list() %>% c(random, report, adreport)
+
+  profile_expr %<>% calculate_expr(data)
+
   sum <- sum(profile_expr[names(profile_expr) == "all"])
   profile_expr <- profile_expr[names(profile_expr) != "all"]
 
   if (!length(profile_expr)) return(data.frame(estimate = sum, lower = sum, upper = sum))
 
-  names <- lincomb_names(analysis)
+  lincomb <- lincomb0(analysis)
 
-  if (!all(names(profile_expr) %in% names)) error("unrecognised parameter name")
-
-  lincomb <- rep(0, length(names))
-  names(lincomb) <- names
+  if (!all(names(profile_expr) %in% names(lincomb))) error("unrecognised parameter name")
 
   lincomb[names(profile_expr)] <- profile_expr
-  profile <- tmbprofile(analysis$ad_fun, lincomb = lincomb, trace = FALSE)
-  profile %<>% confint(level = conf_level) %>% as.data.frame()
 
-  profile_expr <- str_c(names(profile_expr), " * ", profile_expr, collapse = " + ")
+  profile <- tmbprofile(analysis$ad_fun, lincomb = lincomb, trace = FALSE) %>%
+    confint(level = conf_level) %>% as.data.frame()
 
-  profile_expr %<>% replace_names_with_values(fixed)
-  profile_expr %<>% parse_string()
-  profile_expr %<>% lapply(get_name_weight) %>% unlist()
+  profile_expr <- str_c(names(profile_expr), " * ", profile_expr, collapse = " + ") %>%
+    calculate_expr(fixed)
+
   estimate <- sum(profile_expr)
-
   data.frame(estimate = estimate + sum, lower = profile$lower + sum, upper = profile$upper + sum)
 }
 

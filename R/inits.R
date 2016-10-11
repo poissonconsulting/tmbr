@@ -7,6 +7,7 @@ check_dims_inits <- function(x, y) {
     error("dimensions of user-provided random inits must match those of random effects")
   x
 }
+
 inits <- function(data, gen_inits, random_effects) {
   inits <- gen_inits(data)
   random_inits <- random_inits(data, random_effects)
@@ -35,15 +36,6 @@ random_inits <- function(data, random_effects) {
   random_effects %<>% lapply(replace_n, data)
   random_effects %<>% lapply(zeros)
   random_effects
-}
-
-zeros <- function (dims) {
-  stopifnot(is.integer(dims))
-  if (length(dims) == 1)
-    return(numeric(dims))
-  if (length(dims) == 2)
-    return(matrix(0, nrow = dims[1], ncol = dims[2]))
-  array(0, dims)
 }
 
 replace_n <- function(random_effect, data) {
