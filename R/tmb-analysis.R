@@ -2,7 +2,7 @@
 #'
 #' Analyse a data frame using a TMB model.
 #'
-#' @inheritParams analyse
+#' @inheritParams mbr::analyse
 #' @export
 tmb_analysis <- function(data, model, beep = TRUE, debug = FALSE, ...) {
   if (!is.tmb_model(model)) error("model must be a tmb_model")

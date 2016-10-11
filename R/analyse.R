@@ -1,15 +1,3 @@
-#' Analyse
-#'
-#' Analyse a data set and model.
-#'
-#' @param data The data frame to analyse.
-#' @param model The model to use for the analysis.
-#' @param beep A flag indicating whether to beep on completion of the analysis.
-#' @param debug A flag indicating whether to run in debug mode.
-#' @param ...  Not used.
-#' @export
-analyse <- function(model, data, beep = TRUE, debug = FALSE, ...) {UseMethod("analyse")}
-
 #' @export
 analyse.tmb_model <- function(model, data, beep = TRUE, debug = FALSE, ...) {
   check_data1(data)
@@ -56,6 +44,6 @@ analyse.tmb_model <- function(model, data, beep = TRUE, debug = FALSE, ...) {
 
   obj %<>% c(inits = list(inits), ad_fun = list(ad_fun), opt = list(opt),
              sd = list(sd), report = list(report), duration = timer$elapsed())
-  class(obj) <- "tmb_analysis"
+  class(obj) <- c("tmb_analysis", "mb_analysis")
   obj
 }

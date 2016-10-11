@@ -18,8 +18,6 @@ is_dims <- function(x) {
   is.integer(x) && length(dims) && all(x >= 1)
 }
 
-dims <- function(x) if (is.vector(x)) length(x) else dim(x)
-
 error <- function(...) stop(..., call. = FALSE)
 
 seq_to <- function(to) {

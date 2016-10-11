@@ -15,8 +15,7 @@ Demonstration
 
 ``` r
 library(tmbr)
-#> Warning: S3 methods 'augment.tmb_analysis', 'glance.tmb_analysis',
-#> 'tidy.tmb_analysis' were declared in NAMESPACE but not found
+#> Loading required package: mbr
 #> 
 #> Attaching package: 'tmbr'
 #> The following object is masked from 'package:stats':

@@ -41,12 +41,6 @@ test_that("check_profile_expr", {
   expect_error(check_profile_expr("bYear[1] * Year + 2 +"), "profile_expr is incomplete")
 })
 
-test_that("dims", {
-  expect_identical(dims(1), 1L)
-  expect_identical(dims(1:2), 2L)
-  expect_identical(dims(matrix(1:2)), c(2L:1L))
-})
-
 test_that("list_by_name", {
   expect_identical(list_by_name(c(bYear = 1, bYear = 2)), list(bYear = c(1,2)))
 })

@@ -56,6 +56,6 @@ tmb_model <- function(
               modify_data = modify_data,
               predict_expr = predict_expr,
               profile_expr = profile_expr)
-  class(obj) <- "tmb_model"
+  class(obj) <- c("tmb_model", "mb_model")
   obj
 }
