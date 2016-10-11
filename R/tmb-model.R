@@ -10,7 +10,7 @@
 #' @param select_data A named list specifying the columns to select and their associated classes and values.
 #' @inheritParams rescale::rescale
 #' @param modify_data A single argument function to modify the data (in list form) immediately prior to the analysis.
-#' @param predict_expr A string of R code specifying the predictive relationships.
+#' @param new_expr A string of R code specifying the predictive relationships.
 #' @param profile_expr A string of R code specifying the linear relationships.
 #' @return An object of class tmb_model.
 #' @seealso \code{\link[datacheckr]{check_data}} \code{\link[rescale]{rescale}}
@@ -18,7 +18,7 @@
 tmb_model <- function(
   model_code, gen_inits, random_effects = list(), select_data = list(),
   center = character(0), scale = character(0), modify_data = identity,
-  predict_expr = character(0), profile_expr = character(0))
+  new_expr = character(0), profile_expr = character(0))
 {
   check_string(model_code)
   check_single_arg_fun(gen_inits)
@@ -27,7 +27,7 @@ tmb_model <- function(
   check_unique_character_vector(center)
   check_unique_character_vector(scale)
   check_single_arg_fun(modify_data)
-  check_vector(predict_expr, "", min_length = 0, max_length = 1)
+  check_vector(new_expr, "", min_length = 0, max_length = 1)
   check_vector(profile_expr, "", min_length = 0, max_length = 1)
 
   check_all_elements_class_character(random_effects)
@@ -54,7 +54,7 @@ tmb_model <- function(
               scale = scale,
               random_effects =  random_effects,
               modify_data = modify_data,
-              predict_expr = predict_expr,
+              new_expr = new_expr,
               profile_expr = profile_expr)
   class(obj) <- c("tmb_model", "mb_model")
   obj

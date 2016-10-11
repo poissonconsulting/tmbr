@@ -6,7 +6,7 @@
 \usage{
 tmb_model(model_code, gen_inits, random_effects = list(),
   select_data = list(), center = character(0), scale = character(0),
-  modify_data = identity, predict_expr = character(0),
+  modify_data = identity, new_expr = character(0),
   profile_expr = character(0))
 }
 \arguments{
@@ -26,7 +26,7 @@ Missing random parameters are assigned the value 0.}
 
 \item{modify_data}{A single argument function to modify the data (in list form) immediately prior to the analysis.}
 
-\item{predict_expr}{A string of R code specifying the predictive relationships.}
+\item{new_expr}{A string of R code specifying the predictive relationships.}
 
 \item{profile_expr}{A string of R code specifying the linear relationships.}
 }

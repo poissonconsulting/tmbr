@@ -1,8 +1,8 @@
 context("analyse")
 
 test_that("analyse", {
-  model <- tmb_model(model_code_example2, gen_inits = gen_inits_example2, random = list(bYear = "Year"),
-                     predict_expr = "
+  model <- tmb_model(model_code_example2, gen_inits = gen_inits_example2, random_effects = list(bYear = "Year"),
+                     new_expr = "
                      fit <- NA
                     residual <- NA
                     fit2 <- a + b * x

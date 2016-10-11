@@ -28,12 +28,7 @@ predict.tmb_analysis <- function(
 
   model <- model(object)
 
-  if (is.null(new_expr)) {
-    if (conf_int) {
-      new_expr <- model$profile_expr
-    } else new_expr <- model$predict_expr
-    message("new_expr set to ", new_expr)
-  }
+  if (is.null(new_expr)) new_expr <- ifelse(conf_int, model$profile_expr, model$new_expr)
 
   check_string(new_expr)
 
