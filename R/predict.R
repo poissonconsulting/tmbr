@@ -18,7 +18,7 @@
 #' @return The new data with the predictions.
 #' @export
 predict.tmb_analysis <- function(
-  object, new_data = newdata::new_data(data_set(object)), new_expr = NULL, term = "prediction",
+  object, new_data = data_set(object), new_expr = NULL, term = "prediction",
   conf_int = FALSE, conf_level = 0.95, ...) {
 
   check_data2(new_data)

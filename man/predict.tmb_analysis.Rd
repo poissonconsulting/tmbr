@@ -4,9 +4,9 @@
 \alias{predict.tmb_analysis}
 \title{Predict}
 \usage{
-\method{predict}{tmb_analysis}(object,
-  new_data = newdata::new_data(data_set(object)), new_expr = NULL,
-  term = "prediction", conf_int = FALSE, conf_level = 0.95, ...)
+\method{predict}{tmb_analysis}(object, new_data = data_set(object),
+  new_expr = NULL, term = "prediction", conf_int = FALSE,
+  conf_level = 0.95, ...)
 }
 \arguments{
 \item{object}{The tmb_analysis object.}
