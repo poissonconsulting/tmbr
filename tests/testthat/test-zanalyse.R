@@ -76,8 +76,8 @@ other <- prediction")
   expect_identical(lincomb_names(analysis),
                    c("log_sigma", "a", "b", "log_sYear"))
 
-  expect_identical(names(named_estimates(analysis, "random")), paste0("bYear[", 1:10, "]"))
-  expect_equal(named_estimates(analysis, "random"), estimates(analysis, "random")$bYear,
+  expect_identical(names(named_estimates(estimates(analysis, "random"))), paste0("bYear[", 1:10, "]"))
+  expect_equal(named_estimates(estimates(analysis, "random")), estimates(analysis, "random")$bYear,
                check.attributes = FALSE)
 
   profile <- profile(analysis, data_set_example2[1:2,], "2 * 3 + - 7", back_transform = exp)

@@ -33,20 +33,18 @@ c_name <- function(x) {
   x
 }
 
-par_names_indices <- function(analysis, terms = "fixed") {
-  est <- estimates(analysis, terms)
-  est %<>% lapply(dims)
-  est %<>% lapply(dims_to_dimensions_vector)
-  est %<>% purrr::lmap(c_name)
-  est %<>% sort_by_names()
-  est
+par_names_indices <- function(estimates) {
+  estimates %<>% lapply(dims) %>% lapply(dims_to_dimensions_vector)
+  estimates %<>% purrr::lmap(c_name)
+  estimates %<>% sort_by_names()
+  estimates
 }
 
 lincomb_names <- function(analysis) {
   names <- names(analysis$ad_fun$env$last.par.best)
   if (!is.null(analysis$ad_fun$env$random)) names <- names[-analysis$ad_fun$env$random]
 
-  indices <- par_names_indices(analysis, "fixed")
+  indices <- estimates(analysis) %>% par_names_indices()
   stopifnot(setequal(names, names(indices)))
   indices <- indices[unique(names)]
   indices %<>% unlist()
@@ -54,12 +52,10 @@ lincomb_names <- function(analysis) {
   indices
 }
 
-named_estimates <- function(analysis, terms = "fixed") {
-  estimates <- estimates(analysis, terms = terms)
-  indices <- par_names_indices(analysis, terms = terms)
-  stopifnot(identical(names(estimates), names(indices)))
+named_estimates <- function(estimates) {
+  stopifnot(is_named_list(estimates))
+  indices <- par_names_indices(estimates) %>% unlist()
   estimates %<>% unlist()
-  indices %<>% unlist()
   names(estimates) <- indices
   estimates
 }
@@ -135,11 +131,10 @@ profile <- function(object, new_data, profile_expr = NULL, back_transform = iden
 
   data %<>% lapply(as.numeric) %>% as.data.frame()
 
-  fixed <- named_estimates(object) %>% as.list()
-  random <- named_estimates(object, "random") %>% as.list()
-
-  report <- named_estimates(object, "report") %>% as.list()
-  adreport <- named_estimates(object, "adreport") %>% as.list()
+  fixed <- estimates(object) %>% named_estimates() %>% as.list()
+  random <- estimates(object, "random") %>% named_estimates() %>%  as.list()
+  report <- estimates(object, "report") %>% named_estimates() %>% as.list()
+  adreport <- estimates(object, "adreport") %>% named_estimates() %>% as.list()
 
   data %<>% plyr::adply(1,  profile_row, profile_expr = profile_expr,
                         analysis = object, conf_level = conf_level,
