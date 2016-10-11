@@ -43,12 +43,14 @@ predict.tmb_analysis <- function(
                        random_effects = model$random_effects,
                        modify_data = identity)
 
-  data %<>% lapply(as.numeric)
-
   fixed <- estimates(object)
   random <- estimates(object, "random")
+  random %<>% zero_random_effects(data, model$random_effects)
   report <- estimates(object, "report")
   adreport <- estimates(object, "adreport")
+
+  data %<>% lapply(as.numeric)
+
 
   if (!conf_int) {
 

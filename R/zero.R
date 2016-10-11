@@ -13,7 +13,8 @@ zero_random_effects <- function(estimates, data, random_effects) {
   stopifnot(all(names(random_effects) %in% names(estimates)))
   stopifnot(all(unlist(random_effects) %in% names(data)))
 
-  data <- data[unlist(random_effects)]
+  data %<>% lapply(as.numeric)
+  data <- data[unique(unlist(random_effects))]
   data <- data[vapply(data, all1, TRUE)]
   data <- names(data)
   random_effects %<>% vapply(allin, TRUE, data)

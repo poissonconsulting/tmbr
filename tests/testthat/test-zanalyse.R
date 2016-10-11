@@ -39,11 +39,12 @@ test_that("analyse", {
   residuals <- residuals(analysis)
   expect_identical(names(fit), c("x", "y", "Year", "fit"))
 
-  prediction <- predict(analysis, new_data = data_set(analysis))
+  prediction <- predict(analysis)
   expect_is(prediction, "tbl")
   expect_identical(colnames(prediction), c("x", "y", "Year", "prediction"))
   expect_identical(data_set_example2, as.data.frame(prediction[c("x", "y", "Year")]))
   expect_identical(nrow(prediction), 1000L)
+  expect_identical(predict(analysis, new_data = data_set(analysis)[10,])$prediction, predict(analysis, term = "fit2")$fit2[10])
 
   expect_identical(prediction$prediction, fit$fit)
   expect_equal(residuals$residual, adreport$estimate[adreport$term == "residual"])
