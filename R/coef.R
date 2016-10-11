@@ -23,11 +23,11 @@ coef.tmb_analysis <- function(object, terms = "fixed",
   if (terms == "adreport") terms <- "report"
 
   coef <- summary(object$sd, select = terms, p.value = TRUE) %>% as.data.frame()
-  coef %<>% mutate_(term = ~row.names(coef))
-  coef %<>% select_(term = ~term, estimate = ~Estimate, std.error = ~`Std. Error`,
+  coef %<>% dplyr::mutate_(term = ~row.names(coef))
+  coef %<>% dplyr::select_(term = ~term, estimate = ~Estimate, std.error = ~`Std. Error`,
                     statistic = ~`z value`, p.value = ~`Pr(>|z^2|)`)
-  coef %<>% mutate_(lower = ~estimate + std.error * qnorm((1 - conf_level) / 2),
+  coef %<>% dplyr::mutate_(lower = ~estimate + std.error * qnorm((1 - conf_level) / 2),
                     upper = ~estimate + std.error * qnorm((1 - conf_level) / 2 + conf_level))
-  coef %<>% as.tbl()
+  coef %<>% dplyr::as.tbl()
   coef
 }

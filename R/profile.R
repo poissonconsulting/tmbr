@@ -140,10 +140,10 @@ profile <- function(object, new_data, profile_expr = NULL, back_transform = iden
                         analysis = object, conf_level = conf_level,
                         fixed = fixed, random = random, report = report, adreport = adreport)
 
-  data %<>% select_(~estimate, ~lower, ~upper)
+  data %<>% dplyr::select_(~estimate, ~lower, ~upper)
 
   data[] %<>% purrr::map(back_transform)
 
-  new_data %<>% bind_cols(data)
+  new_data %<>% dplyr::bind_cols(data)
   new_data
 }
