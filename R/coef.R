@@ -19,6 +19,14 @@ coef.tmb_analysis <- function(object, terms = "fixed",
   check_vector(terms, c("^fixed$", "^random$", "^adreport$"), max_length = 1)
   check_number(conf_level, c(0.5, 0.99))
 
+  estimates <- estimates(object, terms = terms) %>% named_estimates()
+
+  if (!length(estimates)) {
+    return(dplyr::data_frame(term = character(0), estimate = numeric(0), std.error = numeric(0),
+                      statistic = numeric(0), p.value = numeric(0), lower = numeric(0),
+                      upper = numeric(0)))
+  }
+
   # necessary due to summary args!
   if (terms == "adreport") terms <- "report"
 
@@ -28,6 +36,8 @@ coef.tmb_analysis <- function(object, terms = "fixed",
                     statistic = ~`z value`, p.value = ~`Pr(>|z^2|)`)
   coef %<>% dplyr::mutate_(lower = ~estimate + std.error * qnorm((1 - conf_level) / 2),
                     upper = ~estimate + std.error * qnorm((1 - conf_level) / 2 + conf_level))
+  coef %<>% dplyr::arrange_(~term)
+  coef$term <- names(estimates)
   coef %<>% dplyr::as.tbl()
   coef
 }

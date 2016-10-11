@@ -28,6 +28,7 @@ test_that("analyse", {
 
   random <- coef(analysis, terms = "random")
   expect_identical(nrow(random), 10L)
+  expect_identical(random$term, paste0("bYear[", 1:10, "]"))
 
   expect_error(coef(analysis, terms = "report"), "terms must only include values which match the regular expressions")
 
@@ -43,7 +44,7 @@ test_that("analyse", {
   expect_identical(predict(analysis, new_data = data_set(analysis)[10,])$estimate, predict(analysis, term = "fit2")$estimate[10])
 
   expect_identical(prediction$estimate, fit$estimate)
-  expect_equal(residuals$estimate, adreport$estimate[adreport$term == "residual"])
+  expect_equal(residuals$estimate, adreport$estimate)
   expect_equal(data_set_example2$y, fit$estimate + residuals$estimate)
 
   prediction2 <- predict(analysis, new_data = data_set(analysis), term = "other", new_expr =
