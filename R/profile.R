@@ -1,3 +1,25 @@
+select_profile_expr <- function(string, term) {
+  string %<>% stringr::str_replace_all(" ", "")
+  string %<>% stringr::str_split(pattern = "\\n")
+  string <- string[[1]]
+  pattern <- stringr::str_c("^", term, "(<-)|(=)")
+  string <- string[stringr::str_detect(string, pattern)]
+  if (!length(string)) error("term '", term, "' is not defined in new_expr")
+  if (length(string) == 2) error("term '", term, "' is defined more than once in new_expr")
+
+  string %<>% stringr::str_replace(pattern, "")
+  names(string) <- "identity"
+  pattern <- "(^\\w+)([(])(.*)([)]$)"
+  if (stringr::str_detect(string, pattern)) {
+    fun <- stringr::str_replace(string, pattern, "\\1")
+    string %<>% stringr::str_replace(pattern, "\\3")
+    names(string) <- fun
+  }
+  check <- parse_string(string) %>% vapply(any_blank, TRUE)
+  if (any(check)) error("new_expr is incomplete")
+  string
+}
+
 replace_names_with_values <- function(string, list) {
   for (i in seq_along(list)) {
     pattern <- names(list)[i]

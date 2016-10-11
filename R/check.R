@@ -1,11 +1,3 @@
-check_profile_expr <- function(profile_expr) {
-  if (stringr::str_detect(profile_expr, "[(]|[)]")) error("profile_expr contains round brackets")
-  string <- parse_string(profile_expr)
-  string %<>% vapply(any_blank, TRUE)
-  if (any(string)) error("profile_expr is incomplete")
-  profile_expr
-}
-
 check_x_in_y <- function(x, y, x_name = substitute(x), y_name = substitute(y), type_x = "values", type_y = "values") {
   if (is.name(x_name)) x_name %<>% deparse()
   if (is.name(y_name)) y_name %<>% deparse()

@@ -84,18 +84,18 @@ other <- prediction")
   expect_equal(named_estimates(estimates(analysis, "random")), estimates(analysis, "random")$bYear,
                check.attributes = FALSE)
 
-  profile <- predict(analysis, data_set_example2[1:2,], "2 * 3 + - 7", back_transform = exp, conf_int = TRUE)
+  profile <- predict(analysis, data_set_example2[1:2,], "prediction <- exp(2 * 3 + - 7)", conf_int = TRUE)
   expect_identical(colnames(profile), c("x", "y", "Year", "estimate", "lower", "upper"))
   expect_identical(profile$lower, rep(exp(2 * 3 + - 7), 2))
   expect_identical(profile$lower, profile$upper)
-  profile <- predict(analysis, data_set_example2[1:2,], "2 * 3 + - 7  + 2 * bYear[Year]", back_transform = exp, conf_int = TRUE)
+  profile <- predict(analysis, data_set_example2[1:2,], "prediction <- exp(2 * 3 + - 7  + 2 * bYear[Year])", conf_int = TRUE)
   expect_identical(profile$lower, profile$estimate)
   expect_equal(profile$lower, exp(2 * 3 + -7 + 2 * estimates(analysis, "random")$bYear[as.integer(data_set_example2$Year[1:2])]))
 
-  expect_error(predict(analysis, data_set_example2[1:2,], "a + b * x + bYear2[Year]", conf_int = TRUE), "unrecognised parameter name")
+  expect_error(predict(analysis, data_set_example2[1:2,], "prediction <- a + b * x + bYear2[Year]", conf_int = TRUE), "unrecognised parameter name")
   expect_equal(predict(analysis, data_set_example2[3,], "for(i in 1:length(Year)) prediction[i] <- fit[Year[i]] + bYear[Year[i]]")$prediction,
-                   predict(analysis, data_set_example2[3,], "fit[Year] + bYear[Year]", conf_int = TRUE)$estimate)
-  profile <- predict(analysis, data_set_example2[1:2,], "a + b * x + bYear[Year] + 1 + -1", conf_int = TRUE)
+                   predict(analysis, data_set_example2[3,], "prediction <- fit[Year] + bYear[Year]", conf_int = TRUE)$estimate)
+  profile <- predict(analysis, data_set_example2[1:2,], "prediction <- a + b * x + bYear[Year] + 1 + -1", conf_int = TRUE)
   expect_equal(profile$estimate, prediction$prediction[1:2])
   expect_equal(profile$lower[2], 45.36208, tolerance = 1e-6)
   expect_equal(profile$estimate[2], 53.05689, tolerance = 1e-6)

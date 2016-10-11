@@ -34,11 +34,22 @@ test_that("parse_string", {
 })
 
 test_that("check_profile_expr", {
-  expect_identical(check_profile_expr("bYear * Year"), "bYear * Year")
-  expect_identical(check_profile_expr("bYear[1] * Year"), "bYear[1] * Year")
-  expect_error(check_profile_expr("bYear[1] * (Year + 2)"), "profile_expr contains round brackets")
-  expect_identical(check_profile_expr("bYear[1] * Year + 2"), "bYear[1] * Year + 2")
-  expect_error(check_profile_expr("bYear[1] * Year + 2 +"), "profile_expr is incomplete")
+  expect_error(select_profile_expr("prediction <- bYear * Year", term = "prediction2"),
+               "term 'prediction2' is not defined in new_expr")
+  expect_error(select_profile_expr("prediction <- bYear * Year
+                      prediction <- bYear", term = "prediction"),
+               "term 'prediction' is defined more than once in new_expr")
+  expect_error(select_profile_expr("exp(a <- b * b)", term = "a"),
+               "term 'a' is not defined in new_expr")
+  expect_identical(select_profile_expr("b <- a * a", term = "b"), c(identity = "a*a"))
+  expect_identical(select_profile_expr("b <- a * a
+                                       c <- a * d", term = "b"), c(identity = "a*a"))
+  expect_identical(select_profile_expr("b <- exp(a * a)", term = "b"), c(exp = "a*a"))
+  expect_identical(select_profile_expr("b <- log(a[1] * a)
+                                       c <- eee(a * d)", term = "b"), c(log = "a[1]*a"))
+  expect_identical(select_profile_expr("b <- log(a[1] * a)
+                                       c <- eee(a * d)", term = "c"), c(eee = "a*d"))
+  expect_error(select_profile_expr("a <- bYear[1] * Year + 2 +", "a"), "new_expr is incomplete")
 })
 
 test_that("list_by_name", {

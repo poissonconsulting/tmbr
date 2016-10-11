@@ -6,8 +6,7 @@
 \usage{
 \method{predict}{tmb_analysis}(object,
   new_data = newdata::new_data(data_set(object)), new_expr = NULL,
-  term = "prediction", back_transform = identity, conf_int = FALSE,
-  conf_level = 0.95, ...)
+  term = "prediction", conf_int = FALSE, conf_level = 0.95, ...)
 }
 \arguments{
 \item{object}{The tmb_analysis object.}
@@ -17,8 +16,6 @@
 \item{new_expr}{A string of R code specifying the predictive relationship.}
 
 \item{term}{A string of the term in new_expr.}
-
-\item{back_transform}{A single argument function specifying the transformation for the estimate and confidence intervals.}
 
 \item{conf_int}{A flag indicating whether to calculate confidence intervals.}
 
@@ -35,5 +32,8 @@ Calculate predictions.
 \details{
 If \code{conf_int = TRUE} then the confidence intervals are calculated by profiling.
 The profiling only takes into account uncertainty in the fixed parameters.
+When profiling \code{new_expr} must be linear (the sum of a series of terms)
+and can only include one function that encompasses the whole expression,
+i.e., \code{prediction <- exp(bIntercept + bSlope * y)}.
 }
 
