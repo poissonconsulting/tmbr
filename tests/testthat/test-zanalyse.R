@@ -33,24 +33,24 @@ test_that("analyse", {
 
   fit <- fitted(analysis)
   residuals <- residuals(analysis)
-  expect_identical(names(fit), c("x", "y", "Year", "fit"))
+  expect_identical(names(fit), c("x", "y", "Year", "estimate"))
 
   prediction <- predict(analysis)
   expect_is(prediction, "tbl")
-  expect_identical(colnames(prediction), c("x", "y", "Year", "prediction"))
+  expect_identical(colnames(prediction), c("x", "y", "Year", "estimate"))
   expect_identical(data_set_example2, as.data.frame(prediction[c("x", "y", "Year")]))
   expect_identical(nrow(prediction), 1000L)
-  expect_identical(predict(analysis, new_data = data_set(analysis)[10,])$prediction, predict(analysis, term = "fit2")$fit2[10])
+  expect_identical(predict(analysis, new_data = data_set(analysis)[10,])$estimate, predict(analysis, term = "fit2")$estimate[10])
 
-  expect_identical(prediction$prediction, fit$fit)
-  expect_equal(residuals$residual, adreport$estimate[adreport$term == "residual"])
-  expect_equal(data_set_example2$y, fit$fit + residuals$residual)
+  expect_identical(prediction$estimate, fit$estimate)
+  expect_equal(residuals$estimate, adreport$estimate[adreport$term == "residual"])
+  expect_equal(data_set_example2$y, fit$estimate + residuals$estimate)
 
   prediction2 <- predict(analysis, new_data = data_set(analysis), term = "other", new_expr =
                            "prediction <- a + b * x + bYear[Year]
                             other <- prediction")
-  expect_identical(colnames(prediction2), c("x", "y", "Year", "other"))
-  expect_identical(prediction$prediction, prediction2$other)
+  expect_identical(colnames(prediction2), c("x", "y", "Year", "estimate"))
+  expect_identical(prediction$estimate, prediction2$estimate)
 
   prediction3 <- predict(analysis, new_data = data_set_example2[3,], term = "other", new_expr =
                            "other <- a + b * x + bYear[Year]")
@@ -61,9 +61,9 @@ test_that("analyse", {
   estimates <- estimates(analysis, "random")
   expect_identical(estimates$bYear, random$estimate)
   estimates <- estimates(analysis, "report")
-  expect_equal(estimates$fit, fit$fit, tolerance = 1e-5)
+  expect_equal(estimates$fit, fit$estimate, tolerance = 1e-5)
   estimates <- estimates(analysis, "adreport")
-  expect_equal(estimates$residual, residuals$residual)
+  expect_equal(estimates$residual, residuals$estimate)
 
   expect_identical(lincomb_names(analysis),
                    c("log_sigma", "a", "b", "log_sYear"))
@@ -81,10 +81,10 @@ test_that("analyse", {
   expect_equal(profile$lower, exp(2 * 3 + -7 + 2 * estimates(analysis, "random")$bYear[as.integer(data_set_example2$Year[1:2])]))
 
   expect_error(predict(analysis, data_set_example2[1:2,], "prediction <- a + b * x + bYear2[Year]", conf_int = TRUE), "unrecognised parameter name")
-  expect_equal(predict(analysis, data_set_example2[3,], "prediction <- fit[Year] + bYear[Year]")$prediction,
+  expect_equal(predict(analysis, data_set_example2[3,], "prediction <- fit[Year] + bYear[Year]")$estimate,
                    predict(analysis, data_set_example2[3,], "prediction <- fit[Year] + bYear[Year]", conf_int = TRUE)$estimate)
   profile <- predict(analysis, data_set_example2[1:2,], "prediction <- a + b * x + bYear[Year] + 1 + -1", conf_int = TRUE)
-  expect_equal(profile$estimate, prediction$prediction[1:2])
+  expect_equal(profile$estimate, prediction$estimate[1:2])
   expect_equal(profile$lower[2], 45.36208, tolerance = 1e-6)
   expect_equal(profile$estimate[2], 53.05689, tolerance = 1e-6)
   expect_equal(profile$upper[2], 60.69323, tolerance = 1e-6)

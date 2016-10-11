@@ -70,7 +70,7 @@ predict.tmb_analysis <- function(
       error("term '", term, "' in new_expr must be a scalar or a vector of length ", nrow(new_data))
     }
 
-    new_data[term] <- data[[term]]
+    new_data$estimate <- data[[term]]
     return(new_data)
   }
 
