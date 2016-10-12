@@ -13,7 +13,7 @@ test_that("get_name_weight", {
   expect_identical(get_name_weight("2"), c(all = 2))
   expect_identical(get_name_weight(c("2", "3")), c(all = 6))
   expect_identical(get_name_weight(c("2", "3", "bee")), c(bee = 6))
-  expect_error(get_name_weight(c("b", "3", "bee")), "profile_expr must be linear")
+  expect_error(get_name_weight(c("b", "3", "bee")), "new_expr must be linear")
 })
 
 test_that("replace_names_with_values", {
@@ -33,26 +33,23 @@ test_that("parse_string", {
   expect_identical(parse_string(" bYear[1,2]*2+3*bThing[x,x]*        zz+*"), list(c("bYear[1,2]", "2"), c("3","bThing[x,x]", "zz"), c("", "")))
 })
 
-test_that("check_profile_expr", {
-  expect_error(check_new_expr("prediction <- bYear * Year", term = "prediction2"),
+test_that("select_expr", {
+  expect_error(select_expr("prediction <- bYear * Year", term = "prediction2"),
                "term 'prediction2' is not defined in new_expr")
-  expect_error(check_new_expr("prediction <- bYear * Year
+  expect_error(select_expr("prediction <- bYear * Year
                       prediction <- bYear", term = "prediction"),
                "term 'prediction' is defined more than once in new_expr")
-  expect_error(check_new_expr("exp(a <- b * b)", term = "a"),
+  expect_error(select_expr("exp(a <- b * b)", term = "a"),
                "term 'a' is not defined in new_expr")
-})
-
-test_that("select_profile_expr", {
-  expect_identical(select_profile_expr("b <- a * a", term = "b"), c(identity = "a*a"))
-  expect_identical(select_profile_expr("b <- a * a
+  expect_identical(select_expr("b <- a * a", term = "b"), c(identity = "a*a"))
+  expect_identical(select_expr("b <- a * a
                                        c <- a * d", term = "b"), c(identity = "a*a"))
-  expect_identical(select_profile_expr("b <- exp(a * a)", term = "b"), c(exp = "a*a"))
-  expect_identical(select_profile_expr("b <- log(a[1] * a)
+  expect_identical(select_expr("b <- exp(a * a)", term = "b"), c(exp = "a*a"))
+  expect_identical(select_expr("b <- log(a[1] * a)
                                        c <- eee(a * d)", term = "b"), c(log = "a[1]*a"))
-  expect_identical(select_profile_expr("b <- log(a[1] * a)
+  expect_identical(select_expr("b <- log(a[1] * a)
                                        c <- eee(a * d)", term = "c"), c(eee = "a*d"))
-  expect_error(select_profile_expr("a <- bYear[1] * Year + 2 +", "a"), "new_expr is incomplete")
+  expect_error(select_expr("a <- bYear[1] * Year + 2 +", "a"), "new_expr is incomplete")
 })
 
 test_that("list_by_name", {
@@ -72,5 +69,3 @@ test_that("is_named_list", {
   expect_true(is_named_list(list(x = 1)))
   expect_false(is_named_list(list(1)))
 })
-
-
