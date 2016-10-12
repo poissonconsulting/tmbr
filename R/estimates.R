@@ -11,8 +11,8 @@ estimates.tmb_analysis <- function(object, terms = "fixed", ...) {
     estimates <- object$sd$par.random
 
   estimates %<>% list_by_name()
-  inits <- lapply(object$inits, dims)
-  inits <- inits[names(estimates)]
+  inits <- object$inits[names(estimates)]
+  inits %<>% lapply(dims)
   estimates %<>% purrr::map2(inits, by_dims)
   estimates %<>% sort_by_names()
   estimates

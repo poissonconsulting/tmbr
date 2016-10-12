@@ -1,5 +1,14 @@
 context("utils")
 
+test_that("by_dims", {
+  expect_identical(by_dims(1, 1L), 1)
+  expect_error(by_dims(1:2, 1L))
+  expect_identical(by_dims(1:2, 2L), 1:2)
+  expect_error(by_dims(1:2, c(1L,1L)))
+  expect_identical(by_dims(1:2, c(2L,1L)), matrix(1:2,nrow = 2))
+  expect_identical(by_dims(1:2, c(1L,2L)), matrix(1:2,nrow = 1))
+})
+
 test_that("dims_to_names", {
   expect_identical(dims_to_dimensions_vector(c(1L)), "")
   expect_identical(dims_to_dimensions_vector(c(3L)), c("[1]", "[2]", "[3]"))

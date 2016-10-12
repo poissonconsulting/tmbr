@@ -68,6 +68,62 @@ return nll;
 
 gen_inits_example2 <- function(data) list(a = 0, b = 0, log_sigma = 0, bYear = rep(0, 10), log_sYear = 0)
 
+model_code_example3 <- "
+#include <TMB.hpp>
+
+template<class Type>
+Type objective_function<Type>::operator() () {
+DATA_VECTOR(Count);
+DATA_FACTOR(Year);
+DATA_FACTOR(Site);
+
+PARAMETER(bIntercept);
+PARAMETER_VECTOR(bYear);
+PARAMETER_VECTOR(bSite);
+PARAMETER_MATRIX(bSiteYear);
+
+PARAMETER(log_sYear);
+PARAMETER(log_sSite);
+PARAMETER(log_sSiteYear);
+
+Type sYear = exp(log_sYear);
+Type sSite = exp(log_sSite);
+Type sSiteYear = exp(log_sSiteYear);
+
+int nYear = bYear.size();
+int nSite = bSite.size();
+int n = Count.size();
+
+vector<Type> eCount = Count;
+
+Type zero = 0.0;
+
+Type nll = 0.0;
+
+for(int i = 0; i < nYear; i++){
+  nll -= dnorm(bYear(i), zero, sYear, true);
+}
+
+for(int i = 0; i < nSite; i++){
+  nll -= dnorm(bSite(i), zero, sSite, true);
+  for(int j = 0; j < nYear; j++){
+    nll -= dnorm(bSiteYear(i,j), zero, sSiteYear, true);
+  }
+}
+
+for(int i = 0; i < n; i++){
+  eCount(i) = exp(bIntercept + bYear(Year(i)) + bSite(Site(i)) + bSiteYear(Site(i),Year(i)));
+  nll -= dpois(Count(i), eCount(i), true);
+}
+return nll;
+}"
+
+gen_inits_example3 <- function(data) list(bIntercept = 3, log_sYear = 0, log_sSite = 0, log_sSiteYear = 0)
+
+random_effects_example3 <- list(bYear = "Year", bSite = "Site", bSiteYear = c("Site", "Year"))
+new_expr_example3 <- "prediction <- exp(bIntercept + bYear[Year] + bSite[Site] + bSiteYear[Site,Year])"
+select_data_example3 = list(Count = 1L, Year = factor(1), Site = factor(1))
+
 . <- NULL
 
 

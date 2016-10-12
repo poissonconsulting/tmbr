@@ -90,3 +90,21 @@ test_that("analyse", {
   expect_equal(profile$estimate[2], 53.05689, tolerance = 1e-6)
   expect_equal(profile$upper[2], 60.69323, tolerance = 1e-6)
 })
+
+context("random matrix")
+
+test_that("example3", {
+  model <- tmb_model(model_code_example3, gen_inits = gen_inits_example3,
+                     random_effects = random_effects_example3,
+                     new_expr = new_expr_example3, select_data = select_data_example3)
+
+  analysis <- analyse(model, data_set_example3, beep = FALSE)
+
+  expect_identical(colnames(coef(analysis)), c("term", "estimate", "std.error", "statistic", "p.value", "lower", "upper"))
+
+  expect_identical(names(estimates(analysis)), c("bIntercept", "log_sSite", "log_sSiteYear", "log_sYear"))
+  expect_identical(dims(estimates(analysis, "random")$bSiteYear), c(6L,7L))
+
+  prediction <- predict(analysis, new_data = data_set_example3[11,], conf_int = TRUE)
+  expect_equal(prediction$upper, 70.05925, tolerance = 1e-7)
+})

@@ -2,7 +2,7 @@ select_data <- function(data, select_data, center, scale, random_effects) {
   if (!length(select_data)) {
     cols <- c(center, scale)
     cols %<>% c(unlist(random_effects))
-    check_cols(data, sort(cols))
+    check_cols(data, sort(unique(cols)))
     return(data)
   }
 

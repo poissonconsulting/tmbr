@@ -9,8 +9,9 @@ any_blank <- function(x) {
 by_dims <- function(x, dims) {
   stopifnot(is.vector(x))
   stopifnot(is.integer(dims))
+  stopifnot(length(x) == prod(dims))
   if (length(dims) == 1) return(x)
-  if (length(dims) == 2) return(as.matrix(x, nrow = dims[1], ncol = dims[2]))
+  if (length(dims) == 2) return(matrix(x, nrow = dims[1], ncol = dims[2]))
   return(array(x, dim = dims))
 }
 
