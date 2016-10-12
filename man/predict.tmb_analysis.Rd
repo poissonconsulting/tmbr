@@ -6,7 +6,9 @@
 \usage{
 \method{predict}{tmb_analysis}(object, new_data = data_set(object),
   new_expr = NULL, term = "prediction", conf_int = FALSE,
-  conf_level = 0.95, ...)
+  conf_level = 0.95, quick = getOption("mb.quick", FALSE),
+  quiet = getOption("mb.quiet", TRUE), beep = getOption("mb.beep", FALSE),
+  ...)
 }
 \arguments{
 \item{object}{The tmb_analysis object.}
@@ -21,7 +23,13 @@
 
 \item{conf_level}{A number specifying the confidence level. By default 0.95.}
 
-\item{...}{Unused.}
+\item{quick}{A flag indicating whether to quickly get unreliable values.}
+
+\item{quiet}{A flag indicating whether to disable tracing information.}
+
+\item{beep}{A flag indicating whether to beep on completion of the analysis.}
+
+\item{...}{Additional arguments.}
 }
 \value{
 The new data with the predictions.

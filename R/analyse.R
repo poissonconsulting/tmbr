@@ -1,12 +1,17 @@
 #' @export
-analyse.tmb_model <- function(model, data, beep = getOption("mb.beep", TRUE),
-                         debug = getOption("mb.debug", FALSE), ...) {
+analyse.tmb_model <- function(model, data,
+                         quick = getOption("mb.quick", FALSE),
+                         quiet = getOption("mb.quiet", TRUE),
+                         beep = getOption("mb.beep", TRUE),
+                         ...) {
   check_data2(data)
+  check_flag(quick)
+  check_flag(quiet)
   check_flag(beep)
-  check_flag(debug)
 
   if (beep) on.exit(beepr::beep())
-  if (!debug) {
+
+  if (!quiet) {
     sink(tempfile())
     on.exit(sink(), add = TRUE)
   }
@@ -36,7 +41,7 @@ analyse.tmb_model <- function(model, data, beep = getOption("mb.beep", TRUE),
 
   ad_fun <- TMB::MakeADFun(data = data, inits,
                            random = names(model$random_effects),
-                           DLL = basename(tempfile), silent = !debug)
+                           DLL = basename(tempfile), silent = quiet)
 
   opt <- do.call("optim", ad_fun)
 

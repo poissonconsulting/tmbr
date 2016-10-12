@@ -160,21 +160,26 @@ predict_row <- function(data, new_expr, analysis, term, conf_int, conf_level, fi
 #'
 #' @param object The tmb_analysis object.
 #' @param new_data The data frame to calculate the predictions for.
-#' @param new_expr A string of R code specifying the predictive relationship.
-#' @param term A string of the term in new_expr.
-#' @param conf_int A flag indicating whether to calculate confidence intervals.
-#' @param conf_level A number specifying the confidence level. By default 0.95.
-#' @param ... Unused.
+#' @inheritParams mbr::predict_data
 #' @return The new data with the predictions.
 #' @export
-predict.tmb_analysis <- function(
-  object, new_data = data_set(object), new_expr = NULL, term = "prediction",
-  conf_int = FALSE, conf_level = 0.95, ...) {
+predict.tmb_analysis <- function(object, new_data = data_set(object),
+                                 new_expr = NULL, term = "prediction",
+                                 conf_int = FALSE, conf_level = 0.95,
+                                 quick = getOption("mb.quick", FALSE),
+                                 quiet = getOption("mb.quiet", TRUE),
+                                 beep = getOption("mb.beep", FALSE),
+                                 ...) {
 
   check_data2(new_data)
   check_string(term)
   check_flag(conf_int)
   check_number(conf_level, c(0.5, 0.99))
+  check_flag(quick)
+  check_flag(quiet)
+  check_flag(beep)
+
+  if (beep) on.exit(beepr::beep())
 
   model <- model(object)
 

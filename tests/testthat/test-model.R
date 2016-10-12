@@ -24,7 +24,7 @@ test_that("model", {
 test_that("model data", {
   model <- tmb_model(model_code_example2, gen_inits = gen_inits_example2,
                      scale = "z")
-  expect_error(analyse_data(data_set_example2, model, beep = FALSE, debug = TRUE), "column names in data must include 'z'")
+  expect_error(analyse_data(data_set_example2, model, beep = FALSE), "column names in data must include 'z'")
 })
 
 test_that("model modify data", {
