@@ -1,5 +1,6 @@
 #' @export
-analyse.tmb_model <- function(model, data, beep = TRUE, debug = FALSE, ...) {
+analyse.tmb_model <- function(model, data, beep = getOption("mb.beep", TRUE),
+                         debug = getOption("mb.debug", FALSE), ...) {
   check_data2(data)
   check_flag(beep)
   check_flag(debug)
