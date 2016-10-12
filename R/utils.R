@@ -19,8 +19,6 @@ is_dims <- function(x) {
   is.integer(x) && length(dims) && all(x >= 1)
 }
 
-error <- function(...) stop(..., call. = FALSE)
-
 seq_to <- function(to) {
   seq(from = 1, to = to)
 }

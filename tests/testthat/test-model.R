@@ -24,28 +24,28 @@ test_that("model", {
 test_that("model data", {
   model <- tmb_model(model_code_example2, gen_inits = gen_inits_example2,
                      scale = "z")
-  expect_error(tmb_analysis(data_set_example2, model, beep = FALSE, debug = TRUE), "column names in data must include 'z'")
+  expect_error(analyse_data(data_set_example2, model, beep = FALSE, debug = TRUE), "column names in data must include 'z'")
 })
 
 test_that("model modify data", {
   model <- tmb_model(model_code_example2, gen_inits = gen_inits_example2, modify_data = function(x) stop("Houston..."))
-  expect_error(tmb_analysis(data_set_example2, model, beep = FALSE), "Houston...")
+  expect_error(analyse_data(data_set_example2, model, beep = FALSE), "Houston...")
 })
 
 test_that("tmb_analysis error", {
   model <- tmb_model(model_code_example2, gen_inits = gen_inits_example2,
                      select_data = list(x = 1, y = 1, z = 1))
 
-  expect_error(tmb_analysis(data_set_example2, model, beep = FALSE), "data must have column 'z'")
+  expect_error(analyse_data(data_set_example2, model, beep = FALSE), "data must have column 'z'")
 
   model <- tmb_model(model_code_example2, gen_inits = gen_inits_example2,
                      select_data = list(x = 1, y = TRUE))
 
-  expect_error(tmb_analysis(data_set_example2, model, beep = FALSE), "column y in data must be of class 'logical'")
+  expect_error(analyse_data(data_set_example2, model, beep = FALSE), "column y in data must be of class 'logical'")
 
   model <- tmb_model(model_code_example2, gen_inits =
                        function(data) list(a = 0, b = 0, log_sigma = 0, bYear = rep(0, 10), log_sYear = 0, bYear = c(0,0,0)), random_effects = list(bYear = "Year"),
                      select_data = list(x = 1, y = 1, Year = factor(1)))
 
-  expect_error(tmb_analysis(data_set_example2, model, beep = FALSE), "dimensions of user-provided random inits must match those of random effects")
+  expect_error(analyse_data(data_set_example2, model, beep = FALSE), "dimensions of user-provided random inits must match those of random effects")
 })

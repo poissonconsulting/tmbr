@@ -7,7 +7,7 @@ Description: Facilitates analyses using 'Template Model Builder'.
 License: MIT + file LICENSE
 Depends:
     R (>= 3.3.1),
-    mbr (>= 0.0.0.9003),
+    mbr (>= 0.0.0.9004),
     stats,
 Imports:
     beepr,
