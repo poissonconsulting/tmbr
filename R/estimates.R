@@ -2,8 +2,8 @@
 estimates.tmb_analysis <- function(object, terms = "fixed", ...) {
   check_vector(terms, c("^fixed$", "^random$", "^report$", "^adreport$"), max_length = 1)
 
-  if (terms == "report") return(sort_by_names(object$report))
-  if (terms == "adreport") return(sort_by_names(list_by_name(object$sd$value)))
+  if (terms == "report") return(sort_nlist(object$report))
+  if (terms == "adreport") return(sort_nlist(list_by_name(object$sd$value)))
 
   if (terms == "fixed") {
     estimates <- object$sd$par.fixed
@@ -14,6 +14,6 @@ estimates.tmb_analysis <- function(object, terms = "fixed", ...) {
   inits <- object$inits[names(estimates)]
   inits %<>% lapply(dims)
   estimates %<>% purrr::map2(inits, by_dims)
-  estimates %<>% sort_by_names()
+  estimates %<>% sort_nlist()
   estimates
 }

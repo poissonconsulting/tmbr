@@ -57,7 +57,7 @@ c_name <- function(x) {
 par_names_indices <- function(estimates) {
   estimates %<>% lapply(dims) %>% lapply(dims_to_dimensions_vector)
   estimates %<>% purrr::lmap(c_name)
-  estimates %<>% sort_by_names()
+  estimates %<>% sort_nlist()
   estimates
 }
 
@@ -74,7 +74,7 @@ lincomb_names <- function(analysis) {
 }
 
 named_estimates <- function(estimates) {
-  stopifnot(is_named_list(estimates))
+  stopifnot(is_nlist(estimates))
   indices <- par_names_indices(estimates) %>% unlist()
   estimates %<>% unlist()
   names(estimates) <- indices

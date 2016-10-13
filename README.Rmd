@@ -27,7 +27,7 @@ knitr::opts_chunk$set(
 ```{r}
 library(tmbr)
 
-model_code <- "
+code <- mb_code("
 #include <TMB.hpp>
 
 template<class Type>
@@ -53,11 +53,11 @@ for(int i = 0; i < n; i++){
 }
 
 return nll;
-}"
+}")
 
 gen_inits <- function(data) list(bIntercept = 0, bWt = 0, bHp = 0, bDisp = 0, log_sigma = 0)
 
-model <- tmb_model(model_code, gen_inits = gen_inits, scale = c("wt", "hp", "disp"))
+model <- model(code, gen_inits = gen_inits, scale = c("wt", "hp", "disp"))
 
 analysis <- analyse(model, data = mtcars)
 

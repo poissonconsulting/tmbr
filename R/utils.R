@@ -43,10 +43,6 @@ is_named <- function(x) {
   !is.null(names(x))
 }
 
-is_named_list <- function(x) {
-  is.list(x) && (is_named(x) || !length(x))
-}
-
 list_by_name <- function(x) {
   list <- list()
   names <- unique(names(x))
@@ -55,10 +51,4 @@ list_by_name <- function(x) {
   }
   names(list) <- names
   list
-}
-
-sort_by_names <- function(x) {
-  stopifnot(is_named_list(x))
-  if(!length(x)) return(x)
-  x[order(names(x))]
 }

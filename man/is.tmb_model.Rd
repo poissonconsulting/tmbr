@@ -2,7 +2,7 @@
 % Please edit documentation in R/is.R
 \name{is.tmb_model}
 \alias{is.tmb_model}
-\title{Is a TMB Model?}
+\title{Is a TMB Model}
 \usage{
 is.tmb_model(x)
 }
@@ -13,6 +13,6 @@ is.tmb_model(x)
 A flag indicating whether the test was positive.
 }
 \description{
-Tests wether x is an object of class 'tmb_model'
+Tests whether x is an object of class 'tmb_model'
 }
 

@@ -16,7 +16,7 @@ inits <- function(data, gen_inits, random_effects) {
     random_inits <- random_inits[!names(random_inits) %in% names(inits)]
     inits %<>% c(random_inits)
   }
-  inits %<>% sort_by_names()
+  inits %<>% sort_nlist()
   inits
 }
 

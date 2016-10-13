@@ -1,7 +1,8 @@
 context("analyse")
 
 test_that("analyse", {
-  model <- tmb_model(model_code_example2, gen_inits = gen_inits_example2, random_effects = list(bYear = "Year"),
+  code <- mb_code(model_code_example2)
+  model <- model(code, gen_inits = gen_inits_example2, random_effects = list(bYear = "Year"),
                      new_expr = "
                     fit2 <- a + b * x
                     fit <- a + b * x + bYear[Year]
@@ -12,7 +13,7 @@ test_that("analyse", {
 
   expect_true(is.tmb_analysis(analysis))
 
-  expect_identical(model_code(analysis), model_code_example2)
+  expect_identical(template(analysis), model_code_example2)
   expect_equal(data_set(analysis), data_set_example2)
   expect_equal(logLik(analysis), -3213.379, tolerance = 1e-7)
 
@@ -94,7 +95,7 @@ test_that("analyse", {
 context("random matrix")
 
 test_that("example3", {
-  model <- tmb_model(model_code_example3, gen_inits = gen_inits_example3,
+  model <- model(mb_code(model_code_example3), gen_inits = gen_inits_example3,
                      random_effects = random_effects_example3,
                      new_expr = new_expr_example3, select_data = select_data_example3)
 

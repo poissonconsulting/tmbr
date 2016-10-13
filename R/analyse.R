@@ -34,7 +34,7 @@ analyse.tmb_model <- function(model, data,
 
   tempfile <- tempfile()
 
-  write(model_code(model), file = paste0(tempfile, ".cpp"))
+  write(template(model), file = paste0(tempfile, ".cpp"))
 
   TMB::compile(paste0(tempfile, ".cpp"))
 

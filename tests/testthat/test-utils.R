@@ -71,10 +71,3 @@ test_that("is_named", {
   expect_true(is_named(list(x = 1)))
   expect_false(is_named(list(1)))
 })
-
-test_that("is_named_list", {
-  expect_false(is_named_list(c(x = 1)))
-  expect_false(is_named_list(c(1)))
-  expect_true(is_named_list(list(x = 1)))
-  expect_false(is_named_list(list(1)))
-})
