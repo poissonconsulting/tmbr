@@ -118,5 +118,5 @@ for(i in 1:length(Year)) {
 prediction[i] <- exp(bIntercept + bYear[Year[i]] + bSite[Site[i]] + bSiteYear[Site[i],Year[i]])
 }")
   expect_identical(nrow(prediction3), 1344L)
-  expect_identical(prediction3$estimate[11], prediction2$estimate)
+  expect_equal(prediction3$estimate[11], prediction2$estimate)
 })
