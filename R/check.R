@@ -1,3 +1,9 @@
+check_unused <- function(...) {
+  dots <- pryr::named_dots(...)
+  if (length(dots)) error("dots are not unused")
+  invisible(NULL)
+}
+
 check_x_in_y <- function(x, y, x_name = substitute(x), y_name = substitute(y), type_x = "values", type_y = "values") {
   if (is.name(x_name)) x_name %<>% deparse()
   if (is.name(y_name)) y_name %<>% deparse()

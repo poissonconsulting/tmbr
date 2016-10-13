@@ -48,4 +48,6 @@ test_that("tmb_analysis error", {
                      select_data = list(x = 1, y = 1, Year = factor(1)))
 
   expect_error(analyse_data(data_set_example2, model, beep = FALSE), "dimensions of user-provided random inits must match those of random effects")
+
+  expect_error(analyse_data(data_set_example2, model, not_an_arg = FALSE), "dots are not unused")
 })

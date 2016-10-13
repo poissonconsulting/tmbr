@@ -16,6 +16,7 @@ Imports:
     magrittr,
     plyr,
     purrr,
+    pryr,
     rescale,
     stringr,
     tibble,

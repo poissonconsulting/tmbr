@@ -100,16 +100,6 @@ predict_row <- function(data, new_expr, analysis, term, conf_int, conf_level, fi
 
   data %<>% as.list()
 
-  if (!conf_int) {
-    data %<>% c(fixed, random, report, adreport)
-    new_expr %<>% parse(text = .)
-    vars <- all.vars(new_expr)
-    data[vars[!vars %in% names(data)]] <- NA
-    data %<>% within(eval(new_expr))
-    stopifnot(length(data[[term]]) == 1)
-    return(data.frame(estimate = data[[term]]))
-  }
-
   fixed %<>% named_estimates() %>% as.list()
   random %<>% named_estimates() %>% as.list()
   report %<>% named_estimates() %>% as.list()
@@ -148,6 +138,14 @@ predict_row <- function(data, new_expr, analysis, term, conf_int, conf_level, fi
   data
 }
 
+calculate_predictions <- function(data, new_expr, term) {
+  new_expr %<>% parse(text = .)
+  data %<>% within(eval(new_expr))
+  if (is.null(data[[term]])) error("term '", term, "' is undefined")
+  if (!is.vector(data[[term]])) error("term '", term, "' is not a vector")
+  data[[term]]
+}
+
 #' Predict
 #'
 #' Calculate predictions.
@@ -178,6 +176,7 @@ predict.tmb_analysis <- function(object, new_data = data_set(object),
   check_flag(quick)
   check_flag(quiet)
   check_flag(beep)
+  check_unused(...)
 
   if (beep) on.exit(beepr::beep())
 
@@ -198,16 +197,24 @@ predict.tmb_analysis <- function(object, new_data = data_set(object),
   report <- estimates(object, "report")
   adreport <- estimates(object, "adreport")
 
-  data %<>% lapply(as.numeric) %>% as.data.frame()
+  data %<>% lapply(as.numeric)
+
+  if (!conf_int) {
+    data %<>% c(fixed, random, report, adreport)
+    estimate <- calculate_predictions(data, new_expr, term)
+    if (!length(estimate) %in% c(1, nrow(new_data)))
+        error("length of term '", term, "' is invalid")
+    new_data$estimate <- estimate
+    return(new_data)
+  }
+
+  data %<>% as.data.frame()
 
   data %<>% plyr::adply(1, predict_row, new_expr = new_expr,
                         analysis = object, term = term, conf_int = conf_int, conf_level = conf_level,
                         fixed = fixed, random = random, report = report, adreport = adreport)
 
-  if (conf_int) {
-    data %<>% dplyr::select_(~estimate, ~lower, ~upper)
-  } else
-    data %<>% dplyr::select_(~estimate)
+  data %<>% dplyr::select_(~estimate, ~lower, ~upper)
 
   new_data %<>% dplyr::bind_cols(data)
   new_data
