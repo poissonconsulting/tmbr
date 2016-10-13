@@ -95,31 +95,17 @@ calculate_expr <- function(new_expr, data) {
   new_expr
 }
 
-predict_row <- function(data, new_expr, analysis, term, conf_int, conf_level, fixed, random, report, adreport) {
-  stopifnot(nrow(data) == 1)
+profile_prediction <- function(data, new_expr, analysis, conf_level, fixed, estimates) {
 
-  data %<>% as.list()
-
-  fixed %<>% named_estimates() %>% as.list()
-  random %<>% named_estimates() %>% as.list()
-  report %<>% named_estimates() %>% as.list()
-  adreport %<>% named_estimates() %>% as.list()
-
-  new_expr %<>% select_expr(term)
-  back_transform <- names(new_expr)
-
-  data %<>% c(random, report, adreport)
+  data %<>% as.list() %>% c(estimates)
 
   new_expr %<>% calculate_expr(data)
 
   sum <- sum(new_expr[names(new_expr) == "all"])
   new_expr <- new_expr[names(new_expr) != "all"]
 
-  if (!length(new_expr)) {
-    data <- data.frame(estimate = sum, lower = sum, upper = sum)
-    data[] %<>% purrr::map(eval(parse(text = back_transform)))
-    return(data)
-  }
+  if (!length(new_expr)) return(data.frame(estimate = sum, lower = sum, upper = sum))
+
   lincomb <- lincomb0(analysis)
 
   if (!all(names(new_expr) %in% names(lincomb))) error("unrecognised parameter name")
@@ -133,9 +119,7 @@ predict_row <- function(data, new_expr, analysis, term, conf_int, conf_level, fi
     calculate_expr(fixed)
 
   estimate <- sum(new_expr)
-  data <- data.frame(estimate = estimate + sum, lower = profile$lower + sum, upper = profile$upper + sum)
-  data[] %<>% purrr::map(eval(parse(text = back_transform)))
-  data
+  data.frame(estimate = estimate + sum, lower = profile$lower + sum, upper = profile$upper + sum)
 }
 
 calculate_predictions <- function(data, new_expr, term) {
@@ -199,22 +183,36 @@ predict.tmb_analysis <- function(object, new_data = data_set(object),
 
   data %<>% lapply(as.numeric)
 
-  if (!conf_int) {
+  if (!conf_int || quick) {
     data %<>% c(fixed, random, report, adreport)
     estimate <- calculate_predictions(data, new_expr, term)
     if (!length(estimate) %in% c(1, nrow(new_data)))
         error("length of term '", term, "' is invalid")
     new_data$estimate <- estimate
+
+    if (conf_int) {
+      new_data %<>% mutate(lower = estimate - estimate * 0.1,
+                           upper = estimate + estimate * 0.1)
+    }
     return(new_data)
   }
 
+  estimates <- c(random, report, adreport)
+
+  fixed %<>% named_estimates() %>% as.list()
+  estimates %<>% named_estimates() %>% as.list()
+
+  new_expr %<>% select_expr(term)
+  back_transform <- names(new_expr)
+
   data %<>% as.data.frame()
 
-  data %<>% plyr::adply(1, predict_row, new_expr = new_expr,
-                        analysis = object, term = term, conf_int = conf_int, conf_level = conf_level,
-                        fixed = fixed, random = random, report = report, adreport = adreport)
+  data %<>% plyr::adply(1, profile_prediction, new_expr = new_expr,
+                        analysis = object, conf_level = conf_level,
+                        fixed = fixed, estimates)
 
   data %<>% dplyr::select_(~estimate, ~lower, ~upper)
+  data[] %<>% purrr::map(eval(parse(text = back_transform)))
 
   new_data %<>% dplyr::bind_cols(data)
   new_data
