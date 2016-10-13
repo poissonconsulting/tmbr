@@ -191,8 +191,8 @@ predict.tmb_analysis <- function(object, new_data = data_set(object),
     new_data$estimate <- estimate
 
     if (conf_int) {
-      new_data %<>% mutate(lower = estimate - estimate * 0.1,
-                           upper = estimate + estimate * 0.1)
+      new_data %<>% dplyr::mutate_(lower = ~estimate - estimate * 0.1,
+                           upper = ~estimate + estimate * 0.1)
     }
     return(new_data)
   }

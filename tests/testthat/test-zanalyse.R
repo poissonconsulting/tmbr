@@ -108,4 +108,7 @@ test_that("example3", {
   prediction <- predict(analysis, new_data = data_set_example3[11,], conf_int = TRUE)
   expect_equal(prediction$upper, 70.05925, tolerance = 1e-7)
   expect_identical(predict(analysis, data_set_example3[2,]), predict_data(data_set_example3[2,], analysis))
+  prediction2 <- predict(analysis, new_data = data_set_example3[11,], conf_int = TRUE, quick = TRUE)
+  expect_identical(colnames(prediction), colnames(prediction2))
+  expect_equal(prediction$estimate, prediction2$estimate)
 })
