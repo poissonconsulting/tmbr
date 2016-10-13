@@ -124,6 +124,8 @@ profile_prediction <- function(data, new_expr, analysis, conf_level, fixed, esti
 
 calculate_predictions <- function(data, new_expr, term) {
   new_expr %<>% parse(text = .)
+  vars <- all.vars(new_expr)
+  data[vars[!vars %in% names(data)]] <- NA
   data %<>% within(eval(new_expr))
   if (is.null(data[[term]])) error("term '", term, "' is undefined")
   if (!is.vector(data[[term]])) error("term '", term, "' is not a vector")
@@ -187,12 +189,13 @@ predict.tmb_analysis <- function(object, new_data = data_set(object),
     data %<>% c(fixed, random, report, adreport)
     estimate <- calculate_predictions(data, new_expr, term)
     if (!length(estimate) %in% c(1, nrow(new_data)))
-        error("length of term '", term, "' is invalid")
+      error("length of term '", term, "' is invalid")
     new_data$estimate <- estimate
 
     if (conf_int) {
-      new_data %<>% dplyr::mutate_(lower = ~estimate - estimate * 0.1,
-                           upper = ~estimate + estimate * 0.1)
+      new_data %<>% dplyr::mutate_(
+        lower = ~estimate - estimate * stats::runif(nrow(new_data)),
+        upper = ~estimate + estimate * stats::runif(nrow(new_data)))
     }
     return(new_data)
   }

@@ -111,4 +111,11 @@ test_that("example3", {
   prediction2 <- predict(analysis, new_data = data_set_example3[11,], conf_int = TRUE, quick = TRUE)
   expect_identical(colnames(prediction), colnames(prediction2))
   expect_equal(prediction$estimate, prediction2$estimate)
+
+  prediction3 <- predict(analysis, new_expr = "
+for(i in 1:length(Year)) {
+prediction[i] <- exp(bIntercept + bYear[Year[i]] + bSite[Site[i]] + bSiteYear[Site[i],Year[i]])
+}")
+  expect_identical(nrow(prediction3), 1344L)
+  expect_identical(prediction3$estimate[11], prediction2$estimate)
 })
