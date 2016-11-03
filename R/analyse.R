@@ -21,6 +21,8 @@ analyse.tmb_model <- function(model, data, drop = character(0),
   timer <- timer::Timer$new()
   timer$start()
 
+  model %<>% drop_parameters(parameters = drop)
+
   obj <- list(model = model, data = data)
 
   data %<>% process_data(data2 = data, select_data = model$select_data,
