@@ -1,10 +1,11 @@
 #' @export
-analyse.tmb_model <- function(model, data,
+analyse.tmb_model <- function(model, data, drop = character(0),
                          quick = getOption("mb.quick", FALSE),
                          quiet = getOption("mb.quiet", TRUE),
                          beep = getOption("mb.beep", TRUE),
                          ...) {
   check_data2(data)
+  check_vector(character(0), "", min_length = 0)
   check_flag(quick)
   check_flag(quiet)
   check_flag(beep)
