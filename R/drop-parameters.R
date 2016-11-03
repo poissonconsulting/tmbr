@@ -29,8 +29,7 @@ drop_parameters.tmb_model <- function(x, parameters = character(0), ...) {
   if (!length(parameters))
     return(x)
 
-  code <- code(x)
-  code %<>% drop_parameters(parameters = parameters)
-  x$code <- code
+  x$code %<>% drop_parameters(parameters = parameters)
+  x$new_expr %<>% drop_parameters(parameters = parameters)
   x
 }
