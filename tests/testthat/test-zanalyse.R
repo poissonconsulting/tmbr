@@ -40,6 +40,8 @@ test_that("analyse", {
   residuals <- residuals(analysis)
   expect_identical(names(fit), c("x", "y", "Year", "estimate"))
 
+  expect_equal(rsquared(analysis, "y"), 0.7875721, tolerance = 1e-6)
+
   prediction <- predict(analysis)
   expect_is(prediction, "tbl")
   expect_identical(colnames(prediction), c("x", "y", "Year", "estimate"))
