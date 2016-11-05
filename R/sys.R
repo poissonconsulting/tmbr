@@ -76,8 +76,10 @@ Type objective_function<Type>::operator() () {
 DATA_VECTOR(Count);
 DATA_FACTOR(Year);
 DATA_FACTOR(Site);
+DATA_VECTOR(Slope);
 
 PARAMETER(bIntercept);
+PARAMETER(bSlope);
 PARAMETER_VECTOR(bYear);
 PARAMETER_VECTOR(bSite);
 PARAMETER_MATRIX(bSiteYear);
@@ -112,18 +114,16 @@ for(int i = 0; i < nSite; i++){
 }
 
 for(int i = 0; i < n; i++){
-  eCount(i) = exp(bIntercept + bYear(Year(i)) + bSite(Site(i)) + bSiteYear(Site(i),Year(i)));
+  eCount(i) = exp(bIntercept + bSlope * Slope(i) + bYear(Year(i)) + bSite(Site(i)) + bSiteYear(Site(i),Year(i)));
   nll -= dpois(Count(i), eCount(i), true);
 }
 return nll;
 }"
 
-gen_inits_example3 <- function(data) list(bIntercept = 3, log_sYear = 0, log_sSite = 0, log_sSiteYear = 0)
+gen_inits_example3 <- function(data) list(bIntercept = 3, bSlope = 0, log_sYear = 0, log_sSite = 0, log_sSiteYear = 0)
 
 random_effects_example3 <- list(bYear = "Year", bSite = "Site", bSiteYear = c("Site", "Year"))
-new_expr_example3 <- "prediction <- exp(bIntercept + bYear[Year] + bSite[Site] + bSiteYear[Site,Year])"
-select_data_example3 = list(Count = 1L, Year = factor(1), Site = factor(1))
+new_expr_example3 <- "prediction <- exp(bIntercept + bSlope * Slope + bYear[Year] + bSite[Site] + bSiteYear[Site,Year])"
+select_data_example3 = list(Count = 1L, Year = factor(1), Site = factor(1), Slope = 1)
 
 . <- NULL
-
-

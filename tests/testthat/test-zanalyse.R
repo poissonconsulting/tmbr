@@ -100,10 +100,13 @@ context("random matrix")
 
 test_that("example3", {
   model <- model(mb_code(model_code_example3), gen_inits = gen_inits_example3,
-                     random_effects = random_effects_example3,
+                     random_effects = random_effects_example3, center = "Slope",
                      new_expr = new_expr_example3, select_data = select_data_example3)
 
-  analysis <- analyse(model, data_set_example3, beep = FALSE)
+  analyses <- backwards(model, data_set_example3, drop = c("bIntercept", "bSlope"))
+  expect_identical(length(analyses), 2L)
+
+  analysis <- analyses[[1]]
 
   expect_identical(colnames(coef(analysis)), c("term", "estimate", "std.error", "statistic", "p.value", "lower", "upper"))
 
@@ -111,7 +114,7 @@ test_that("example3", {
   expect_identical(dims(estimates(analysis, "random")$bSiteYear), c(6L,7L))
 
   prediction <- predict(analysis, new_data = data_set_example3[11,], conf_int = TRUE)
-  expect_equal(prediction$upper, 70.05925, tolerance = 1e-7)
+  expect_equal(prediction$upper, 8.395107, tolerance = 1e-7)
   expect_identical(predict(analysis, data_set_example3[2,]), predict_data(data_set_example3[2,], analysis))
   prediction2 <- predict(analysis, new_data = data_set_example3[11,], conf_int = TRUE, quick = TRUE)
   expect_identical(colnames(prediction), colnames(prediction2))
