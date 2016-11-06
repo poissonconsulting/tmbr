@@ -13,7 +13,7 @@ analyse.tmb_model <- function(model, data, drop = character(0),
 
   if (beep) on.exit(beepr::beep())
 
-  if (!quiet) {
+  if (quiet) {
     sink(tempfile())
     on.exit(sink(), add = TRUE)
   }

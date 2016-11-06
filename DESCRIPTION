@@ -12,7 +12,7 @@ Depends:
 Imports:
     beepr,
     dplyr,
-    datacheckr (>= 0.1.1.9002),
+    datacheckr,
     magrittr,
     plyr,
     purrr,
