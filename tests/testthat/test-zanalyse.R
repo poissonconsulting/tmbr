@@ -8,7 +8,7 @@ test_that("analyse", {
                     fit2 <- a + b * x
                     fit <- a + b * x + bYear[Year]
                      residual <- y - fit
-                     prediction <- fit")
+                     prediction <- fit", latex = c(a = "\\alpha", b = "\\beta_{\\lambda}", bYear = "\\beta Y", log_sigma = "log(\\sigma)", log_sYear = "log(\\sigma_Y)"))
 
   model <- drop_parameters(model, parameters = c("a"))
 
@@ -25,6 +25,10 @@ test_that("analyse", {
   expect_identical(coef$lower, coef$estimate - coef$std.error * qnorm(0.975))
   expect_equal(coef$upper, coef$estimate + coef$std.error * qnorm(0.975))
   expect_identical(nrow(coef), 3L)
+
+  latex <- coef(analysis, latex = TRUE)
+  expect_identical(coef$estimate, latex$estimate)
+  expect_true(all(latex$term %in% c("\\beta_{\\lambda}", "log(\\sigma)", "log(\\sigma_Y)")))
 
   adreport <- coef(analysis, terms = "adreport")
   expect_identical(nrow(adreport), 1000L)
@@ -105,7 +109,7 @@ test_that("example3", {
                      random_effects = random_effects_example3, center = "Slope",
                      new_expr = new_expr_example3, select_data = select_data_example3)
 
-  analyses <- backwards(model, data_set_example3, drop = c("bIntercept", "bSlope"))
+  analyses <- backwards(model, data_set_example3, drop = c("bIntercept", "bSlope"), beep = FALSE)
   expect_identical(length(analyses), 2L)
 
   analysis <- analyses[[1]]

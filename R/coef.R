@@ -14,15 +14,22 @@
 #' @param terms A string of the type of terms to get the coefficients for.
 #' @param scalar A flag indicating whether to only return scalar terms.
 #' @param conf_level A number specifying the confidence level. By default 0.95.
+#' @param latex A flag indicating whether to replace each term with its latex math code
+#' or a named character vector specifying the latex math code for each parameter.
 #' @param ... Not used.
 #' @return A tidy tibble of the coeffcient terms.
 #' @export
 coef.tmb_analysis <- function(object, terms = "fixed", scalar = FALSE,
-                              conf_level = 0.95, ...) {
+                              conf_level = 0.95, latex = FALSE, ...) {
   check_vector(terms, c("^fixed$", "^random$", "^adreport$"), max_length = 1)
   check_flag(scalar)
   check_number(conf_level, c(0.5, 0.99))
   check_unused(...)
+
+  if (is.logical(latex)) {
+    check_flag(latex)
+    if (latex) latex <- object$model$latex
+  }
 
   # get all estimates (scalar = FALSE) and filter later
   estimates <- estimates(object, terms = terms, scalar = FALSE) %>% named_estimates()
@@ -45,6 +52,7 @@ coef.tmb_analysis <- function(object, terms = "fixed", scalar = FALSE,
   coef %<>% dplyr::arrange_(~term)
   coef$term <- names(estimates)
   if (scalar) coef %<>% dplyr::filter_(~!str_detect(term, "\\["))
+  if(!identical(latex, FALSE)) coef$term %<>% replace_latex(latex)
   coef %<>% dplyr::as.tbl()
   coef
 }
