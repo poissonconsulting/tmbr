@@ -6,9 +6,9 @@
 \usage{
 \method{predict}{tmb_analysis}(object, new_data = data_set(object),
   new_expr = NULL, term = "prediction", conf_int = FALSE,
-  conf_level = 0.95, quick = getOption("mb.quick", FALSE),
-  quiet = getOption("mb.quiet", TRUE), beep = getOption("mb.beep", FALSE),
-  ...)
+  conf_level = 0.95, modify_new_data = NULL, quick = getOption("mb.quick",
+  FALSE), quiet = getOption("mb.quiet", TRUE), beep = getOption("mb.beep",
+  FALSE), ...)
 }
 \arguments{
 \item{object}{The tmb_analysis object.}
@@ -22,6 +22,8 @@
 \item{conf_int}{A flag indicating whether to calculate confidence intervals.}
 
 \item{conf_level}{A number specifying the confidence level. By default 0.95.}
+
+\item{modify_new_data}{A single argument function to modify new data (in list form) immediately prior to calculating new_expr.}
 
 \item{quick}{A flag indicating whether to quickly get unreliable values.}
 

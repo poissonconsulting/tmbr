@@ -25,10 +25,7 @@ analyse.tmb_model <- function(model, data, drop = character(0),
 
   obj <- list(model = model, data = data)
 
-  data %<>% process_data(data2 = data, select_data = model$select_data,
-                             center = model$center, scale = model$scale,
-                             random_effects = model$random_effects,
-                             modify_data = model$modify_data)
+  data %<>% mbr::modify_data(model = model)
 
   inits <- inits(data, model$gen_inits, model$random_effects)
 

@@ -161,8 +161,10 @@ calculate_predictions <- function(data, new_expr, term) {
 #' @return The new data with the predictions.
 #' @export
 predict.tmb_analysis <- function(object, new_data = data_set(object),
-                                 new_expr = NULL, term = "prediction",
+                                 new_expr = NULL,
+                                 term = "prediction",
                                  conf_int = FALSE, conf_level = 0.95,
+                                 modify_new_data = NULL,
                                  quick = getOption("mb.quick", FALSE),
                                  quiet = getOption("mb.quiet", TRUE),
                                  beep = getOption("mb.beep", FALSE),
@@ -184,11 +186,8 @@ predict.tmb_analysis <- function(object, new_data = data_set(object),
   if (is.null(new_expr)) new_expr <- model$new_expr
   check_string(new_expr)
 
-  data <- process_data(new_data, data2 = data_set(object),
-                       select_data = model$select_data,
-                       center = model$center, scale = model$scale,
-                       random_effects = model$random_effects,
-                       modify_data = identity)
+  data <- mbr::modify_new_data(new_data, data2 = data_set(object), model = model,
+                               modify_new_data = modify_new_data)
 
   fixed <- estimates(object)
   random <- estimates(object, "random") %>%
