@@ -5,8 +5,10 @@ estimates.tmb_analysis <- function(object, terms = "fixed", scalar = FALSE, ...)
 
   if (terms == "report") {
     estimates <- object$report
+    estimates %<>% remap_estimates(object$map)
   } else if (terms == "adreport") {
     estimates <- list_by_name(object$sd$value)
+    estimates %<>% remap_estimates(object$map)
   } else {
     if (terms == "fixed") {
       estimates <- object$sd$par.fixed
@@ -14,6 +16,7 @@ estimates.tmb_analysis <- function(object, terms = "fixed", scalar = FALSE, ...)
       estimates <- object$sd$par.random
 
     estimates %<>% list_by_name()
+    estimates %<>% remap_estimates(object$map)
     inits <- object$inits[names(estimates)]
     inits %<>% lapply(dims)
     estimates %<>% purrr::map2(inits, by_dims)

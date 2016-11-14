@@ -50,9 +50,10 @@ coef.tmb_analysis <- function(object, terms = "fixed", scalar = FALSE,
   coef %<>% dplyr::mutate_(lower = ~estimate + std.error * qnorm((1 - conf_level) / 2),
                     upper = ~estimate + std.error * qnorm((1 - conf_level) / 2 + conf_level))
   coef %<>% dplyr::arrange_(~term)
+  coef %<>% remap_coef(object$map)
   coef$term <- names(estimates)
   if (scalar) coef %<>% dplyr::filter_(~!str_detect(term, "\\["))
-  if(!identical(latex, FALSE)) coef$term %<>% replace_latex(latex)
+  if (!identical(latex, FALSE)) coef$term %<>% replace_latex(latex)
   coef %<>% dplyr::as.tbl()
   coef
 }

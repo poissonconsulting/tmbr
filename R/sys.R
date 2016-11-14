@@ -66,7 +66,7 @@ ADREPORT(residual);
 return nll;
 }"
 
-gen_inits_example2 <- function(data) list(a = 0, b = 0, log_sigma = 0, bYear = rep(0, 10), log_sYear = 0)
+gen_inits_example2 <- function(data) list(a = 0, b = 0, log_sigma = 0, bYear = c(NA, rep(0, 9)), log_sYear = 0)
 
 model_code_example3 <- "
 #include <TMB.hpp>

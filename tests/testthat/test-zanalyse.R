@@ -17,7 +17,7 @@ test_that("analyse", {
   expect_true(is.tmb_analysis(analysis))
 
   expect_equal(data_set(analysis), data_set_example2)
-  expect_equal(logLik(analysis), -3225.942, tolerance = 1e-7)
+  expect_equal(logLik(analysis), -3591.286, tolerance = 1e-7)
 
   coef <- coef(analysis)
   expect_is(coef, "tbl")
@@ -44,7 +44,7 @@ test_that("analyse", {
   residuals <- residuals(analysis)
   expect_identical(names(fit), c("x", "y", "Year", "estimate"))
 
-  expect_equal(rsquared(analysis, "y"), 0.7875721, tolerance = 1e-6)
+  expect_equal(rsquared(analysis, "y"), 0.5707243, tolerance = 1e-6)
 
   prediction <- predict(analysis)
   expect_is(prediction, "tbl")
@@ -97,9 +97,9 @@ test_that("analyse", {
                    predict(analysis, data_set_example2[3,], "prediction <- fit[Year] + bYear[Year]", conf_int = TRUE)$estimate)
   profile <- predict(analysis, data_set_example2[1:2,], "prediction <- b * x + bYear[Year] + 1 + -1", conf_int = TRUE)
   expect_equal(profile$estimate, prediction$estimate[1:2])
-  expect_equal(profile$lower[2], 51.96163, tolerance = 1e-6)
-  expect_equal(profile$estimate[2], 53.10635, tolerance = 1e-6)
-  expect_equal(profile$upper[2], 54.25148, tolerance = 1e-6)
+  expect_equal(profile$lower[2], 55.3838, tolerance = 1e-6)
+  expect_equal(profile$estimate[2], 56.75728, tolerance = 1e-6)
+  expect_equal(profile$upper[2], 58.13152, tolerance = 1e-6)
 })
 
 context("random matrix")
