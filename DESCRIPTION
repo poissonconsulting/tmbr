@@ -1,13 +1,13 @@
 Package: tmbr
 Title: Analyses Using TMB
-Version: 0.0.0.9012
-Date: 2016-11-05
+Version: 0.0.0.9013
+Date: 2016-11-14
 Authors@R: person("Joe", "Thorley", email = "joe@poissonconsulting.ca", role = c("aut", "cre"))
 Description: Facilitates analyses using 'Template Model Builder'.
 License: MIT + file LICENSE
 Depends:
     R (>= 3.3.1),
-    mbr (>= 0.0.0.9012),
+    mbr (>= 0.0.0.9014),
     stats,
 Imports:
     beepr,

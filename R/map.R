@@ -53,8 +53,9 @@ remap_estimates <- function(estimates, map) {
 
 remap_data <- function(x, y) {
   stopifnot(nrow(x) == sum(!is.na(y)))
+  x$constant <- FALSE
   z <- dplyr::data_frame(term = "", estimate = 0, std.error = 0, statistic = NaN,
-                         p.value = 1, lower = 0, upper = 0)
+                         p.value = 1, lower = 0, upper = 0, constant = TRUE)
   z <- z[rep(1,length(y)),]
   z[!is.na(y),] <- x
   z
@@ -69,6 +70,8 @@ remap_data <- function(x, y) {
 #' @param map A named list indicating the fixed values.
 remap_coef <- function(coef, map) {
   check_uniquely_named_list(map)
+  coef$constant <- FALSE
+
   if (!length(map)) return(coef)
   map <- map[names(map) %in% unique(coef$term)]
   if (!length(map)) return(coef)

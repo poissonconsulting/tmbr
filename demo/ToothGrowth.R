@@ -10,7 +10,9 @@ rm(list = ls())
 # input data
 data <- ToothGrowth
 
-summary(lm(len ~ supp - 1, data = data))
+mod <- lm(len ~ supp - 1, data = data)
+summary(mod)
+AIC(mod)
 
 template <- "
 #include <TMB.hpp>
@@ -56,7 +58,9 @@ opt <- do.call("optim", ad_fun)
 sd <- sdreport(ad_fun)
 summary(sd)
 
-summary(lm(len ~ supp, data = data))
+mod <- lm(len ~ supp, data = data)
+logLik(mod)
+AIC(mod)
 
 template <- "
 #include <TMB.hpp>
@@ -108,4 +112,8 @@ code <- mb_code(template)
 model <- model(code, gen_inits = function (data) list(bintercept = 0, bsupp = c(NA,0), log_slen = 0))
 analysis <- analyse(model, data = data)
 coef(analysis)
+logLik(analysis)
+nterms(analysis)
 
+IC(analysis, n = Inf)
+stopifnot(all.equal(IC(analysis, n = Inf), AIC(mod)))

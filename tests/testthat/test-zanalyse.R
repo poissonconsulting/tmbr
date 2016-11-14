@@ -18,6 +18,9 @@ test_that("analyse", {
 
   expect_equal(data_set(analysis), data_set_example2)
   expect_equal(logLik(analysis), -3591.286, tolerance = 1e-7)
+  expect_equal(sample_size(analysis), nrow(data_set_example2))
+  expect_equal(nterms(analysis), 3L)
+  expect_equal(AIC(analysis), 7188.596, tolerance = 1e-7)
 
   coef <- coef(analysis)
   expect_is(coef, "tbl")
@@ -36,7 +39,8 @@ test_that("analyse", {
   random <- coef(analysis, terms = "random")
   expect_identical(nrow(random), 10L)
   expect_identical(random$term, paste0("bYear[", 1:10, "]"))
-  expect_identical(nrow(coef(analysis, terms = "random", scalar = TRUE)), 0L)
+  expect_identical(nrow(coef(analysis, terms = "random", scalar_only = TRUE)), 0L)
+  expect_identical(nrow(coef(analysis, terms = "random", constant_included = FALSE)), 9L)
 
   expect_error(coef(analysis, terms = "report"), "terms must only include values which match the regular expressions")
 
@@ -69,7 +73,7 @@ test_that("analyse", {
 
   estimates <- estimates(analysis)
   expect_identical(lapply(estimates, dims), lapply(analysis$inits[names(estimates)], dims))
-  expect_identical(estimates(analysis, "random", scalar = TRUE), list(x = 1)[-1])
+  expect_identical(estimates(analysis, "random", scalar_only = TRUE), list(x = 1)[-1])
   estimates <- estimates(analysis, "random")
   expect_identical(estimates$bYear, random$estimate)
   estimates <- estimates(analysis, "report")

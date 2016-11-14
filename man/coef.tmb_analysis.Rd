@@ -4,15 +4,17 @@
 \alias{coef.tmb_analysis}
 \title{Coef TMB Analysis}
 \usage{
-\method{coef}{tmb_analysis}(object, terms = "fixed", scalar = FALSE,
-  conf_level = 0.95, latex = FALSE, ...)
+\method{coef}{tmb_analysis}(object, terms = "fixed", scalar_only = FALSE,
+  constant_included = TRUE, conf_level = 0.95, latex = FALSE, ...)
 }
 \arguments{
 \item{object}{The tmb_analysis object.}
 
 \item{terms}{A string of the type of terms to get the coefficients for.}
 
-\item{scalar}{A flag indicating whether to only return scalar terms.}
+\item{scalar_only}{A flag indicating whether to only return scalar terms.}
+
+\item{constant_included}{A flag indicating whether to include constant terms.}
 
 \item{conf_level}{A number specifying the confidence level. By default 0.95.}
 

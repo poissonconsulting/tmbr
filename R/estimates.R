@@ -1,7 +1,7 @@
 #' @export
-estimates.tmb_analysis <- function(object, terms = "fixed", scalar = FALSE, ...) {
+estimates.tmb_analysis <- function(object, terms = "fixed", scalar_only = FALSE, ...) {
   check_vector(terms, c("^fixed$", "^random$", "^report$", "^adreport$"), max_length = 1)
-  check_flag(scalar)
+  check_flag(scalar_only)
 
   if (terms == "report") {
     estimates <- object$report
@@ -21,7 +21,7 @@ estimates.tmb_analysis <- function(object, terms = "fixed", scalar = FALSE, ...)
     inits %<>% lapply(dims)
     estimates %<>% purrr::map2(inits, by_dims)
   }
-  if (scalar) estimates %<>% scalar_nlist()
+  if (scalar_only) estimates %<>% scalar_nlist()
   estimates %<>% sort_nlist()
   estimates
 }
