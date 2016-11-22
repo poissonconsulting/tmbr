@@ -5,7 +5,7 @@ analyse.tmb_model <- function(model, data, drop = character(0),
                          beep = getOption("mb.beep", TRUE),
                          ...) {
   check_data2(data)
-  check_vector(character(0), "", min_length = 0)
+  check_vector(drop, "", min_length = 0)
   check_flag(quick)
   check_flag(quiet)
   check_flag(beep)

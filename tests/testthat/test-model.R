@@ -35,6 +35,19 @@ test_that("model modify data", {
   expect_error(analyse_data(data_set_example2, model, beep = FALSE), "Houston...")
 })
 
+test_that("make_all_models", {
+  code <- mb_code(model_code_example2)
+  model <- model(code, gen_inits = gen_inits_example2)
+  models <- make_all_models(model, drop = list("a"))
+  expect_is(models, "list")
+  expect_length(models, 2L)
+  expect_identical(names(models), c("-", "-a"))
+  expect_identical(models[[1]], model)
+  expect_identical(names(models), c("-", "-a"))
+  expect_identical(names(make_all_models(model, drop = list(c("a", "b")))), c("-", "-b", "-a-b"))
+  expect_identical(names(make_all_models(model, drop = list("b", "a"))), c("-", "-a", "-b", "-a-b"))
+})
+
 test_that("tmb_analysis error", {
   code <- mb_code(model_code_example2)
   model <- model(code, gen_inits = gen_inits_example2,

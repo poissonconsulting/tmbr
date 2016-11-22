@@ -113,10 +113,10 @@ test_that("example3", {
                      random_effects = random_effects_example3, center = "Slope",
                      new_expr = new_expr_example3, select_data = select_data_example3)
 
-  analyses <- backwards(model, data_set_example3, drop = c("bIntercept", "bSlope"), beep = FALSE)
-  expect_identical(length(analyses), 2L)
+  analyses <- backwards(model, data_set_example3, drop = list(c("bIntercept", "bSlope")), beep = FALSE)
+  expect_identical(names(analyses), c("-", "-bSlope"))
 
-  analysis <- analyses[[1]]
+  analysis <- analyses[[2]]
 
   expect_identical(colnames(coef(analysis)), c("term", "estimate", "std.error", "statistic", "p.value", "lower", "upper"))
 
