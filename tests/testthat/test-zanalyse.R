@@ -5,9 +5,15 @@ test_that("analyse", {
 
   model <- model(code, gen_inits = gen_inits_example2, random_effects = list(bYear = "Year"),
                      new_expr = "
-                    fit2 <- a + b * x
+  for(i in 1:length(x)) {
+    fit2[i] <- a + b * x[i]
+  }
                     fit <- a + b * x + bYear[Year]
                      residual <- y - fit
+                    rsquared0 <- var(fit)  / var(y)
+                    rsquared3 <- 1 - var(y - fit)  / var(y)
+                    rsquared <- var(fit2)  / (var(fit2) + exp(log_sigma)^2)
+                    rsquared2 <- (var(fit2) + exp(log_sYear)^2)  / (var(fit2) + exp(log_sigma)^2 + exp(log_sYear)^2)
                      prediction <- fit", latex = c(a = "\\alpha", b = "\\beta_{\\lambda}", bYear = "\\beta Y", log_sigma = "log(\\sigma)", log_sYear = "log(\\sigma_Y)"))
 
   model <- drop_parameters(model, parameters = c("a"))
@@ -48,7 +54,7 @@ test_that("analyse", {
   residuals <- residuals(analysis)
   expect_identical(names(fit), c("x", "y", "Year", "estimate"))
 
-  expect_equal(rsquared(analysis, "y"), 0.5707243, tolerance = 1e-6)
+  expect_equal(predict(analysis, term = "rsquared3")$estimate[1], 0.5707243, tolerance = 1e-6)
 
   prediction <- predict(analysis)
   expect_is(prediction, "tbl")
