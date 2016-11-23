@@ -142,4 +142,12 @@ prediction[i] <- exp(bIntercept + bYear[Year[i]] + bSite[Site[i]] + bSiteYear[Si
 }")
   expect_identical(nrow(prediction3), 1344L)
   expect_equal(prediction3$estimate[11], prediction2$estimate)
+
+  prediction4 <- predict(analysis, new_data = data_set_example3[11,] ,new_expr = "prediction <- bIntercept * Year * Year", conf_int = TRUE)
+  expect_equal(prediction4$upper, 39.30119, tolerance = 1e-6)
+  prediction5 <- predict(analysis, new_data = data_set_example3[10:11,] ,new_expr = "prediction <- exp(bIntercept * Year * Year)", conf_int = TRUE)
+  prediction5b <- predict(analysis, new_data = data_set_example3[10:11,], new_expr = "
+prediction <- exp(bIntercept * Year + bYear[Year]) ", conf_int = TRUE)
+  prediction6 <- predict(analysis, new_data = data_set_example3[10:11,] ,new_expr = "prediction <-  exp(bIntercept + bYear[Year])", conf_int = TRUE)
+  expect_error(predict(analysis, new_data = data_set_example3[10:11,] ,new_expr = "prediction <-  exp(bIntercept + bYear[Year] + bIntercept * Year^2)", conf_int = TRUE, quick = TRUE))
 })
