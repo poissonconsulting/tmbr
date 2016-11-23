@@ -28,6 +28,11 @@ test_that("analyse", {
   expect_equal(nterms(analysis), 3L)
   expect_equal(AIC(analysis), 7188.596, tolerance = 1e-7)
 
+  analyses <- analyse(model, list(x = data_set_example2, x2 = data_set_example2), beep = FALSE)
+  expect_is(analyses, "list")
+  expect_identical(names(analyses), c("x", "x2"))
+  expect_equal(logLik(analyses[[1]]), -3591.286, tolerance = 1e-7)
+
   coef <- coef(analysis)
   expect_is(coef, "tbl")
   expect_identical(colnames(coef), c("term", "estimate", "std.error", "statistic", "p.value", "lower", "upper"))
