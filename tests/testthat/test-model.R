@@ -41,11 +41,11 @@ test_that("make_all_models", {
   models <- make_all_models(model, drop = list("a"))
   expect_is(models, "list")
   expect_length(models, 2L)
-  expect_identical(names(models), c("base+a", "base"))
+  expect_identical(names(models), c("full", "base"))
   expect_identical(models[[1]], model)
-  expect_identical(names(models), c("base+a", "base"))
-  expect_identical(names(make_all_models(model, drop = list(c("a", "b")))), c("base+a+b", "base+a", "base"))
-  expect_identical(names(make_all_models(model, drop = list("b", "a"))), c("base+a+b", "base+b", "base+a", "base"))
+  expect_identical(names(models), c("full", "base"))
+  expect_identical(names(make_all_models(model, drop = list(c("a", "b")))), c("full", "base+a", "base"))
+  expect_identical(names(make_all_models(model, drop = list("b", "a"))), c("full", "base+b", "base+a", "base"))
 })
 
 test_that("tmb_analysis error", {

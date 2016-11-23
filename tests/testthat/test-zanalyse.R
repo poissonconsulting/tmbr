@@ -120,7 +120,7 @@ test_that("example3", {
                      new_expr = new_expr_example3, select_data = select_data_example3)
 
   analyses <- backwards(model, data_set_example3, drops = list(c("bIntercept", "bSlope")), beep = FALSE)
-  expect_identical(names(analyses), c("base+bIntercept+bSlope", "base+bIntercept"))
+  expect_identical(names(analyses), c("full", "base+bIntercept"))
 
   analysis <- analyses[[2]]
 
