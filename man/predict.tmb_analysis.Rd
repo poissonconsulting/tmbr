@@ -5,10 +5,10 @@
 \title{Predict}
 \usage{
 \method{predict}{tmb_analysis}(object, new_data = data_set(object),
-  new_expr = NULL, term = "prediction", conf_int = FALSE,
-  conf_level = 0.95, modify_new_data = NULL, quick = getOption("mb.quick",
-  FALSE), quiet = getOption("mb.quiet", TRUE), beep = getOption("mb.beep",
-  FALSE), ...)
+  new_expr = NULL, new_values = list(), term = "prediction",
+  conf_int = FALSE, conf_level = 0.95, modify_new_data = NULL,
+  quick = getOption("mb.quick", FALSE), quiet = getOption("mb.quiet", TRUE),
+  beep = getOption("mb.beep", FALSE), ...)
 }
 \arguments{
 \item{object}{The tmb_analysis object.}
@@ -16,6 +16,8 @@
 \item{new_data}{The data frame to calculate the predictions for.}
 
 \item{new_expr}{A string of R code specifying the predictive relationship.}
+
+\item{new_values}{A named list of new or replacement values to pass to new_expr.}
 
 \item{term}{A string of the term in new_expr.}
 

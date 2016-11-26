@@ -78,6 +78,11 @@ test_that("analyse", {
   expect_identical(colnames(prediction2), c("x", "y", "Year", "estimate"))
   expect_identical(prediction$estimate, prediction2$estimate)
 
+  prediction2b <- predict(analysis, new_data = data_set(analysis), new_expr =
+                           "prediction <- b * x", new_values = list(b = -1))
+
+  expect_identical(prediction2b$x * -1, prediction2b$estimate)
+
   prediction3 <- predict(analysis, new_data = data_set_example2[3,], term = "other", new_expr =
                            "other <- b * x + bYear[Year]")
   expect_equal(prediction2[3,], prediction3)

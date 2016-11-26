@@ -162,6 +162,7 @@ calculate_predictions <- function(data, new_expr, term) {
 #' @export
 predict.tmb_analysis <- function(object, new_data = data_set(object),
                                  new_expr = NULL,
+                                 new_values = list(),
                                  term = "prediction",
                                  conf_int = FALSE, conf_level = 0.95,
                                  modify_new_data = NULL,
@@ -171,7 +172,7 @@ predict.tmb_analysis <- function(object, new_data = data_set(object),
                                  ...) {
 
   check_data2(new_data)
-  check_string(term)
+  check_uniquely_named_list(new_values)
   check_flag(conf_int)
   check_number(conf_level, c(0.5, 0.99))
   check_flag(quick)
@@ -199,6 +200,8 @@ predict.tmb_analysis <- function(object, new_data = data_set(object),
 
   if (!conf_int) {
     data %<>% c(fixed, random, report, adreport)
+    data <- data[!names(data) %in% names(new_values)]
+    data %<>% c(new_values)
     estimate <- calculate_predictions(data, new_expr, term)
     if (!length(estimate) %in% c(1, nrow(new_data)))
       error("length of term '", term, "' is invalid")
