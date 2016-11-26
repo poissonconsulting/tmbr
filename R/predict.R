@@ -196,7 +196,7 @@ predict.tmb_analysis <- function(object, new_data = data_set(object),
   report <- estimates(object, "report")
   adreport <- estimates(object, "adreport")
 
-  data %<>% lapply(as.numeric)
+  data %<>% numericize_factors()
 
   if (!conf_int) {
     data %<>% c(fixed, random, report, adreport)
