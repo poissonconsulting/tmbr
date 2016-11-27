@@ -31,5 +31,6 @@ drop_parameters.tmb_model <- function(x, parameters = character(0), ...) {
 
   x$code %<>% drop_parameters(parameters = parameters)
   x$new_expr %<>% drop_parameters(parameters = parameters)
+  x$latex <- x$latex[!names(x$latex) %in% parameters]
   x
 }

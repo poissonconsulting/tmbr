@@ -1,6 +1,19 @@
 #' @export
 estimates.tmb_analysis <- function(object, terms = "fixed", scalar_only = FALSE, ...) {
-  check_vector(terms, c("^fixed$", "^random$", "^report$", "^adreport$"), max_length = 1)
+  possible <- c("fixed", "random", "report", "adreport")
+  if (identical(terms, "all")) terms <- possible
+  if (identical(terms, "primary")) terms <- c("fixed", "random")
+
+  terms %<>% unique()
+
+  if (length(terms) > 1) {
+    terms %<>% lapply(function(term) {estimates(object, terms = term, scalar_only = scalar_only)})
+    terms %<>% unlist(recursive = FALSE)
+    terms %<>% sort_nlist()
+    return(terms)
+  }
+
+  check_scalar(terms, possible)
   check_flag(scalar_only)
 
   if (terms == "report") {

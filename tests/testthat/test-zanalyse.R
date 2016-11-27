@@ -96,6 +96,7 @@ test_that("analyse", {
   expect_equal(estimates$fit, fit$estimate, tolerance = 1e-5)
   estimates <- estimates(analysis, "adreport")
   expect_equal(estimates$residual, residuals$estimate)
+  expect_identical(names(estimates(analysis, "primary")), sort(names(c(estimates(analysis, "fixed"), estimates(analysis, "random")))))
 
   expect_identical(lincomb_names(analysis),
                    c("log_sigma", "b", "log_sYear"))

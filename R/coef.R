@@ -23,22 +23,7 @@
 coef.tmb_analysis <- function(object, terms = "fixed", scalar_only = FALSE,
                               constant_included = TRUE,
                               conf_level = 0.95, latex = FALSE, ...) {
-
-  possible <- c("fixed", "random", "adreport")
-  if (identical(terms, "all")) terms <- possible
-  if (identical(terms, "primary")) terms <- c("fixed", "random")
-  terms %<>% unique()
-
-  if (length(terms) > 1) {
-    coef <- lapply(terms, function(term) {coef(object, terms = term, scalar_only = scalar_only,
-                                           constant_included = constant_included,
-                                           conf_level = conf_level, latex = latex)})
-    coef %<>% dplyr::bind_rows()
-    coef %<>% dplyr::arrange_(~term)
-    return(coef)
-  }
-
-  check_scalar(terms, possible)
+  check_vector(terms, c("^fixed$", "^random$", "^adreport$"), max_length = 1)
   check_flag(scalar_only)
   check_flag(constant_included)
   check_number(conf_level, c(0.5, 0.99))
