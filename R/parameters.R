@@ -2,6 +2,7 @@
 parameters.tmb_code <- function(x, terms = "primary", scalar_only = FALSE, ...) {
   possible <- c("primary", "report", "adreport")
   if (identical(terms, "all")) terms <- possible
+  terms %<>% unique()
 
   if (length(terms) > 1) {
     terms %<>% lapply(function(term) {parameters(x, term, scalar_only)})

@@ -16,8 +16,8 @@ tmb_analysis <- function(data, model, tempfile, quick, quiet, compiled = FALSE) 
 
   inits <- inits(data, model$gen_inits, model$random_effects)
 
-  if (any(names(inits) %in% c("fixed", "random", "report", "adreport", "all")))
-    error("parameters cannot be named 'fixed', 'random', 'report', 'adreport' or 'all'")
+  if (any(names(inits) %in% c("fixed", "primary", "random", "report", "adreport", "all")))
+    error("parameters cannot be named 'fixed', 'primary', 'random', 'report', 'adreport' or 'all'")
 
   map <- map(inits)
 
