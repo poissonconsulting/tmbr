@@ -170,6 +170,7 @@ predict.tmb_analysis <- function(object, new_data = data_set(object),
                                  term = "prediction",
                                  conf_int = FALSE, conf_level = 0.95,
                                  modify_new_data = NULL,
+                                 parallel = getOption("mb.parallel", FALSE),
                                  quick = getOption("mb.quick", FALSE),
                                  quiet = getOption("mb.quiet", TRUE),
                                  beep = getOption("mb.beep", FALSE),
@@ -179,6 +180,7 @@ predict.tmb_analysis <- function(object, new_data = data_set(object),
   check_uniquely_named_list(new_values)
   check_flag(conf_int)
   check_number(conf_level, c(0.5, 0.99))
+  check_flag(parallel)
   check_flag(quick)
   check_flag(quiet)
   check_flag(beep)
@@ -229,7 +231,8 @@ predict.tmb_analysis <- function(object, new_data = data_set(object),
 
   data %<>% plyr::adply(1, profile_prediction, new_expr = new_expr,
                         analysis = object, conf_level = conf_level,
-                        fixed = fixed, estimates = estimates)
+                        fixed = fixed, estimates = estimates,
+                        .parallel = parallel)
 
   data %<>% dplyr::select_(~estimate, ~lower, ~upper)
   data[] %<>% purrr::map(eval(parse(text = back_transform)))
