@@ -23,7 +23,6 @@ Imports:
     timer,
     TMB (>= 1.7.5)
 Suggests:
-    doParallel,
     testthat
 Remotes:
     poissonconsulting/datacheckr,

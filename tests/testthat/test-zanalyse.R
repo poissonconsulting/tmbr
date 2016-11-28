@@ -126,10 +126,6 @@ test_that("analyse", {
 context("random matrix")
 
 test_that("example3", {
-  require(foreach, quietly = TRUE)
-  require(doParallel, quietly = TRUE)
-
-  registerDoParallel(10, cores = 2)
   model <- model(mb_code(model_code_example3), gen_inits = gen_inits_example3,
                      random_effects = random_effects_example3, center = "Slope",
                      new_expr = new_expr_example3, select_data = select_data_example3)
@@ -160,7 +156,7 @@ prediction[i] <- exp(bIntercept + bYear[Year[i]] + bSite[Site[i]] + bSiteYear[Si
 
   prediction4 <- predict(analysis, new_data = data_set_example3[11,] ,new_expr = "prediction <- bIntercept * Year * Year", conf_int = TRUE)
   expect_equal(prediction4$upper, 39.30119, tolerance = 1e-6)
-  prediction5 <- predict(analysis, new_data = data_set_example3[1:10,] ,new_expr = "prediction <- exp(bIntercept * Year * Year)", conf_int = TRUE, parallel = TRUE)
+  prediction5 <- predict(analysis, new_data = data_set_example3[10:11,] ,new_expr = "prediction <- exp(bIntercept * Year * Year)", conf_int = TRUE)
   prediction5b <- predict(analysis, new_data = data_set_example3[10:11,], new_expr = "
 prediction <- exp(bIntercept * Year + bYear[Year]) ", conf_int = TRUE)
   prediction6 <- predict(analysis, new_data = data_set_example3[10:11,] ,new_expr = "prediction <-  exp(bIntercept + bYear[Year])", conf_int = TRUE)
