@@ -42,7 +42,7 @@ test_that("analyse", {
 
   latex <- coef(analysis, latex = TRUE)
   expect_identical(coef$estimate, latex$estimate)
-  expect_true(all(latex$term %in% c("\\beta_{\\lambda}", "log(\\sigma)", "log(\\sigma_Y)")))
+  expect_true(all(latex$term %in% c("$\\beta_{\\lambda}$", "$log(\\sigma)$", "$log(\\sigma_Y)$")))
 
   adreport <- coef(analysis, terms = "adreport")
   expect_identical(nrow(adreport), 1000L)
