@@ -160,5 +160,4 @@ prediction[i] <- exp(bIntercept + bYear[Year[i]] + bSite[Site[i]] + bSiteYear[Si
   prediction5b <- predict(analysis, new_data = data_set_example3[10:11,], new_expr = "
 prediction <- exp(bIntercept * Year + bYear[Year]) ", conf_int = TRUE)
   prediction6 <- predict(analysis, new_data = data_set_example3[10:11,] ,new_expr = "prediction <-  exp(bIntercept + bYear[Year])", conf_int = TRUE)
-  expect_error(predict(analysis, new_data = data_set_example3[10:11,] ,new_expr = "prediction <-  exp(bIntercept + bYear[Year] + bIntercept * Year^2)", conf_int = TRUE, quick = TRUE))
 })

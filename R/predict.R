@@ -36,9 +36,20 @@ parse_string <- function(string) {
   string
 }
 
+weight <- function(x) {
+  x %<>% parse(text = .)
+  if (length(all.vars(x))) return(NA_real_)
+  eval(x)
+}
+
+weights <- function(x) {
+  x %<>% vapply(weight, 1)
+  x
+}
+
 get_name_weight <- function(x) {
   stopifnot(is.character(x))
-  suppressWarnings(weights <- as.numeric(x))
+  weights <- weights(x)
   if (sum(is.na(weights)) >= 2) error("new_expr must be linear")
   if (!any(is.na(weights))) return(c("all" = prod(weights)))
   if (length(weights) == 1) {
@@ -95,7 +106,7 @@ calculate_expr <- function(new_expr, data) {
   new_expr
 }
 
-profile_prediction <- function(data, new_expr, analysis, conf_level, fixed, estimates, quick) {
+profile_prediction <- function(data, new_expr, analysis, conf_level, fixed, estimates) {
 
   data %<>% as.list() %>% c(estimates)
 
@@ -118,13 +129,6 @@ profile_prediction <- function(data, new_expr, analysis, conf_level, fixed, esti
   estimate <- sum(new_expr)
 
   data <- data.frame(estimate = estimate + sum)
-
-  if (quick) {
-    data %<>% dplyr::mutate_(
-      lower = ~estimate - estimate * stats::runif(nrow(data)),
-      upper = ~estimate + estimate * stats::runif(nrow(data)))
-    return(data)
-  }
 
   profile <- TMB::tmbprofile(analysis$ad_fun, lincomb = lincomb, trace = FALSE) %>%
     confint(level = conf_level) %>% as.data.frame()
@@ -198,14 +202,18 @@ predict.tmb_analysis <- function(object, new_data = data_set(object),
 
   data %<>% numericize_factors()
 
-  if (!conf_int) {
+  if (!conf_int || quick) {
     data %<>% c(fixed, random, report, adreport)
     data <- data[!names(data) %in% names(new_values)]
     data %<>% c(new_values)
     estimate <- calculate_predictions(data, new_expr, term)
     if (!length(estimate) %in% c(1, nrow(new_data)))
       error("length of term '", term, "' is invalid")
-    new_data$estimate <- estimate
+    new_data %<>% dplyr::mutate_(estimate = ~estimate)
+    if (quick) {
+      new_data %<>% dplyr::mutate_(lower = ~estimate,
+                                   upper = ~estimate)
+    }
     return(new_data)
   }
 
@@ -221,7 +229,7 @@ predict.tmb_analysis <- function(object, new_data = data_set(object),
 
   data %<>% plyr::adply(1, profile_prediction, new_expr = new_expr,
                         analysis = object, conf_level = conf_level,
-                        fixed = fixed, estimates = estimates, quick = quick)
+                        fixed = fixed, estimates = estimates)
 
   data %<>% dplyr::select_(~estimate, ~lower, ~upper)
   data[] %<>% purrr::map(eval(parse(text = back_transform)))
