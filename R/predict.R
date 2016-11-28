@@ -2,10 +2,10 @@ select_expr <- function(string, term) {
   string %<>% stringr::str_replace_all(" ", "")
   string %<>% stringr::str_split(pattern = "\\n")
   string <- string[[1]]
-  pattern <- stringr::str_c("^", term, "(<-)|(=)")
+  pattern <- stringr::str_c("^", term, "((<-)|=)")
   string <- string[stringr::str_detect(string, pattern)]
   if (!length(string)) error("term '", term, "' is not defined in new_expr")
-  if (length(string) == 2) error("term '", term, "' is defined more than once in new_expr")
+  if (length(string) > 1) error("term '", term, "' is defined more than once in new_expr")
   string %<>% stringr::str_replace(pattern, "")
   names(string) <- "identity"
   pattern <- "(^\\w+)([(])(.*)([)]$)"
