@@ -20,6 +20,10 @@ drop_parameters.tmb_code <- function(x, parameters = character(0), ...) {
   x
 }
 
+drop_indices <- function(x) {
+  str_replace(x, "^(\\w+)(\\[.*)", "\\1")
+}
+
 #' @export
 drop_parameters.tmb_model <- function(x, parameters = character(0), ...) {
   check_vector(parameters, "", min_length = 0)
@@ -32,5 +36,6 @@ drop_parameters.tmb_model <- function(x, parameters = character(0), ...) {
   x$code %<>% drop_parameters(parameters = parameters)
   x$new_expr %<>% drop_parameters(parameters = parameters)
   x$latex <- x$latex[!names(x$latex) %in% parameters]
+  x$description <- x$description[!drop_indices(names(x$description)) %in% parameters]
   x
 }
