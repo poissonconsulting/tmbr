@@ -5,7 +5,7 @@
 \title{Coef TMB Analysis}
 \usage{
 \method{coef}{tmb_analysis}(object, terms = "fixed", scalar_only = FALSE,
-  constant_included = TRUE, conf_level = 0.95, latex = FALSE, ...)
+  constant_included = TRUE, conf_level = 0.95, ...)
 }
 \arguments{
 \item{object}{The tmb_analysis object.}
@@ -17,9 +17,6 @@
 \item{constant_included}{A flag indicating whether to include constant terms.}
 
 \item{conf_level}{A number specifying the confidence level. By default 0.95.}
-
-\item{latex}{A flag indicating whether to replace each term with its latex math code
-or a named character vector specifying the latex math code for each parameter.}
 
 \item{...}{Not used.}
 }

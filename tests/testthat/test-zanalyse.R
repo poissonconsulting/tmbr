@@ -14,8 +14,7 @@ test_that("analyse", {
                     rsquared3 <- 1 - var(y - fit)  / var(y)
                     rsquared <- var(fit2)  / (var(fit2) + exp(log_sigma)^2)
                     rsquared2 <- (var(fit2) + exp(log_sYear)^2)  / (var(fit2) + exp(log_sigma)^2 + exp(log_sYear)^2)
-                     prediction <- fit", latex = c(a = "\\alpha", b = "\\beta_{\\lambda}", bYear = "\\beta Y", log_sigma = "log(\\sigma)", log_sYear = "log(\\sigma_Y)"),
-                 description = c(a = "Intercept", b = "Slopey thing", bYear = "Effect of Year on a but not aa", log_sigma = "Not to do with b or bb", log_sYear = "Log of SD"))
+                     prediction <- fit")
 
   model <- drop_parameters(model, parameters = c("a"))
 
@@ -40,14 +39,6 @@ test_that("analyse", {
   expect_identical(coef$lower, coef$estimate - coef$std.error * qnorm(0.975))
   expect_equal(coef$upper, coef$estimate + coef$std.error * qnorm(0.975))
   expect_identical(nrow(coef), 3L)
-
-  latex <- coef(analysis, latex = TRUE)
-  expect_identical(coef$estimate, latex$estimate)
-  expect_true(all(latex$term %in% c("$\\beta_{\\lambda}$", "$log(\\sigma)$", "$log(\\sigma_Y)$")))
-
-  expect_identical(mbr::describe(analysis), dplyr::data_frame(parameter = c("b", "bYear", "log_sigma", "log_sYear"), description = c("Slopey thing", "Effect of Year on a but not aa", "Not to do with b or bb", "Log of SD")))
-
- # expect_identical(mbr::describe(model(analysis), quote = "'"), dplyr::data_frame(parameter = c("a", "b", "bYear", "log_sigma", "log_sYear"), description = c("Intercept", "Slopey thing", "Effect of Year on a but not aa", "The log", "Log of SD")))
 
   adreport <- coef(analysis, terms = "adreport")
   expect_identical(nrow(adreport), 1000L)
