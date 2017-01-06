@@ -16,9 +16,6 @@ tmb_analysis <- function(data, model, tempfile, quick, quiet, compiled = FALSE) 
 
   inits <- inits(data, model$gen_inits, model$random_effects)
 
-  if (any(names(inits) %in% c("fixed", "primary", "random", "report", "adreport", "all")))
-    error("parameters cannot be named 'fixed', 'primary', 'random', 'report', 'adreport' or 'all'")
-
   map <- map(inits)
 
   inits %<>% lapply(function(x) {x[is.na(x)] <- 0; x})
@@ -40,6 +37,7 @@ tmb_analysis <- function(data, model, tempfile, quick, quiet, compiled = FALSE) 
 
 #' @export
 analyse.tmb_model <- function(model, data, drop = character(0),
+                              parallel = getOption("mb.parallel", FALSE),
                               quick = getOption("mb.quick", FALSE),
                               quiet = getOption("mb.quiet", TRUE),
                               beep = getOption("mb.beep", TRUE),
@@ -51,6 +49,7 @@ analyse.tmb_model <- function(model, data, drop = character(0),
   } else error("data must be a data.frame or a list of data.frames")
 
   check_vector(drop, "", min_length = 0)
+  check_flag(parallel)
   check_flag(quick)
   check_flag(quiet)
   check_flag(beep)

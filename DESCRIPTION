@@ -7,12 +7,13 @@ Description: Facilitates analyses using 'Template Model Builder'.
 License: MIT + file LICENSE
 Depends:
     R (>= 3.3.1),
-    mbr (>= 0.0.0.9022),
+    mbr (>= 0.0.0.9024),
     stats,
 Imports:
     beepr,
     dplyr,
     datacheckr,
+    mcmcr (>= 0.0.0.9001),
     magrittr,
     plyr,
     purrr,
@@ -27,6 +28,7 @@ Suggests:
 Remotes:
     poissonconsulting/datacheckr,
     poissonconsulting/mbr,
+    poissonconsulting/mcmcr,
     poissonconsulting/rescale,
     poissonconsulting/timer
 Encoding: UTF-8

@@ -2,33 +2,30 @@
 #'
 #' Coefficients for a TMB analysis.
 #'
-#'  Permitted values for terms are 'fixed',
-#' 'random' and 'adreport'.
-#'
 #' The \code{statistic} is the z value.
 #' The \code{p.value} is \code{Pr(>|z^2|)}.
 #' The (95\%) \code{lower} and \code{upper} confidence intervals are
 #' the \code{estimate} +/- 1.96 * \code{std.error}.
 #'
-#' @param object The tmb_analysis object.
-#' @param terms A string of the type of terms to get the coefficients for.
-#' @param scalar_only A flag indicating whether to only return scalar terms.
-#' @param constant_included A flag indicating whether to include constant terms.
+#' @param object The mb_analysis object.
+#' @param fixed A flag specifying whether fixed or random terms.
+#' @param include_constant A flag specifying whether to include constant terms.
+#' @param mcmc A flag specifying whether to get the mcmc draws as oppsed to ml estimates.
 #' @param conf_level A number specifying the confidence level. By default 0.95.
 #' @param ... Not used.
-#' @return A tidy tibble of the coeffcient terms.
+#' @return A tidy tibble of the coefficient terms.
 #' @export
-coef.tmb_analysis <- function(object, terms = "fixed", scalar_only = FALSE,
-                              constant_included = TRUE,
-                              conf_level = 0.95, ...) {
-  check_vector(terms, c("^fixed$", "^random$", "^adreport$"), max_length = 1)
-  check_flag(scalar_only)
-  check_flag(constant_included)
+coef.tmb_analysis <- function(object, fixed = TRUE, include_constant = TRUE, mcmc = FALSE, conf_level = 0.95, ...) {
+  check_flag(fixed)
+  check_flag(include_constant)
+  check_flag(mcmc)
   check_number(conf_level, c(0.5, 0.99))
   check_unused(...)
 
+  if (mcmc) NextMethod()
+
   # get all estimates (scalar_only = FALSE) and filter later
-  estimates <- estimates(object, terms = terms, scalar_only = FALSE) %>% named_estimates()
+  estimates <- estimates(object, fixed) %>% named_estimates()
 
   if (!length(estimates)) {
     return(dplyr::data_frame(term = character(0), estimate = numeric(0), std.error = numeric(0),

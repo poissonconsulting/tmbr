@@ -1,39 +1,29 @@
+#' Estimates
+#'
+#' estimates
+#'
+#' @param object The mb_analysis object.
+#' @param fixed A flag specifying whether fixed or random terms.
+#' @param mcmc A flag specifying whether to get the mcmc draws as oppsed to ml estimates.
+#' @param ... Not used.
 #' @export
-estimates.tmb_analysis <- function(object, terms = "fixed", scalar_only = FALSE, ...) {
-  possible <- c("fixed", "random", "report", "adreport")
-  if (identical(terms, "all")) terms <- possible
-  if (identical(terms, "primary")) terms <- c("fixed", "random")
+estimates.mb_analysis <- function(object, fixed = TRUE, mcmc = FALSE, ...) {
+  check_flag(fixed)
+  check_unused(...)
 
-  terms %<>% unique()
+  if (mcmc) NextMethod()
 
-  if (length(terms) > 1) {
-    terms %<>% lapply(function(term) {estimates(object, terms = term, scalar_only = scalar_only)})
-    terms %<>% unlist(recursive = FALSE)
-    terms %<>% sort_nlist()
-    return(terms)
-  }
+  if (fixed) {
+    estimates <- object$sd$par.fixed
+  } else
+    estimates <- object$sd$par.random
 
-  check_scalar(terms, possible)
-  check_flag(scalar_only)
-
-  if (terms == "report") {
-    estimates <- object$report
-    estimates %<>% remap_estimates(object$map)
-  } else if (terms == "adreport") {
-    estimates <- list_by_name(object$sd$value)
-    estimates %<>% remap_estimates(object$map)
-  } else {
-    if (terms == "fixed") {
-      estimates <- object$sd$par.fixed
-    } else
-      estimates <- object$sd$par.random
-
-    estimates %<>% list_by_name()
-    estimates %<>% remap_estimates(object$map)
-    inits <- object$inits[names(estimates)]
-    inits %<>% lapply(dims)
-    estimates %<>% purrr::map2(inits, by_dims)
-  }
+  estimates %<>% list_by_name()
+  estimates %<>% remap_estimates(object$map)
+  inits <- object$inits[names(estimates)]
+  inits %<>% lapply(dims)
+  estimates %<>% purrr::map2(inits, by_dims)
+#}
   if (scalar_only) estimates %<>% scalar_nlist()
   estimates %<>% sort_nlist()
   estimates

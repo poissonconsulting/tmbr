@@ -4,32 +4,29 @@
 \alias{coef.tmb_analysis}
 \title{Coef TMB Analysis}
 \usage{
-\method{coef}{tmb_analysis}(object, terms = "fixed", scalar_only = FALSE,
-  constant_included = TRUE, conf_level = 0.95, ...)
+\method{coef}{tmb_analysis}(object, fixed = TRUE, include_constant = TRUE,
+  mcmc = FALSE, conf_level = 0.95, ...)
 }
 \arguments{
-\item{object}{The tmb_analysis object.}
+\item{object}{The mb_analysis object.}
 
-\item{terms}{A string of the type of terms to get the coefficients for.}
+\item{fixed}{A flag specifying whether fixed or random terms.}
 
-\item{scalar_only}{A flag indicating whether to only return scalar terms.}
+\item{include_constant}{A flag specifying whether to include constant terms.}
 
-\item{constant_included}{A flag indicating whether to include constant terms.}
+\item{mcmc}{A flag specifying whether to get the mcmc draws as oppsed to ml estimates.}
 
 \item{conf_level}{A number specifying the confidence level. By default 0.95.}
 
 \item{...}{Not used.}
 }
 \value{
-A tidy tibble of the coeffcient terms.
+A tidy tibble of the coefficient terms.
 }
 \description{
 Coefficients for a TMB analysis.
 }
 \details{
-Permitted values for terms are 'fixed',
-'random' and 'adreport'.
-
 The \code{statistic} is the z value.
 The \code{p.value} is \code{Pr(>|z^2|)}.
 The (95\%) \code{lower} and \code{upper} confidence intervals are

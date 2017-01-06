@@ -22,8 +22,6 @@
 
 \item{term}{A string of the term in new_expr.}
 
-\item{conf_int}{A flag indicating whether to calculate confidence intervals.}
-
 \item{conf_level}{A number specifying the confidence level. By default 0.95.}
 
 \item{modify_new_data}{A single argument function to modify new data (in list form) immediately prior to calculating new_expr.}
