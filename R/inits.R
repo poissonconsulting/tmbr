@@ -1,3 +1,12 @@
+zeros <- function(dims) {
+  stopifnot(is_dims(dims))
+  if (length(dims) == 1)
+    return(numeric(dims))
+  if (length(dims) == 2)
+    return(matrix(0, nrow = dims[1], ncol = dims[2]))
+  array(0, dims)
+}
+
 check_dims_inits <- function(x, y) {
   x %<>% lapply(dims)
   y %<>% lapply(dims)

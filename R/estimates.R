@@ -7,9 +7,8 @@
 #' @param mcmc A flag specifying whether to get the mcmc draws as oppsed to ml estimates.
 #' @param ... Not used.
 #' @export
-estimates.mb_analysis <- function(object, fixed = TRUE, mcmc = FALSE, ...) {
+estimates.tmb_analysis <- function(object, fixed = TRUE, mcmc = FALSE, ...) {
   check_flag(fixed)
-  
 
   if (mcmc) NextMethod()
 
@@ -23,8 +22,7 @@ estimates.mb_analysis <- function(object, fixed = TRUE, mcmc = FALSE, ...) {
   inits <- object$inits[names(estimates)]
   inits %<>% lapply(dims)
   estimates %<>% purrr::map2(inits, by_dims)
-#}
-  if (scalar_only) estimates %<>% scalar_nlist()
+
   estimates %<>% sort_nlist()
   estimates
 }

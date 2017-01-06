@@ -2,7 +2,7 @@
 drop_parameters.tmb_code <- function(x, parameters = character(0), ...) {
   check_vector(parameters, "", min_length = 0)
   check_unique(parameters)
-  
+
 
   if (!length(parameters))
     return(x)
@@ -17,19 +17,5 @@ drop_parameters.tmb_code <- function(x, parameters = character(0), ...) {
   }
 
   x$template <- template
-  x
-}
-
-#' @export
-drop_parameters.tmb_model <- function(x, parameters = character(0), ...) {
-  check_vector(parameters, "", min_length = 0)
-  check_unique(parameters)
-  
-
-  if (!length(parameters))
-    return(x)
-
-  x$code %<>% drop_parameters(parameters = parameters)
-  x$new_expr %<>% drop_parameters(parameters = parameters)
   x
 }
