@@ -6,13 +6,13 @@
 \usage{
 \method{predict}{tmb_analysis}(object, new_data = data_set(object),
   new_expr = NULL, new_values = list(), term = "prediction",
-  conf_int = FALSE, conf_level = 0.95, modify_new_data = NULL,
+  conf_level = 0.95, modify_new_data = NULL, mcmc = FALSE,
   parallel = getOption("mb.parallel", FALSE), quick = getOption("mb.quick",
   FALSE), quiet = getOption("mb.quiet", TRUE), beep = getOption("mb.beep",
   FALSE), ...)
 }
 \arguments{
-\item{object}{The tmb_analysis object.}
+\item{object}{An object inheriting from class mb_analysis.}
 
 \item{new_data}{The data frame to calculate the predictions for.}
 
@@ -26,6 +26,8 @@
 
 \item{modify_new_data}{A single argument function to modify new data (in list form) immediately prior to calculating new_expr.}
 
+\item{mcmc}{A flag specifying whether to get the mcmc draws as oppsed to ml estimates.}
+
 \item{parallel}{A flag indicating whether to do predictions using parallel backend provided by foreach.}
 
 \item{quick}{A flag indicating whether to quickly get unreliable values.}
@@ -36,17 +38,7 @@
 
 \item{...}{Additional arguments.}
 }
-\value{
-The new data with the predictions.
-}
 \description{
 Calculate predictions.
-}
-\details{
-If \code{conf_int = TRUE} then the confidence intervals are calculated by profiling.
-The profiling only takes uncertainty in the fixed parameters into account.
-When profiling \code{new_expr} must be linear (the sum of a series of terms)
-and can only include one function that encompasses the whole expression,
-i.e., \code{prediction <- exp(bIntercept + bSlope * y)}.
 }
 

@@ -1,3 +1,23 @@
+c_name <- function(x) {
+  x[[1]] %<>% stringr::str_c(names(x), .)
+  x
+}
+
+par_names_indices <- function(estimates) {
+  estimates %<>% lapply(dims) %>% lapply(dims_to_dimensions_vector)
+  estimates %<>% purrr::lmap(c_name)
+  estimates %<>% sort_nlist()
+  estimates
+}
+
+named_estimates <- function(estimates) {
+  stopifnot(is_nlist(estimates))
+  indices <- par_names_indices(estimates) %>% unlist()
+  estimates %<>% unlist()
+  names(estimates) <- indices
+  estimates
+}
+
 #' Coef TMB Analysis
 #'
 #' Coefficients for a TMB analysis.

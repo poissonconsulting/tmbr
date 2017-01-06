@@ -1,3 +1,7 @@
+is_dims <- function(x) {
+  is.integer(x) && length(dims) && all(x >= 1)
+}
+
 zeros <- function(dims) {
   stopifnot(is_dims(dims))
   if (length(dims) == 1)

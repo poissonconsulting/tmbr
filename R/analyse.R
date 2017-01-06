@@ -1,3 +1,39 @@
+lmcmcarray <- function(x, niters) {
+
+  nrow <- nrow(x)
+  samples <- rnorm(nrow * niters, mean = x$estimate, sd = x$std.error)
+
+  if (identical(nrow, 1L)) {
+    dims <- 1L
+  } else {
+    dims <- str_replace(x$term[nrow], "^(\\w+)(.*)", "\\2") %>% str_replace("^(\\[)(.*)(\\])$", "\\2")
+    dims %<>% str_split(",", simplify = FALSE) %>% unlist()
+    dims %<>% as.integer()
+  }
+
+  dims %<>% c(1L, niters, .)
+
+  samples %<>% array(dim = dims)
+  class(samples) <- "mcmcarray"
+
+  samples
+}
+
+lmcmcr <- function(object, niters = 2000L) {
+
+  coef <- coef(object, mcmc = FALSE)
+  random <- coef(object, fixed = FALSE, mcmc = FALSE)
+
+  coef %<>% dplyr::bind_rows(random) %>% dplyr::select_(~term, ~estimate, ~std.error)
+
+  coef %<>% dplyr::mutate_(parameter = ~str_replace(term, "^(\\w+)(.*)", "\\1"))
+
+  coef %<>% plyr::dlply(~parameter, lmcmcarray, niters = niters)
+
+  class(coef) <- "mcmcr"
+  coef
+}
+
 compile_code <- function(model, tempfile) {
     write(template(model), file = paste0(tempfile, ".cpp"))
     TMB::compile(paste0(tempfile, ".cpp"))
@@ -30,8 +66,11 @@ tmb_analysis <- function(data, model, tempfile, quick, quiet, compiled = FALSE) 
   report <- ad_fun$report()
 
   obj %<>% c(inits = list(inits), map = list(map), ad_fun = list(ad_fun), opt = list(opt),
-             sd = list(sd), report = list(report), duration = timer$elapsed())
+             sd = list(sd), report = list(report), lmcmcr = list(lmcmcr), duration = timer$elapsed())
   class(obj) <- c("tmb_analysis", "mb_analysis")
+
+  obj$lmcmcr <- lmcmcr(obj)
+
   obj
 }
 
@@ -53,7 +92,7 @@ analyse.tmb_model <- function(model, data, drop = character(0),
   check_flag(quick)
   check_flag(quiet)
   check_flag(beep)
-  
+
 
   if (beep) on.exit(beepr::beep())
 

@@ -1,6 +1,6 @@
-# context("analyse")
-#
-# test_that("analyse", {
+context("analyse")
+
+test_that("analyse", {
 
   require(newdata)
 
@@ -60,6 +60,9 @@
 
   analysis <- analyse(model, data = data, beep = FALSE)
 
+  expect_identical(parameters(mb_code(tmb_template)), c("bIntercept", "bSite", "bSiteYear", "bYear", "log_sDensity", "log_sSiteYear"))
+  expect_identical(parameters(mb_code(tmb_template)), sort(c(parameters(analysis), parameters(analysis, FALSE))))
+
   coef <- coef(analysis)
 
   expect_is(coef, "tbl")
@@ -72,10 +75,9 @@
 
   predict <- predict(analysis, new_data = new_data(data, "Site"))
 
-
-  expect_is(predict, "tbl")
-  expect_identical(colnames(predict), c("Density", "Site", "Year", "Visit", "estimate"))
-  expect_identical(nrow(predict), 6L)
+#  expect_is(predict, "tbl")
+#  expect_identical(colnames(predict), c("Density", "Site", "Year", "Visit", "estimate"))
+#  expect_identical(nrow(predict), 6L)
 
   #  analysis <- reanalyse(analysis, beep = FALSE)
 
@@ -86,5 +88,4 @@
   #  expect_equal(convergence(analysis), 1.00, tolerance = 1)
 
   #  expect_is(as.mcmcr(analysis), "mcmcr")
-#  })
-
+})
