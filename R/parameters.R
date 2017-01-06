@@ -12,7 +12,7 @@ parameters.tmb_code <- function(x, terms = "primary", scalar_only = FALSE, ...) 
 
   check_scalar(terms, possible)
   check_flag(scalar_only)
-  check_unused(...)
+  
 
   if (terms %in% c("report", "adreport") && scalar_only)
     error("the dimensionality of ", terms, " parameters is not identifiable")

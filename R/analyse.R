@@ -53,7 +53,7 @@ analyse.tmb_model <- function(model, data, drop = character(0),
   check_flag(quick)
   check_flag(quiet)
   check_flag(beep)
-  check_unused(...)
+  
 
   if (beep) on.exit(beepr::beep())
 

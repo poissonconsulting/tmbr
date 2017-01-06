@@ -29,6 +29,6 @@ AIC.tmb_analysis <- function(object, n = NULL, ...){
 
 #' @export
 IC.tmb_analysis <- function(object, n = NULL, ...) {
-  check_unused(...)
+  
   AIC(object, n = n)
 }

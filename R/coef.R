@@ -20,7 +20,7 @@ coef.tmb_analysis <- function(object, fixed = TRUE, include_constant = TRUE, mcm
   check_flag(include_constant)
   check_flag(mcmc)
   check_number(conf_level, c(0.5, 0.99))
-  check_unused(...)
+  
 
   if (mcmc) NextMethod()
 

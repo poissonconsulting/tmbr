@@ -9,7 +9,7 @@
 #' @export
 estimates.mb_analysis <- function(object, fixed = TRUE, mcmc = FALSE, ...) {
   check_flag(fixed)
-  check_unused(...)
+  
 
   if (mcmc) NextMethod()
 
