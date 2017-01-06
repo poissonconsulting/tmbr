@@ -1,7 +1,7 @@
 lmcmcarray <- function(x, niters) {
 
   nrow <- nrow(x)
-  samples <- rnorm(nrow * niters, mean = x$estimate, sd = x$std.error)
+  samples <- stats::rnorm(nrow * niters, mean = x$estimate, sd = x$std.error)
 
   if (identical(nrow, 1L)) {
     dims <- 1L

@@ -63,6 +63,8 @@ test_that("analyse", {
   expect_identical(parameters(mb_code(tmb_template)), c("bIntercept", "bSite", "bSiteYear", "bYear", "log_sDensity", "log_sSiteYear"))
   expect_identical(parameters(mb_code(tmb_template)), sort(c(parameters(analysis), parameters(analysis, FALSE))))
 
+
+
   coef <- coef(analysis)
 
   expect_is(coef, "tbl")
@@ -73,7 +75,7 @@ test_that("analyse", {
                                 "bSite[4]", "bSite[5]", "bSite[6]", "bYear",
                                 "log_sDensity", "log_sSiteYear"))
 
-  predict <- predict(analysis, new_data = new_data(data, "Site"))
+#  predict <- predict(analysis, new_data = new_data(data, "Site"))
 
 #  expect_is(predict, "tbl")
 #  expect_identical(colnames(predict), c("Density", "Site", "Year", "Visit", "estimate"))

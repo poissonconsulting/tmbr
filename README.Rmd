@@ -22,55 +22,6 @@ knitr::opts_chunk$set(
 
 `tmbr` (pronounced timber) is an R package to facilitate analyses using Template Model Builder (TMB).
 
-## Demonstration
-
-```{r}
-library(tmbr)
-
-code <- mb_code("
-#include <TMB.hpp>
-
-template<class Type>
-Type objective_function<Type>::operator() () {
-DATA_VECTOR(wt);
-DATA_VECTOR(hp);
-DATA_VECTOR(disp);
-DATA_VECTOR(mpg);
-
-PARAMETER(bIntercept); 
-PARAMETER(bWt); 
-PARAMETER(bHp); 
-PARAMETER(bDisp); 
-PARAMETER(log_sigma);
-
-Type sigma = exp(log_sigma);
-
-int n = wt.size();
-
-Type nll = 0.0;
-for(int i = 0; i < n; i++){
-  nll -= dnorm(mpg[i], bIntercept + bWt * wt[i] + bHp * hp[i] + bDisp * disp[i], sigma, true);
-}
-
-return nll;
-}")
-
-gen_inits <- function(data) list(bIntercept = 0, bWt = 0, bHp = 0, bDisp = 0, log_sigma = 0)
-
-model <- model(code, gen_inits = gen_inits, scale = c("wt", "hp", "disp"))
-
-analysis <- analyse(model, data = mtcars)
-
-coef(analysis)
-logLik(analysis)
-
-analysis2 <- lm(mpg ~ wt + hp + disp, 
-        data = rescale::rescale(mtcars, scale = c("wt", "hp", "disp")))
-
-summary(analysis2)
-logLik(analysis)
-```
-
 ## Installation
 
 To install from GitHub

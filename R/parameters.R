@@ -8,17 +8,8 @@ parameters.tmb_code <- function(x, ...) {
 }
 
 #' @export
-parameters.tmb_analysis <- function(x, fixed = TRUE, mcmc = FALSE, ...) {
-  check_flag(fixed)
-  check_flag(mcmc)
+parameters.tmb_analysis <- function(x, fixed = TRUE, ...) {
+  x$mcmcr <- x$lmcmcr
 
-  if (mcmc) NextMethod()
-
-  random <- names(random_effects(x))
-
-  if (!fixed) return(random)
-
-  parameters <- parameters(code(x))
-
-  setdiff(parameters, random)
+  NextMethod()
 }
