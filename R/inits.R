@@ -33,6 +33,13 @@ inits <- function(data, gen_inits, random_effects) {
   inits
 }
 
+replace_n <- function(random_effect, data) {
+  stopifnot(is.character(random_effect))
+  stopifnot(is.integer(data))
+  stopifnot(all(random_effect %in% names(data)))
+  return(data[random_effect])
+}
+
 random_inits <- function(data, random_effects) {
   if (!length(random_effects)) return(NULL)
 
@@ -50,11 +57,3 @@ random_inits <- function(data, random_effects) {
   random_effects %<>% lapply(zeros)
   random_effects
 }
-
-replace_n <- function(random_effect, data) {
-  stopifnot(is.character(random_effect))
-  stopifnot(is.integer(data))
-  stopifnot(all(random_effect %in% names(data)))
-  return(data[random_effect])
-}
-

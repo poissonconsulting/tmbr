@@ -1,5 +1,5 @@
-#' @import datacheckr mbr stringr
+#' @import datacheckr mcmcr mbr stringr
 #' @importFrom magrittr %<>% %>%
-#' @importFrom mcmcr dims error estimates parameters
+#' @importFrom newdata new_data
 #' @importFrom stats AIC coef logLik predict
 NULL

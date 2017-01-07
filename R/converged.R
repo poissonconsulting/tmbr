@@ -5,10 +5,12 @@
 #' @param rhat A number specifying the rhat threshold.
 #' @param ... Unused.
 #' @export
-is_converged.tmb_analysis <- function(x, mcmc = FALSE, rhat = 1.1, ...) {
+converged.tmb_analysis <- function(x, mcmc = FALSE, rhat = getOption("mb.rhat", 1.1), ...) {
   check_flag(mcmc)
 
   if (mcmc) NextMethod()
 
-  stop("implement for ML")
+  warning("converged is not yet implemented for ML estimates")
+
+  TRUE
 }

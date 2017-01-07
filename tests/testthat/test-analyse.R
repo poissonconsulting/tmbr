@@ -62,6 +62,8 @@ test_that("analyse", {
 
   # analysis <- analyse(model, data = data, beep = FALSE)
   #
+  # expect_identical(logLik(analysis), 1L)
+  #
   # expect_identical(parameters(analysis), sort(c("bHabitatQuality", "bIntercept", "bYear", "log_sDensity", "log_sSiteYear")))
   # expect_identical(parameters(analysis, fixed = FALSE), "bSiteYear")
   #
@@ -72,6 +74,7 @@ test_that("analyse", {
   # expect_is(coef, "tbl")
   # expect_identical(colnames(coef), c("term", "estimate", "sd", "zscore",
   #                                    "lower", "upper", "significance"))
+  #
   #
   # expect_identical(coef$term, sort(c("bHabitatQuality[1]", "bHabitatQuality[2]", "bIntercept", "bYear",
   #                               "log_sDensity", "log_sSiteYear")))
