@@ -54,8 +54,8 @@ remap_estimates <- function(estimates, map) {
 remap_data <- function(x, y) {
   stopifnot(nrow(x) == sum(!is.na(y)))
   x$constant <- FALSE
-  z <- dplyr::data_frame(term = "", estimate = 0, std.error = 0, statistic = NaN,
-                         p.value = 1, lower = 0, upper = 0, constant = TRUE)
+  z <- dplyr::data_frame(term = "", estimate = 0, sd = 0, zscore = NaN,
+                        lower = 0, upper = 0, significance = 0, constant = TRUE)
   z <- z[rep(1,length(y)),]
   z[!is.na(y),] <- x
   z

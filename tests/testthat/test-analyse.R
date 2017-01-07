@@ -70,8 +70,8 @@ test_that("analyse", {
   # coef <- coef(analysis)
   #
   # expect_is(coef, "tbl")
-  # expect_identical(colnames(coef), c("term", "estimate", "std.error", "statistic",
-  #                                    "p.value", "lower", "upper"))
+  # expect_identical(colnames(coef), c("term", "estimate", "sd", "zscore",
+  #                                    "lower", "upper", "significance"))
   #
   # expect_identical(coef$term, sort(c("bHabitatQuality[1]", "bHabitatQuality[2]", "bIntercept", "bYear",
   #                               "log_sDensity", "log_sSiteYear")))

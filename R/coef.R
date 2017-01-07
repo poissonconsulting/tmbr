@@ -22,8 +22,6 @@ named_estimates <- function(estimates) {
 #'
 #' Coefficients for a TMB analysis.
 #'
-#' The \code{statistic} is the z value.
-#' The \code{p.value} is \code{Pr(>|z^2|)}.
 #' The (95\%) \code{lower} and \code{upper} confidence intervals are
 #' the \code{estimate} +/- 1.96 * \code{std.error}.
 #'
@@ -46,18 +44,18 @@ coef.tmb_analysis <- function(object, fixed = TRUE, include_constant = TRUE, mcm
   estimates <- estimates(object, fixed = fixed) %>% named_estimates()
 
   if (!length(estimates)) {
-    return(dplyr::data_frame(term = character(0), estimate = numeric(0), std.error = numeric(0),
-                             statistic = numeric(0), p.value = numeric(0), lower = numeric(0),
-                             upper = numeric(0)))
+    return(dplyr::data_frame(term = character(0), estimate = numeric(0), sd = numeric(0),
+                             zscore = numeric(0), lower = numeric(0),
+                             upper = numeric(0), significance = numeric(0)))
   }
 
   coef <- summary(object$sd, select = ifelse(fixed, "fixed", "random"), p.value = TRUE) %>% as.data.frame()
 
   coef %<>% dplyr::mutate_(term = ~row.names(coef))
-  coef %<>% dplyr::select_(term = ~term, estimate = ~Estimate, std.error = ~`Std. Error`,
-                    statistic = ~`z value`, p.value = ~`Pr(>|z^2|)`)
-  coef %<>% dplyr::mutate_(lower = ~estimate + std.error * qnorm((1 - conf_level) / 2),
-                    upper = ~estimate + std.error * qnorm((1 - conf_level) / 2 + conf_level))
+  coef %<>% dplyr::select_(term = ~term, estimate = ~Estimate, sd = ~`Std. Error`,
+                    zscore = ~`z value`, significance = ~`Pr(>|z^2|)`)
+  coef %<>% dplyr::mutate_(lower = ~estimate + sd * qnorm((1 - conf_level) / 2),
+                    upper = ~estimate + sd * qnorm((1 - conf_level) / 2 + conf_level))
   coef %<>% dplyr::arrange_(~term)
 
   coef %<>% remap_coef(object$map)
