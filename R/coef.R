@@ -43,7 +43,13 @@ coef.tmb_analysis <- function(object, fixed = TRUE, include_constant = TRUE, mcm
 
   if (mcmc) NextMethod()
 
-  estimates <- estimates(object, fixed) %>% named_estimates()
+  estimates <- estimates(object, fixed = fixed) %>% named_estimates()
+
+  if (!length(estimates)) {
+    return(dplyr::data_frame(term = character(0), estimate = numeric(0), std.error = numeric(0),
+                             statistic = numeric(0), p.value = numeric(0), lower = numeric(0),
+                             upper = numeric(0)))
+  }
 
   coef <- summary(object$sd, select = ifelse(fixed, "fixed", "random"), p.value = TRUE) %>% as.data.frame()
 

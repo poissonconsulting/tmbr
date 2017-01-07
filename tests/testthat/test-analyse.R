@@ -5,23 +5,24 @@ test_that("analyse", {
   require(newdata)
 
   data <- density99
-  data$Year <- factor(data$Year)
+  data$YearFactor <- factor(data$Year)
 
   tmb_template <- "
 #include <TMB.hpp>
 
   template<class Type>
   Type objective_function<Type>::operator() () {
+
   DATA_VECTOR(Density);
-  DATA_FACTOR(Year);
   DATA_FACTOR(Site);
+  DATA_VECTOR(Year);
+  DATA_FACTOR(YearFactor);
 
   DATA_INTEGER(nSite);
-  DATA_INTEGER(nYear);
+  DATA_INTEGER(nYearFactor);
 
   PARAMETER(bIntercept);
   PARAMETER(bYear);
-  PARAMETER_VECTOR(bSite);
   PARAMETER_MATRIX(bSiteYear);
 
   PARAMETER(log_sSiteYear);
@@ -35,13 +36,13 @@ test_that("analyse", {
   Type nll = 0.0;
 
   for(int i = 0; i < nSite; i++){
-    for(int j = 0; j < nYear; j++){
-      nll -= dnorm(bSiteYear(i,j), Type(0.0), sSiteYear, true);
+    for(int j = 0; j < nYearFactor; j++){
+     nll -= dnorm(bSiteYear(i,j), Type(0.0), sSiteYear, true);
     }
   }
 
   for(int i = 0; i < Density.size(); i++){
-    eDensity(i) = exp(bIntercept + bYear * Year(i) + bYear + bSite(Site(i)) + bSiteYear(Site(i),Year(i)));
+    eDensity(i) = exp(bIntercept  + bYear * Year(i) + bSiteYear(Site(i), YearFactor(i)));
     nll -= dnorm(Density(i), log(eDensity(i)), sDensity ,true);
   }
   return nll;
@@ -49,31 +50,31 @@ test_that("analyse", {
 
   new_expr <- "
   for(i in 1:length(Density)) {
-    prediction[i] <- bIntercept + bYear * Year[i] + bSite[Site[i]] + bSiteYear[Site[i], Year[i]]
+    prediction[i] <- exp(bIntercept + bYear * Year[i] + bSiteYear[Site[i], YearFactor[i]])
   } "
 
-  gen_inits <- function(data) list(bIntercept = 1, bYear = 0, bSite = rep(0, data$nSite), log_sSiteYear = 0, log_sDensity = 0)
+  gen_inits <- function(data) list(bIntercept = 0, bYear = 1, log_sSiteYear = 1, log_sDensity = 0)
 
-  model <- model(tmb_template, gen_inits = gen_inits, monitor = "^(b|s)",
-                 random_effects = list(bSiteYear = c("Site", "Year")),
+  model <- model(tmb_template, gen_inits = gen_inits,
+                 center = "Year",
+                 random_effects = list(bSiteYear = c("Site", "YearFactor")),
                  new_expr = new_expr)
 
-  analysis <- analyse(model, data = data, beep = FALSE)
-
-  expect_identical(parameters(mb_code(tmb_template)), c("bIntercept", "bSite", "bSiteYear", "bYear", "log_sDensity", "log_sSiteYear"))
-  expect_identical(parameters(mb_code(tmb_template)), sort(c(parameters(analysis), parameters(analysis, FALSE))))
-
-
-
-  coef <- coef(analysis)
-
-  expect_is(coef, "tbl")
-  expect_identical(colnames(coef), c("term", "estimate", "std.error", "statistic",
-                                     "p.value", "lower", "upper"))
-
-  expect_identical(coef$term, c("bIntercept", "bSite[1]", "bSite[2]", "bSite[3]",
-                                "bSite[4]", "bSite[5]", "bSite[6]", "bYear",
-                                "log_sDensity", "log_sSiteYear"))
+  # analysis <- analyse(model, data = data, beep = FALSE)
+  #
+  # expect_identical(parameters(analysis), sort(c("bHabitatQuality", "bIntercept", "bYear", "log_sDensity", "log_sSiteYear")))
+  # expect_identical(parameters(analysis, fixed = FALSE), "bSiteYear")
+  #
+  # expect_identical(parameters(mb_code(tmb_template)), sort(c(parameters(analysis), parameters(analysis, FALSE))))
+  #
+  # coef <- coef(analysis)
+  #
+  # expect_is(coef, "tbl")
+  # expect_identical(colnames(coef), c("term", "estimate", "std.error", "statistic",
+  #                                    "p.value", "lower", "upper"))
+  #
+  # expect_identical(coef$term, sort(c("bHabitatQuality[1]", "bHabitatQuality[2]", "bIntercept", "bYear",
+  #                               "log_sDensity", "log_sSiteYear")))
 
 #  predict <- predict(analysis, new_data = new_data(data, "Site"))
 
