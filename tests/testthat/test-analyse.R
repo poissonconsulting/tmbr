@@ -45,41 +45,41 @@ test_that("analyse", {
                  center = "Year",
                  new_expr = new_expr)
 
- # analysis <- analyse(model, data = data, beep = FALSE)
+  analysis <- analyse(model, data = data, beep = FALSE)
 
-  # expect_identical(parameters(analysis), sort(c("bHabitatQuality", "bIntercept", "bYear", "log_sDensity", "log_sSiteYear")))
+ # expect_identical(parameters(analysis), sort(c("bHabitatQuality", "bIntercept", "bYear", "log_sDensity", "log_sSiteYear")))
   # expect_identical(parameters(analysis, fixed = FALSE), "bSiteYear")
   #
-  # expect_is(as.mcmcr(analysis), "mcmcr")
-  #
-  # glance <- glance(analysis)
-  # expect_is(glance, "tbl")
-  # expect_identical(colnames(glance), c("n", "k", "logLik", "IC", "minutes", "converged"))
-  # expect_equal(glance$logLik, -5238.213, tolerance = 0.0000001)
-  # expect_identical(glance$n, 300L)
-  # expect_identical(glance$k, 3L)
-  #
-  # coef <- coef(analysis)
-  #
-  # expect_is(coef, "tbl")
-  # expect_identical(colnames(coef), c("term", "estimate", "sd", "zscore", "lower", "upper", "significance"))
+  expect_error(as.mcmcr(analysis), "as.mcmcr is undefined for x")
+
+  glance <- glance(analysis)
+  expect_is(glance, "tbl")
+  expect_identical(colnames(glance), c("n", "k", "logLik", "IC", "minutes", "converged"))
+  expect_equal(glance$logLik, -5238.213, tolerance = 0.0000001)
+  expect_identical(glance$n, 300L)
+  expect_identical(glance$k, 3L)
+
+  coef <- coef(analysis)
+
+  expect_is(coef, "tbl")
+  expect_identical(colnames(coef), c("term", "estimate", "sd", "zscore", "lower", "upper", "significance"))
   #
   # expect_identical(coef$term, c("bHabitatQuality[1]", "bHabitatQuality[2]",
   #                               "bIntercept", "bYear",
   #                               "log_sDensity", "log_sSiteYear"))
   # #
-  # tidy <- tidy(analysis)
-  # expect_identical(colnames(tidy), c("term", "estimate", "std.error", "statistic", "p.value"))
-  # expect_identical(tidy$estimate, coef$estimate)
-  #
-  # year <- predict(analysis, new_data = new_data(data, "Year"), quick = TRUE)
-  #
-  # expect_is(year, "tbl")
+  tidy <- tidy(analysis)
+  expect_identical(colnames(tidy), c("term", "estimate", "std.error", "statistic", "p.value"))
+  expect_identical(tidy$estimate, coef$estimate)
+
+  year <- predict(analysis, new_data = new_data(data, "Year"))
+
+  expect_is(year, "tbl")
   # expect_identical(colnames(year), c("Site", "HabitatQuality", "Year", "Visit",
   #                                    "Density", "YearFactor",
   #                                    "estimate", "lower", "upper"))
   # expect_identical(year$estimate, year$lower)
-  # expect_false(is.unsorted(year$estimate))
+  expect_false(is.unsorted(year$estimate))
 
   #  analysis <- reanalyse(analysis, beep = FALSE)
 
