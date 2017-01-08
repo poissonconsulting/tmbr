@@ -84,8 +84,6 @@ year <- predict(analysis, new_data = new_data(data, "Year"))
 ggplot(data = year, aes(x = Year, y = estimate)) +
   geom_point(data = data, aes(y = Pairs)) +
   geom_line() +
-  geom_line(aes(y = lower), linetype = "dotted") +
-  geom_line(aes(y = upper), linetype = "dotted") +
   expand_limits(y = 0)
 ```
 

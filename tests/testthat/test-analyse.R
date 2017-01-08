@@ -47,9 +47,9 @@ test_that("analyse", {
 
   analysis <- analyse(model, data = data, beep = FALSE)
 
- # expect_identical(parameters(analysis), sort(c("bHabitatQuality", "bIntercept", "bYear", "log_sDensity", "log_sSiteYear")))
-  # expect_identical(parameters(analysis, fixed = FALSE), "bSiteYear")
-  #
+ expect_identical(parameters(analysis), sort(c("bIntercept", "bYear", "log_sDensity")))
+  expect_identical(parameters(analysis, fixed = FALSE), character(0))
+
   expect_error(as.mcmcr(analysis), "as.mcmcr is undefined for x")
 
   glance <- glance(analysis)
@@ -63,11 +63,9 @@ test_that("analyse", {
 
   expect_is(coef, "tbl")
   expect_identical(colnames(coef), c("term", "estimate", "sd", "zscore", "lower", "upper", "significance"))
-  #
-  # expect_identical(coef$term, c("bHabitatQuality[1]", "bHabitatQuality[2]",
-  #                               "bIntercept", "bYear",
-  #                               "log_sDensity", "log_sSiteYear"))
-  # #
+
+  expect_identical(coef$term, c("bIntercept", "bYear", "log_sDensity"))
+
   tidy <- tidy(analysis)
   expect_identical(colnames(tidy), c("term", "estimate", "std.error", "statistic", "p.value"))
   expect_identical(tidy$estimate, coef$estimate)
@@ -75,11 +73,11 @@ test_that("analyse", {
   year <- predict(analysis, new_data = new_data(data, "Year"))
 
   expect_is(year, "tbl")
-  # expect_identical(colnames(year), c("Site", "HabitatQuality", "Year", "Visit",
-  #                                    "Density", "YearFactor",
-  #                                    "estimate", "lower", "upper"))
-  # expect_identical(year$estimate, year$lower)
+  expect_identical(colnames(year), c("Site", "HabitatQuality", "Year", "Visit",
+                                     "Density", "YearFactor",
+                                     "estimate", "lower", "upper"))
   expect_false(is.unsorted(year$estimate))
+  expect_true(all(is.na(year$lower)))
 
   #  analysis <- reanalyse(analysis, beep = FALSE)
 
