@@ -1,7 +1,6 @@
-lmcmcarray <- function(x, niters) {
+lmcmcarray <- function(x) {
 
   nrow <- nrow(x)
-  samples <- stats::rnorm(nrow * niters, mean = x$estimate, sd = x$sd)
 
   if (identical(nrow, 1L)) {
     dims <- 1L
@@ -11,24 +10,24 @@ lmcmcarray <- function(x, niters) {
     dims %<>% as.integer()
   }
 
-  dims %<>% c(1L, niters, .)
+  dims %<>% c(1L, 1L, .)
 
-  samples %<>% array(dim = dims)
+  samples <- array(x$estimate, dim = dims)
   class(samples) <- "mcmcarray"
 
   samples
 }
 
-lmcmcr <- function(object, niters = 2000L) {
+lmcmcr <- function(object) {
 
   coef <- coef(object, mcmc = FALSE)
   random <- coef(object, fixed = FALSE, mcmc = FALSE)
 
-  coef %<>% dplyr::bind_rows(random) %>% dplyr::select_(~term, ~estimate, ~sd)
+  coef %<>% dplyr::bind_rows(random) %>% dplyr::select_(~term, ~estimate)
 
   coef %<>% dplyr::mutate_(parameter = ~str_replace(term, "^(\\w+)(.*)", "\\1"))
 
-  coef %<>% plyr::dlply(~parameter, lmcmcarray, niters = niters)
+  coef %<>% plyr::dlply(~parameter, lmcmcarray)
 
   class(coef) <- "mcmcr"
   coef
