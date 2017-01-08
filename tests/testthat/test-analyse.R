@@ -79,6 +79,8 @@ test_that("analyse", {
   expect_false(is.unsorted(year$estimate))
   expect_true(all(is.na(year$lower)))
 
+  expect_equal(unlist(estimates(analysis)), coef$estimate, check.names = FALSE)
+
   #  analysis <- reanalyse(analysis, beep = FALSE)
 
   #  expect_identical(niters(analysis), 500L)
@@ -88,4 +90,6 @@ test_that("analyse", {
   #  expect_equal(convergence(analysis), 1.00, tolerance = 1)
 
   #  expect_is(as.mcmcr(analysis), "mcmcr")
+  #    expect_identical(estimates(analysis), estimates(analysis, mcmc = TRUE))
+
 })
