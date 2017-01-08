@@ -56,6 +56,7 @@ coef.tmb_analysis <- function(object, fixed = TRUE, include_constant = TRUE, mcm
                     zscore = ~`z value`, significance = ~`Pr(>|z^2|)`)
   coef %<>% dplyr::mutate_(lower = ~estimate + sd * qnorm((1 - conf_level) / 2),
                     upper = ~estimate + sd * qnorm((1 - conf_level) / 2 + conf_level))
+  coef %<>% dplyr::select_(~term, ~estimate, ~sd, ~zscore, ~lower, ~upper, ~significance)
   coef %<>% dplyr::arrange_(~term)
 
   coef %<>% remap_coef(object$map)

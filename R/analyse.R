@@ -61,7 +61,7 @@ tmb_analysis <- function(data, model, tempfile, quick, quiet, compiled = FALSE) 
 
   opt <- do.call("optim", ad_fun)
 
-  sd <- TMB::sdreport(ad_fun, getReportCovariance = FALSE)
+  sd <- TMB::sdreport(ad_fun)
   report <- ad_fun$report()
 
   obj %<>% c(inits = list(inits), map = list(map), ad_fun = list(ad_fun), opt = list(opt),

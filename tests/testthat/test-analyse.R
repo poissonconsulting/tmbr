@@ -14,35 +14,21 @@ test_that("analyse", {
   Type objective_function<Type>::operator() () {
 
   DATA_VECTOR(Density);
-  DATA_FACTOR(Site);
   DATA_VECTOR(Year);
-  DATA_FACTOR(YearFactor);
-
-  DATA_INTEGER(nSite);
-  DATA_INTEGER(nYearFactor);
 
   PARAMETER(bIntercept);
   PARAMETER(bYear);
-  PARAMETER_MATRIX(bSiteYear);
 
-  PARAMETER(log_sSiteYear);
   PARAMETER(log_sDensity);
 
-  Type sSiteYear = exp(log_sSiteYear);
   Type sDensity = exp(log_sDensity);
 
   vector<Type> eDensity = Density;
 
   Type nll = 0.0;
 
-  for(int i = 0; i < nSite; i++){
-    for(int j = 0; j < nYearFactor; j++){
-     nll -= dnorm(bSiteYear(i,j), Type(0.0), sSiteYear, true);
-    }
-  }
-
   for(int i = 0; i < Density.size(); i++){
-    eDensity(i) = exp(bIntercept  + bYear * Year(i) + bSiteYear(Site(i), YearFactor(i)));
+    eDensity(i) = exp(bIntercept  + bYear * Year(i));
     nll -= dnorm(Density(i), log(eDensity(i)), sDensity ,true);
   }
   return nll;
@@ -50,40 +36,50 @@ test_that("analyse", {
 
   new_expr <- "
   for(i in 1:length(Density)) {
-    prediction[i] <- exp(bIntercept + bYear * Year[i] + bSiteYear[Site[i], YearFactor[i]])
+    prediction[i] <- exp(bIntercept + bYear * Year[i])
   } "
 
-  gen_inits <- function(data) list(bIntercept = 0, bYear = 1, log_sSiteYear = 1, log_sDensity = 0)
+  gen_inits <- function(data) list(bIntercept = 0, bYear = 1, log_sDensity = 0)
 
   model <- model(tmb_template, gen_inits = gen_inits,
                  center = "Year",
-                 random_effects = list(bSiteYear = c("Site", "YearFactor")),
                  new_expr = new_expr)
 
-  # analysis <- analyse(model, data = data, beep = FALSE)
-  #
-  # expect_identical(logLik(analysis), 1L)
-  #
+ # analysis <- analyse(model, data = data, beep = FALSE)
+
   # expect_identical(parameters(analysis), sort(c("bHabitatQuality", "bIntercept", "bYear", "log_sDensity", "log_sSiteYear")))
   # expect_identical(parameters(analysis, fixed = FALSE), "bSiteYear")
   #
-  # expect_identical(parameters(mb_code(tmb_template)), sort(c(parameters(analysis), parameters(analysis, FALSE))))
+  # expect_is(as.mcmcr(analysis), "mcmcr")
+  #
+  # glance <- glance(analysis)
+  # expect_is(glance, "tbl")
+  # expect_identical(colnames(glance), c("n", "k", "logLik", "IC", "minutes", "converged"))
+  # expect_equal(glance$logLik, -5238.213, tolerance = 0.0000001)
+  # expect_identical(glance$n, 300L)
+  # expect_identical(glance$k, 3L)
   #
   # coef <- coef(analysis)
   #
   # expect_is(coef, "tbl")
-  # expect_identical(colnames(coef), c("term", "estimate", "sd", "zscore",
-  #                                    "lower", "upper", "significance"))
+  # expect_identical(colnames(coef), c("term", "estimate", "sd", "zscore", "lower", "upper", "significance"))
   #
+  # expect_identical(coef$term, c("bHabitatQuality[1]", "bHabitatQuality[2]",
+  #                               "bIntercept", "bYear",
+  #                               "log_sDensity", "log_sSiteYear"))
+  # #
+  # tidy <- tidy(analysis)
+  # expect_identical(colnames(tidy), c("term", "estimate", "std.error", "statistic", "p.value"))
+  # expect_identical(tidy$estimate, coef$estimate)
   #
-  # expect_identical(coef$term, sort(c("bHabitatQuality[1]", "bHabitatQuality[2]", "bIntercept", "bYear",
-  #                               "log_sDensity", "log_sSiteYear")))
-
-#  predict <- predict(analysis, new_data = new_data(data, "Site"))
-
-#  expect_is(predict, "tbl")
-#  expect_identical(colnames(predict), c("Density", "Site", "Year", "Visit", "estimate"))
-#  expect_identical(nrow(predict), 6L)
+  # year <- predict(analysis, new_data = new_data(data, "Year"), quick = TRUE)
+  #
+  # expect_is(year, "tbl")
+  # expect_identical(colnames(year), c("Site", "HabitatQuality", "Year", "Visit",
+  #                                    "Density", "YearFactor",
+  #                                    "estimate", "lower", "upper"))
+  # expect_identical(year$estimate, year$lower)
+  # expect_false(is.unsorted(year$estimate))
 
   #  analysis <- reanalyse(analysis, beep = FALSE)
 
