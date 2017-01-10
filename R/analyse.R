@@ -89,6 +89,7 @@ tmb_analysis <- function(data, model, tempfile, quick, quiet, compiled = FALSE) 
   class(obj) <- c("tmb_ml_analysis", "tmb_analysis", "mb_analysis")
 
   obj$mcmcr <- lmcmcr(obj)
+  obj$model$derived <- names(list_by_name(obj$sd$value))
   obj$duration <- timer$elapsed()
 
   obj

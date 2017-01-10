@@ -82,14 +82,14 @@ remap_estimates <- function(estimates, map) {
 
 terms_internal <- function(object, param_type = "fixed", ...) {
 
-  if (param_type == "adreport") {
+  if (param_type == "derived") {
     estimates <- list_by_name(object$sd$value)
     estimates %<>% remap_estimates(object$map)
   } else {
     if (param_type == "fixed") {
       estimates <- object$sd$par.fixed
     } else
-      param_type <- object$sd$par.random
+      estimates <- object$sd$par.random
 
     estimates %<>% list_by_name()
     estimates %<>% remap_estimates(object$map)
