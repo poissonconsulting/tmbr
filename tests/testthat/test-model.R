@@ -28,6 +28,7 @@ test_that("analyse", {
                 Type sMales = exp(log_sMales);
 
                 ADREPORT(sMales);
+                REPORT(eSurvival);
 
                 vector<Type> bAdults = Males;
                 vector<Type> bYearlings = Males;
@@ -58,6 +59,16 @@ test_that("analyse", {
 
                 return nll;
                 }"
+
+  expect_identical(parameters(mb_code(template)),
+            c("bAdultsInitial", "bDisturbance", "bHunterDays", "bPDO", "bSurvival",
+              "bYearlingsInitial", "log_sMales"))
+
+  expect_identical(parameters(mb_code(template), "derived"),
+                   "sMales")
+
+  expect_error(parameters(mb_code(template), "adreport"))
+  expect_error(parameters(mb_code(template), "report"))
 
   gen_inits <- function(data) {
     inits <- list()
@@ -106,5 +117,4 @@ r2 <- 1 - var(Males - eMales) / var(Males)
   expect_identical(models[[1]], model)
 
   expect_identical(names(models), c("full", "base+bHunterDays+bPDO", "base+bDisturbance+bPDO", "base+bDisturbance+bHunterDays", "base+bPDO", "base+bHunterDays", "base+bDisturbance", "base"))
-
 })

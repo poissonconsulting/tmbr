@@ -19,6 +19,11 @@ library(tmbr)
 #> Loading required package: mbr
 #> Loading required package: broom
 #> Loading required package: mcmcr
+#> 
+#> Attaching package: 'mcmcr'
+#> The following object is masked from 'package:ggplot2':
+#> 
+#>     derive
 #> Loading required package: newdata
 
 options("mb.parallel" = TRUE)
@@ -64,12 +69,10 @@ analysis <- analyse(model, data = data)
 #> Note: Using Makevars in /Users/joe/.R/Makevars
 
 glance(analysis)
-#> Warning in converged.tmb_analysis(x, rhat = rhat): converged is not yet
-#> implemented for ML estimates
 #> # A tibble: 1 × 6
-#>       n     k    logLik       IC minutes converged
+#>       n     K    logLik     AICc minutes converged
 #>   <int> <int>     <dbl>    <dbl>   <int>     <lgl>
-#> 1    40     4 -159.1842 327.5113       0      TRUE
+#> 1    40     4 -159.1842 327.5113       0        NA
 tidy(analysis)
 #> # A tibble: 4 × 5
 #>    term     estimate  std.error  statistic       p.value

@@ -19,17 +19,19 @@ lmcmcarray <- function(x) {
 }
 
 lmcmcr <- function(object) {
+  coef <- coef(object)
+  derived <- coef(object, "derived")
+  random <- coef(object, "random")
 
-  coef <- coef(object, mcmc = FALSE)
-  random <- coef(object, fixed = FALSE, mcmc = FALSE)
-
-  coef %<>% dplyr::bind_rows(random) %>% dplyr::select_(~term, ~estimate)
+  coef %<>% dplyr::bind_rows(derived) %>% dplyr::bind_rows(random) %>% dplyr::select_(~term, ~estimate)
 
   coef %<>% dplyr::mutate_(parameter = ~str_replace(term, "^(\\w+)(.*)", "\\1"))
 
   coef %<>% plyr::dlply(~parameter, lmcmcarray)
 
   class(coef) <- "mcmcr"
+
+  coef %<>% sort()
   coef
 }
 
@@ -65,10 +67,12 @@ tmb_analysis <- function(data, model, tempfile, quick, quiet, compiled = FALSE) 
   report <- ad_fun$report()
 
   obj %<>% c(inits = list(inits), map = list(map), ad_fun = list(ad_fun), opt = list(opt),
-             sd = list(sd), report = list(report), lmcmcr = list(lmcmcr), duration = timer$elapsed())
-  class(obj) <- c("tmb_analysis", "mb_analysis")
+             sd = list(sd), report = list(report))
 
-  obj$lmcmcr <- lmcmcr(obj)
+  class(obj) <- c("tmb_ml_analysis", "tmb_analysis", "mb_analysis")
+
+  obj$mcmcr <- lmcmcr(obj)
+  obj$duration <- timer$elapsed()
 
   obj
 }

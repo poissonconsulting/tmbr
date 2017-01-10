@@ -20,37 +20,6 @@ map <- function(inits) {
   map
 }
 
-#' Remap Vector
-#'
-#' Remaps vector x based on missing values in y.
-#'
-#' @param x The vector of estimates to remap (added fixed values as 0)
-#' @param y The vector indicating missing values.
-remap_vector <- function(x, y) {
-  stopifnot(length(x) == sum(!is.na(y)))
-  y %<>% as.numeric()
-  y[!is.na(y)] <- x
-  y[is.na(y)] <- 0
-  y
-}
-
-#' Remap Estimates
-#'
-#' Adds fixed values to estimates.
-#'
-#' @param estimates A named list of the estimates to add as 0 values that were fixed.
-#' @param map A named list indicating the fixed values.
-remap_estimates <- function(estimates, map) {
-  check_uniquely_named_list(estimates)
-  check_uniquely_named_list(map)
-  if (!length(map)) return(estimates)
-  map <- map[names(map) %in% names(estimates)]
-  if (!length(map)) return(estimates)
-
-  estimates[names(map)] %<>% purrr::map2(map, remap_vector)
-  estimates
-}
-
 remap_data <- function(x, y) {
   stopifnot(nrow(x) == sum(!is.na(y)))
   x$constant <- FALSE
@@ -60,7 +29,6 @@ remap_data <- function(x, y) {
   z[!is.na(y),] <- x
   z
 }
-
 
 #' Remap Coef
 #'

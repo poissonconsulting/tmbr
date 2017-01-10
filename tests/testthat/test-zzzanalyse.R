@@ -48,16 +48,18 @@ test_that("analyse", {
   analysis <- analyse(model, data = data, beep = FALSE)
 
  expect_identical(parameters(analysis), sort(c("bIntercept", "bYear", "log_sDensity")))
-  expect_identical(parameters(analysis, fixed = FALSE), character(0))
+  expect_identical(parameters(analysis, "random"), character(0))
 
-  expect_error(as.mcmcr(analysis), "as.mcmcr is undefined for x")
+  expect_is(as.mcmcr(analysis), "mcmcr")
+  expect_identical(nchains(analysis), 1L)
+  expect_identical(niters(analysis), 1L)
 
   glance <- glance(analysis)
   expect_is(glance, "tbl")
-  expect_identical(colnames(glance), c("n", "k", "logLik", "mAICc", "minutes", "converged"))
+  expect_identical(colnames(glance), c("n", "K", "logLik", "AICc", "minutes", "converged"))
   expect_equal(glance$logLik, -5238.213, tolerance = 0.0000001)
   expect_identical(glance$n, 300L)
-  expect_identical(glance$k, 3L)
+  expect_identical(glance$K, 3L)
 
   coef <- coef(analysis)
 

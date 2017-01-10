@@ -33,3 +33,29 @@ is.tmb_model <- function(x) {
 is.tmb_analysis <- function(x) {
   inherits(x, "tmb_analysis")
 }
+
+#' Is a TMB ML Analysis
+#'
+#' Tests whether x is an object of class 'tmb_ml_analysis'
+#'
+#' @param x The object to test.
+#'
+#' @return A flag indicating whether the test was positive.
+#' @export
+is.tmb_ml_analysis <- function(x) {
+  inherits(x, "tmb_ml_analysis")
+}
+
+#' Is a TMB MCMC Analysis
+#'
+#' Tests whether x is an object of class 'tmb_mcmc_analysis'
+#'
+#' @param x The object to test.
+#'
+#' @return A flag indicating whether the test was positive.
+#' @export
+is.tmb_mcmc_analysis <- function(x) {
+  inherits(x, "tmb_mcmc_analysis")
+}
+
+
