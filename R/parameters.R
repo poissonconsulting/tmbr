@@ -5,7 +5,8 @@ parameters.tmb_code <- function(x, param_type = "fixed", scalar = TRUE, ...) {
 
   x %<>% template() %>% str_replace_all(" ", "")
 
-  if (param_type == "derived") {
+  # ignore REPORT parameters as easily generate using predict
+  if (param_type == "derived") { # can't deterimne which derived parameters are scalar
     x %<>% str_extract_all("\\s(ADREPORT)[(]\\w+[)]", simplify = TRUE)
   } else {# can't separate fixed and random from tmb code but can separate scalar
     if(scalar) {
