@@ -35,6 +35,23 @@ lmcmcr <- function(object) {
   coef
 }
 
+# Constructs a list identifying which parameters to fix (based on missing values in inits).
+map <- function(inits) {
+  check_uniquely_named_list(inits)
+
+  if (!length(inits)) return(list())
+
+  inits <- inits[vapply(inits, function(x) (any(is.na(x))), TRUE)]
+
+  if (!length(inits)) return(list())
+
+  inits %<>% lapply(as.vector)
+  map <- lapply(inits, function(x) 1:length(x))
+  map <- purrr::map2(map, inits, function(x, y) {is.na(x) <- is.na(y); x})
+  map %<>% lapply(function(x) factor(x))
+  map
+}
+
 compile_code <- function(model, tempfile) {
     write(template(model), file = paste0(tempfile, ".cpp"))
     TMB::compile(paste0(tempfile, ".cpp"))

@@ -1,3 +1,135 @@
+seq_to <- function(to) {
+  seq(from = 1, to = to)
+}
+
+paste_rows <- function(x) {
+  x %<>% unlist()
+  x %<>% stringr::str_c(collapse = ",")
+  data.frame(x = x)
+}
+
+dims_to_dimensions_vector <- function(dims) {
+  if (identical(dims, 1L)) return("")
+  dims %<>% lapply(seq_to)
+  dims %<>% expand.grid()
+  dims %<>% plyr::adply(1, paste_rows)
+  dims <- dims$x
+  dims %<>% stringr::str_c("[", ., "]")
+  dims
+}
+
+by_dims <- function(x, dims) {
+  stopifnot(is.vector(x))
+  stopifnot(is.integer(dims))
+  stopifnot(length(x) == prod(dims))
+  if (length(dims) == 1) return(x)
+  if (length(dims) == 2) return(matrix(x, nrow = dims[1], ncol = dims[2]))
+  return(array(x, dim = dims))
+}
+
+list_by_name <- function(x) {
+  list <- list()
+  names <- unique(names(x))
+  for (name in names) {
+    list %<>% c(list(unname(x[names(x) == name])))
+  }
+  names(list) <- names
+  list
+}
+
+c_name <- function(x) {
+  x[[1]] %<>% stringr::str_c(names(x), .)
+  x
+}
+
+par_names_indices <- function(estimates) {
+  estimates %<>% lapply(dims) %>% lapply(dims_to_dimensions_vector)
+  estimates %<>% purrr::lmap(c_name)
+  estimates %<>% sort_nlist()
+  estimates
+}
+
+named_estimates <- function(estimates) {
+  stopifnot(is_nlist(estimates))
+  indices <- par_names_indices(estimates) %>% unlist()
+  estimates %<>% unlist()
+  names(estimates) <- indices
+  estimates
+}
+
+# Remaps vector x based on missing values in y.
+remap_vector <- function(x, y) {
+  stopifnot(length(x) == sum(!is.na(y)))
+  y %<>% as.numeric()
+  y[!is.na(y)] <- x
+  y[is.na(y)] <- 0
+  y
+}
+
+# Adds fixed values to estimates.
+# estimates A named list of the estimates to add as 0 values that were fixed.
+# A named list indicating the fixed values.
+remap_estimates <- function(estimates, map) {
+  check_uniquely_named_list(estimates)
+  check_uniquely_named_list(map)
+  if (!length(map)) return(estimates)
+  map <- map[names(map) %in% names(estimates)]
+  if (!length(map)) return(estimates)
+
+  estimates[names(map)] %<>% purrr::map2(map, remap_vector)
+  estimates
+}
+
+terms_internal <- function(object, param_type = "fixed", ...) {
+
+  if (param_type == "adreport") {
+    estimates <- list_by_name(object$sd$value)
+    estimates %<>% remap_estimates(object$map)
+  } else {
+    if (param_type == "fixed") {
+      estimates <- object$sd$par.fixed
+    } else
+      param_type <- object$sd$par.random
+
+    estimates %<>% list_by_name()
+    estimates %<>% remap_estimates(object$map)
+    inits <- object$inits[names(estimates)]
+    inits %<>% lapply(dims)
+    estimates %<>% purrr::map2(inits, by_dims)
+  }
+
+  estimates %<>% sort_nlist()
+  estimates %<>% named_estimates()
+  estimates %<>% names()
+  estimates
+}
+
+remap_data <- function(x, y) {
+  stopifnot(nrow(x) == sum(!is.na(y)))
+  x$constant <- FALSE
+  z <- dplyr::data_frame(term = "", estimate = 0, sd = 0, zscore = NaN,
+                         lower = 0, upper = 0, significance = 0, constant = TRUE)
+  z <- z[rep(1,length(y)),]
+  z[!is.na(y),] <- x
+  z
+}
+
+# Adds fixed values to coef table.
+remap_coef <- function(coef, map) {
+  check_uniquely_named_list(map)
+  coef$constant <- FALSE
+
+  if (!length(map)) return(coef)
+  map <- map[names(map) %in% unique(coef$term)]
+  if (!length(map)) return(coef)
+
+  coef %<>% plyr::dlply(.variables = c("term"))
+  coef[names(map)] %<>% purrr::map2(map, remap_data)
+  coef %<>% plyr::ldply()
+  coef %<>% dplyr::mutate_(.id = ~NULL)
+  coef
+}
+
 #' Coef TMB Analysis
 #'
 #' Coefficients for a TMB analysis.
@@ -17,37 +149,30 @@ coef.tmb_ml_analysis <- function(object, param_type = "fixed", include_constant 
   check_flag(include_constant)
   check_number(conf_level, c(0.5, 0.99))
 
-  coef <- dplyr::data_frame(term = character(0), estimate = numeric(0), sd = numeric(0),
-                            zscore = numeric(0), lower = numeric(0),
-                            upper = numeric(0), significance = numeric(0))
+  terms <- terms_internal(object, param_type = param_type)
 
-  # there should always be fixed parameters
-  if (param_type == "random") {
-    if (is.null(object$sd$par.random)) {
-      return(coef)
-    }
-  }
-
-  if (param_type == "derived") {
-    if (!length(object$sd$value)) {
-      return(coef)
-    }
+  if (!length(terms)) {
+    return(dplyr::data_frame(term = character(0), estimate = numeric(0), sd = numeric(0),
+                             zscore = numeric(0), lower = numeric(0),
+                             upper = numeric(0), significance = numeric(0)))
   }
 
   # necessary due to summary args!
   if (param_type == "derived") param_type <- "report"
+
   coef <- summary(object$sd, select = param_type, p.value = TRUE) %>% as.data.frame()
 
   coef %<>% dplyr::mutate_(term = ~row.names(coef))
   coef %<>% dplyr::select_(term = ~term, estimate = ~Estimate, sd = ~`Std. Error`,
-                    zscore = ~`z value`, significance = ~`Pr(>|z^2|)`)
+                           zscore = ~`z value`, significance = ~`Pr(>|z^2|)`)
 
   coef %<>% dplyr::mutate_(lower = ~estimate + sd * qnorm((1 - conf_level) / 2),
-                    upper = ~estimate + sd * qnorm((1 - conf_level) / 2 + conf_level))
+                           upper = ~estimate + sd * qnorm((1 - conf_level) / 2 + conf_level))
   coef %<>% dplyr::select_(~term, ~estimate, ~sd, ~zscore, ~lower, ~upper, ~significance)
   coef %<>% dplyr::arrange_(~term)
 
   coef %<>% remap_coef(object$map)
+  coef$term <- terms
   if (!include_constant) coef %<>% dplyr::filter_(~!constant)
   coef %<>% dplyr::mutate_(constant = ~NULL)
   coef %<>% dplyr::as.tbl()

@@ -25,6 +25,8 @@ test_that("analyse", {
 
   vector<Type> eDensity = Density;
 
+  ADREPORT(sDensity)
+
   Type nll = 0.0;
 
   for(int i = 0; i < Density.size(); i++){
@@ -67,6 +69,8 @@ test_that("analyse", {
   expect_identical(colnames(coef), c("term", "estimate", "sd", "zscore", "lower", "upper", "significance"))
 
   expect_identical(coef$term, c("bIntercept", "bYear", "log_sDensity"))
+
+  coef2 <- coef(analysis, "derived")
 
   tidy <- tidy(analysis)
   expect_identical(colnames(tidy), c("term", "estimate", "std.error", "statistic", "p.value"))
