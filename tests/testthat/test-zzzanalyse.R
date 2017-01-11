@@ -88,7 +88,7 @@ test_that("analyse", {
 
   expect_equal(unlist(estimates(analysis)), coef$estimate, check.names = FALSE)
 
-  #  analysis <- reanalyse(analysis, beep = FALSE)
+  analysis2 <- reanalyse(analysis, beep = FALSE)
 
   #  expect_identical(niters(analysis), 500L)
   #  expect_identical(nchains(analysis), 4L)
