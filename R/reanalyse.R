@@ -1,6 +1,6 @@
 #' @export
 as.tmb_ml_analysis.tmb_mcmc_analysis <- function(x, ...) {
-  x$ngens <- NULL
+  x$ngens <- x$ml$ngens
   x$duration <- x$ml$duration
   x$mcmcr <- x$ml$mcmcr
 
@@ -11,42 +11,48 @@ as.tmb_ml_analysis.tmb_mcmc_analysis <- function(x, ...) {
 }
 
 
-tmb_mcmc_reanalyse_chain(mcmcr, ad_fun, niters, nthin, quiet) {
-  #  pass alpha as option as in future TMB should optimise (will just ignore then)
+tmb_mcmc_reanalyse_chain <- function(mcmcr, ad_fun, niters, nthin, quiet) {
+  stopifnot(identical(nchains(mcmcr), 1L))
 
-  #  inits <- from mcmcr
-  mcmc <- TMB::run_mcmc.rwm(nsim = niters, fn = ad_fun,  alpha = getOption("tmbr.alpha", 1))
+  #  inits <- from mcmcr? # default is to use obj$par....
+  #  pass alpha as option as in future TMB should optimise (can just ignore then)
+  mcmc <- TMB::run_mcmc(ad_fun,  nsim = niters, algorithm = "RWM", alpha = getOption("tmbr.alpha", 1))
+
+#  mcmc %<>% as.mcmc()
+#  x <<- mcmc
+
   # then need to convert mcmc to mcmcr perhaps using mcmcr dims
   # then need to thin
   mcmcr
 }
 
-
 tmb_mcmc_reanalyse_internal <- function(analysis, parallel, quiet) {
+
   timer <- timer::Timer$new()
   timer$start()
 
   niters <- analysis$ngens * 2
   nchains <- nchains(analysis)
-  nthin <- niters * nchains / (2000 * 2)
+  nthin <- niters * nchains %/% (2000 * 2)
+
+  nthin %<>% max(nthin, 1L)
 
   mcmcr <- list()
-  for (i in 1:chains() {
+  for (i in 1:nchains) {
     mcmcr[[i]] <- subset(analysis$mcmcr, chains = i)
   }
 
   mcmcr %<>% plapply(tmb_mcmc_reanalyse_chain, .parallel = parallel, ad_fun = analysis$ad_fun,
-                             niters = niters, nthin = nthin, quiet = quiet)
+                     niters = niters, nthin = nthin, quiet = quiet)
 
-  analysis$mcmcr %<>% purrr::reduce(mcmcr)
-
+  analysis$mcmcr %<>% purrr::reduce(mcmcr, bind_chains)
   analysis$ngens <- as.integer(niters)
   analysis$duration %<>% magrittr::add(timer$elapsed())
   analysis
 }
 
 tmb_mcmc_reanalyse <- function(analysis, rhat = rhat, minutes = minutes, quick = quick,
-                             quiet = quiet, parallel = parallel) {
+                               quiet = quiet, parallel = parallel) {
 
   if (quick || converged(analysis, rhat) || minutes < elapsed(analysis) * 2) return(analysis)
 
@@ -57,18 +63,18 @@ tmb_mcmc_reanalyse <- function(analysis, rhat = rhat, minutes = minutes, quick =
 
 #' @export
 reanalyse.tmb_mcmc_analysis <- function(analysis,
-                                      rhat = getOption("mb.rhat", 1.1),
-                                      minutes = getOption("mb.minutes", 60L),
-                                      parallel = getOption("mb.parallel", FALSE),
-                                      quick = getOption("mb.quick", FALSE),
-                                      quiet = getOption("mb.quiet", TRUE),
-                                      beep = getOption("mb.beep", TRUE), ...) {
+                                        rhat = getOption("mb.rhat", 1.1),
+                                        minutes = getOption("mb.minutes", 60L),
+                                        parallel = getOption("mb.parallel", FALSE),
+                                        quick = getOption("mb.quick", FALSE),
+                                        quiet = getOption("mb.quiet", TRUE),
+                                        beep = getOption("mb.beep", TRUE), ...) {
+  check_number(rhat)
   check_count(minutes)
   check_flag(quick)
   check_flag(quiet)
   check_flag(parallel)
   check_flag(beep)
-  check_number(alpha)
 
   if (beep) on.exit(beepr::beep())
 
@@ -84,17 +90,31 @@ reanalyse.tmb_ml_analysis <- function(analysis,
                                       quiet = getOption("mb.quiet", TRUE),
                                       beep = getOption("mb.beep", TRUE), ...) {
 
+  if (beep) on.exit(beepr::beep())
+
+  if (!file.exists(paste0(analysis$tempfile, ".cpp"))) {
+    # recompile and run analysis
+    analysis <- analyse(analysis$model, data_set(analysis),
+                          parallel = parallel, quick = quick,
+                          quiet = quiet, beep = FALSE)
+  }
+
   analysis$ml <- list()
   analysis$ml$duration <- analysis$duration
   analysis$ml$mcmcr <- analysis$mcmcr
+  analysis$ml$ngens <- analysis$ngens
 
-  analysis$ngens <- analysis$model$niters
+  nchains <- ifelse(quick, 2L, 4L)
+  ngens <- ifelse(quick, 5L, analysis$model$niters %/% 2L)
 
-  analysis$mcmc %<>% subset(chains = rep(1, 4), iterations = rep(1, 10))
+  analysis$duration <- lubridate::duration(0)
+  analysis$mcmcr %<>% subset(chains = rep(1L, nchains))
+  analysis$ngens <- ngens
 
   class(analysis) <- c("tmb_mcmc_analysis", "tmb_analysis", "mb_analysis")
 
-  reanalyse(analysis, rhat = rhat, minutes = minute, quick = quick,
-            quiet = quiet, parallel = parallel)
+  analysis %<>% tmb_mcmc_reanalyse_internal(parallel = parallel, quiet = quiet)
 
+  tmb_mcmc_reanalyse(analysis, rhat = rhat, minutes = minutes, quick = quick,
+                     quiet = quiet, parallel = parallel)
 }

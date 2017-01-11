@@ -1,3 +1,12 @@
+compile_code <- function(model, tempfile) {
+  file <- paste0(tempfile, ".cpp")
+  stopifnot(!file.exists(file))
+
+  write(template(model), file = file)
+  TMB::compile(file)
+  dyn.load(TMB::dynlib(tempfile))
+}
+
 lmcmcarray <- function(x) {
 
   nrow <- nrow(x)
@@ -52,17 +61,9 @@ map <- function(inits) {
   map
 }
 
-compile_code <- function(model, tempfile) {
-    write(template(model), file = paste0(tempfile, ".cpp"))
-    TMB::compile(paste0(tempfile, ".cpp"))
-    dyn.load(TMB::dynlib(tempfile))
-}
-
-tmb_analysis <- function(data, model, tempfile, quick, quiet, compiled = FALSE) {
+tmb_analysis <- function(data, model, tempfile, quick, quiet) {
   timer <- timer::Timer$new()
   timer$start()
-
-  if (!compiled) compile_code(model, tempfile)
 
   obj <- list(model = model, data = data)
 
@@ -83,12 +84,13 @@ tmb_analysis <- function(data, model, tempfile, quick, quiet, compiled = FALSE) 
   sd <- TMB::sdreport(ad_fun)
   report <- ad_fun$report()
 
-  obj %<>% c(inits = list(inits), map = list(map), ad_fun = list(ad_fun), opt = list(opt),
+  obj %<>% c(inits = list(inits), tempfile = tempfile, map = list(map), ad_fun = list(ad_fun), opt = list(opt),
              sd = list(sd), report = list(report))
 
   class(obj) <- c("tmb_ml_analysis", "tmb_analysis", "mb_analysis")
 
   obj$mcmcr <- lmcmcr(obj)
+  obj$ngens <- 1L
   obj$model$derived <- names(list_by_name(obj$sd$value))
   obj$duration <- timer$elapsed()
 
@@ -114,20 +116,16 @@ analyse.tmb_model <- function(model, data, drop = character(0),
   check_flag(quiet)
   check_flag(beep)
 
-
   if (beep) on.exit(beepr::beep())
 
   model %<>% drop_parameters(parameters = drop)
 
   tempfile <- tempfile()
-
-  if (is.data.frame(data)) {
-    return(tmb_analysis(data = data, model = model, tempfile = tempfile,
-                        quick = quick, quiet = quiet))
-  }
-
   compile_code(model, tempfile)
 
-  lapply(data, tmb_analysis, model = model, tempfile = tempfile,
-         quick = quick, quiet = quiet, compiled = TRUE)
+  if (is.data.frame(data)) {
+    return(tmb_analysis(data = data, model = model, tempfile = tempfile, quick = quick, quiet = quiet))
+  }
+
+  lapply(data, tmb_analysis, model = model, tempfile = tempfile, quick = quick, quiet = quiet)
 }
