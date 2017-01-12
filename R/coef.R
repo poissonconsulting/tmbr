@@ -27,16 +27,6 @@ by_dims <- function(x, dims) {
   return(array(x, dim = dims))
 }
 
-list_by_name <- function(x) {
-  list <- list()
-  names <- unique(names(x))
-  for (name in names) {
-    list %<>% c(list(unname(x[names(x) == name])))
-  }
-  names(list) <- names
-  list
-}
-
 c_name <- function(x) {
   x[[1]] %<>% stringr::str_c(names(x), .)
   x

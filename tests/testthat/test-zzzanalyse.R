@@ -49,7 +49,7 @@ test_that("analyse", {
 
   analysis <- analyse(model, data = data, beep = FALSE)
 
- expect_identical(parameters(analysis), sort(c("bIntercept", "bYear", "log_sDensity")))
+  expect_identical(parameters(analysis), sort(c("bIntercept", "bYear", "log_sDensity")))
   expect_identical(parameters(analysis, "random"), character(0))
 
   expect_is(as.mcmcr(analysis), "mcmcr")
@@ -88,17 +88,17 @@ test_that("analyse", {
 
   expect_equal(unlist(estimates(analysis)), coef$estimate, check.names = FALSE)
 
- # analysis2 <- reanalyse(analysis, beep = FALSE)
+  analysis2 <- reanalyse(analysis, beep = FALSE, minutes = 0L)
 
- # expect_identical(as.tmb_ml_analysis(analysis2), analysis)
+  expect_identical(as.tmb_ml_analysis(analysis2), analysis)
 
-  #  expect_identical(niters(analysis), 500L)
-  #  expect_identical(nchains(analysis), 4L)
-  #  expect_identical(nsamples(analysis), 2000L)
+  expect_identical(niters(analysis2), 500L)
+  expect_identical(nchains(analysis2), 4L)
+#  expect_identical(ngens(analysis2), 1000L)
 
-  #  expect_equal(convergence(analysis), 1.00, tolerance = 1)
+  analysis2 <- tmb_mcmc_reanalyse_internal(analysis2, parallel = FALSE, quiet = TRUE)
 
-  #  expect_is(as.mcmcr(analysis), "mcmcr")
-  #    expect_identical(estimates(analysis), estimates(analysis, mcmc = TRUE))
-
+  expect_identical(as.tmb_ml_analysis(analysis2), analysis)
+  expect_identical(niters(analysis2), 500L)
+  expect_identical(nchains(analysis2), 4L)
 })

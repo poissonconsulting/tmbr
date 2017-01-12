@@ -11,6 +11,7 @@ Depends:
     newdata (>= 0.0.0.9002)
 Imports:
     beepr,
+    coda,
     dplyr,
     datacheckr (>= 0.1.2),
     mcmcr (>= 0.0.0.9004),
