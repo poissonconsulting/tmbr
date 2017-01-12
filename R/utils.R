@@ -15,5 +15,3 @@ dprint <- function(x, note = NULL, do = getOption("dprint.do", TRUE)) {
   cat("\n", deparse(substitute(x)), ": \n", sep = "")
   print(x)
 }
-
-

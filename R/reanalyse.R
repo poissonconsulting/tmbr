@@ -1,4 +1,4 @@
-#' @export
+# @export
 as.tmb_ml_analysis.tmb_mcmc_analysis <- function(x, ...) {
   x$ngens <- x$ml$ngens
   x$duration <- x$ml$duration
@@ -120,7 +120,7 @@ tmb_mcmc_reanalyse <- function(analysis, rhat = rhat, minutes = minutes, quick =
   analysis
 }
 
-#' @export
+# @export
 reanalyse.tmb_mcmc_analysis <- function(analysis,
                                         rhat = getOption("mb.rhat", 1.1),
                                         minutes = getOption("mb.minutes", 60L),
@@ -140,7 +140,7 @@ reanalyse.tmb_mcmc_analysis <- function(analysis,
   tmb_mcmc_reanalyse(analysis, rhat = rhat, minutes = minutes, quick = quick, quiet = quiet, parallel = parallel)
 }
 
-#' @export
+# @export
 reanalyse.tmb_ml_analysis <- function(analysis,
                                       rhat = getOption("mb.rhat", 1.1),
                                       minutes = getOption("mb.minutes", 60L),

@@ -88,26 +88,26 @@ test_that("analyse", {
 
   expect_equal(unlist(estimates(analysis)), coef$estimate, check.names = FALSE)
 
-  analysis2 <- reanalyse(analysis, beep = FALSE, minutes = 0L)
-
-  expect_identical(as.tmb_ml_analysis(analysis2), analysis)
-
-  expect_identical(niters(analysis2), 500L)
-  expect_identical(nchains(analysis2), 4L)
-
-  glance <- glance(analysis2)
-  expect_is(glance, "tbl")
-  expect_identical(colnames(glance), c("n", "K", "logLik", "AICc", "minutes", "converged"))
-  expect_true(is.na(glance$logLik))
-  expect_identical(glance$n, 300L)
-  expect_identical(glance$K, 3L)
-  expect_identical(glance$minutes, 1L)
-  expect_true(!is.na(glance$converged))
-
-  coef2 <- coef(analysis2)
-
-  expect_is(coef2, "tbl")
-  expect_identical(colnames(coef2), c("term", "estimate", "sd", "zscore", "lower", "upper", "significance"))
-  expect_identical(coef2$term, c("bIntercept", "bYear", "log_sDensity"))
-  expect_warning(coef(analysis2, "derived"))
+  # analysis2 <- reanalyse(analysis, beep = FALSE, minutes = 0L)
+  #
+  # expect_identical(as.tmb_ml_analysis(analysis2), analysis)
+  #
+  # expect_identical(niters(analysis2), 500L)
+  # expect_identical(nchains(analysis2), 4L)
+  #
+  # glance <- glance(analysis2)
+  # expect_is(glance, "tbl")
+  # expect_identical(colnames(glance), c("n", "K", "logLik", "AICc", "minutes", "converged"))
+  # expect_true(is.na(glance$logLik))
+  # expect_identical(glance$n, 300L)
+  # expect_identical(glance$K, 3L)
+  # expect_identical(glance$minutes, 1L)
+  # expect_true(!is.na(glance$converged))
+  #
+  # coef2 <- coef(analysis2)
+  #
+  # expect_is(coef2, "tbl")
+  # expect_identical(colnames(coef2), c("term", "estimate", "sd", "zscore", "lower", "upper", "significance"))
+  # expect_identical(coef2$term, c("bIntercept", "bYear", "log_sDensity"))
+  # expect_warning(coef(analysis2, "derived"))
 })

@@ -2,12 +2,12 @@
 #'
 #' @param x object to coerce.
 #' @param ... Unused.
-#' @export
+# @export
 as.tmb_ml_analysis <- function(x, ...) {
   UseMethod("as.tmb_ml_analysis")
 }
 
-#' @export
+# @export
 as.tmb_ml_analysis.tmb_mcmc_analysis <- function(x, ...) {
   x$ngens <- x$ml$ngens
   x$duration <- x$ml$duration
