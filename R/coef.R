@@ -168,3 +168,28 @@ coef.tmb_ml_analysis <- function(object, param_type = "fixed", include_constant 
   coef %<>% dplyr::as.tbl()
   coef
 }
+
+#' Coef TMB Analysis
+#'
+#' Coefficients for a TMB analysis.
+#'
+#' The (95\%) \code{lower} and \code{upper} confidence intervals are
+#' the \code{estimate} +/- 1.96 * \code{std.error}.
+#'
+#' @param object The mb_analysis object.
+#' @param param_type A flag specifying whether 'fixed', 'random' or 'derived' terms.
+#' @param include_constant A flag specifying whether to include constant terms.
+#' @param conf_level A number specifying the confidence level. By default 0.95.
+#' @param ... Not used.
+#' @return A tidy tibble of the coefficient terms.
+#' @export
+coef.tmb_mcmc_analysis <- function(object, param_type = "fixed", include_constant = TRUE, conf_level = 0.95, ...) {
+  check_scalar(param_type, c("fixed", "random", "derived"))
+  if (param_type != "fixed") {
+    warning("coef.tmb_ml_analysis is only defined for fixed effects. try as.tmb_mcmc_analysis first.")
+    return(dplyr::data_frame(term = character(0), estimate = numeric(0), sd = numeric(0),
+                             zscore = numeric(0), lower = numeric(0),
+                             upper = numeric(0), significance = numeric(0)))
+  }
+  NextMethod()
+}

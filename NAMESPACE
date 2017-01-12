@@ -2,6 +2,7 @@
 
 S3method(analyse,tmb_model)
 S3method(as.tmb_ml_analysis,tmb_mcmc_analysis)
+S3method(coef,tmb_mcmc_analysis)
 S3method(coef,tmb_ml_analysis)
 S3method(converged,tmb_ml_analysis)
 S3method(drop_parameters,tmb_code)

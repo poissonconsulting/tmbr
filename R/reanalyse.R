@@ -76,7 +76,7 @@ tmb_mcmc_reanalyse_chain <- function(mcmcr, analysis, niters, nthin, quiet) {
 
   #  pass alpha as option as in future TMB should optimise (will just ignore then)
   mcmc <- TMB::run_mcmc(obj = analysis$ad_fun, nsim = niters, params.init = estimates,
-                        algorithm = "RWM", alpha = getOption("tmbr.alpha", 1))
+                        algorithm = "RWM", alpha  = getOption("tmbr.alpha", 1))
 
   mcmc %<>% list_by_name()
   mcmc %<>% lapply(as.matrix)
