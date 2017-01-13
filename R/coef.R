@@ -142,7 +142,7 @@ coef.tmb_ml_analysis <- function(object, param_type = "fixed", include_constant 
   terms <- terms_internal(object, param_type = param_type)
 
   if (!length(terms)) {
-    return(dplyr::data_frame(term = character(0), estimate = numeric(0), sd = numeric(0),
+    return(dplyr::data_frame(term = as.term(character(0)), estimate = numeric(0), sd = numeric(0),
                              zscore = numeric(0), lower = numeric(0),
                              upper = numeric(0), significance = numeric(0)))
   }
@@ -162,7 +162,7 @@ coef.tmb_ml_analysis <- function(object, param_type = "fixed", include_constant 
   coef %<>% dplyr::arrange_(~term)
 
   coef %<>% remap_coef(object$map)
-  coef$term <- terms
+  coef$term <- as.term(terms)
   if (!include_constant) coef %<>% dplyr::filter_(~!constant)
   coef %<>% dplyr::mutate_(constant = ~NULL)
   coef %<>% dplyr::as.tbl()
@@ -187,7 +187,7 @@ coef.tmb_mcmc_analysis <- function(object, param_type = "fixed", include_constan
   check_scalar(param_type, c("fixed", "random", "derived"))
   if (param_type != "fixed") {
     warning("coef.tmb_ml_analysis is only defined for fixed effects. try as.tmb_mcmc_analysis first.")
-    return(dplyr::data_frame(term = character(0), estimate = numeric(0), sd = numeric(0),
+    return(dplyr::data_frame(term = as.term(character(0)), estimate = numeric(0), sd = numeric(0),
                              zscore = numeric(0), lower = numeric(0),
                              upper = numeric(0), significance = numeric(0)))
   }
