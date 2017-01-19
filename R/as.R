@@ -18,3 +18,5 @@ as.tmb_ml_analysis.tmb_mcmc_analysis <- function(x, ...) {
   class(x) <- c("tmb_ml_analysis", "tmb_analysis", "mb_analysis")
   x
 }
+
+eee <- function () {
