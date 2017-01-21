@@ -75,9 +75,10 @@ tmb_mcmc_reanalyse_chain <- function(mcmcr, analysis, niters, nthin, quiet) {
   stopifnot(identical(names(estimates), names(analysis$ad_fun$par)))
 
   #  pass alpha as option as in future TMB should optimise (will just ignore then)
-  mcmc <- TMB::run_mcmc(obj = analysis$ad_fun, nsim = niters, params.init = estimates,
-                        algorithm = "RWM", alpha  = getOption("tmbr.alpha", 1))
-
+ # mcmc <- TMB::run_mcmc(obj = analysis$ad_fun, nsim = niters, params.init = estimates,
+  #                      algorithm = "RWM", alpha  = getOption("tmbr.alpha", 1))
+  #                      version 1.76 moved MCMC to separate package
+  mcmc <- NULL
   mcmc %<>% list_by_name()
   mcmc %<>% lapply(as.matrix)
   mcmc %<>% remap_mcmcs(analysis$map)

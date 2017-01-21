@@ -98,7 +98,7 @@ remap_data <- function(x, y) {
   stopifnot(nrow(x) == sum(!is.na(y)))
   x$constant <- FALSE
   z <- dplyr::data_frame(term = "", estimate = 0, sd = 0, zscore = NaN,
-                         lower = 0, upper = 0, significance = 0, constant = TRUE)
+                         lower = 0, upper = 0, pvalue = 0, constant = TRUE)
   z <- z[rep(1,length(y)),]
   z[!is.na(y),] <- x
   z
@@ -144,7 +144,7 @@ coef.tmb_ml_analysis <- function(object, param_type = "fixed", include_constant 
   if (!length(terms)) {
     return(dplyr::data_frame(term = as.term(character(0)), estimate = numeric(0), sd = numeric(0),
                              zscore = numeric(0), lower = numeric(0),
-                             upper = numeric(0), significance = numeric(0)))
+                             upper = numeric(0), pvalue = numeric(0)))
   }
 
   # necessary due to summary args!
@@ -154,11 +154,11 @@ coef.tmb_ml_analysis <- function(object, param_type = "fixed", include_constant 
 
   coef %<>% dplyr::mutate_(term = ~row.names(coef))
   coef %<>% dplyr::select_(term = ~term, estimate = ~Estimate, sd = ~`Std. Error`,
-                           zscore = ~`z value`, significance = ~`Pr(>|z^2|)`)
+                           zscore = ~`z value`, pvalue = ~`Pr(>|z^2|)`)
 
   coef %<>% dplyr::mutate_(lower = ~estimate + sd * qnorm((1 - conf_level) / 2),
                            upper = ~estimate + sd * qnorm((1 - conf_level) / 2 + conf_level))
-  coef %<>% dplyr::select_(~term, ~estimate, ~sd, ~zscore, ~lower, ~upper, ~significance)
+  coef %<>% dplyr::select_(~term, ~estimate, ~sd, ~zscore, ~lower, ~upper, ~pvalue)
   coef %<>% dplyr::arrange_(~term)
 
   coef %<>% remap_coef(object$map)
@@ -189,7 +189,7 @@ coef.tmb_mcmc_analysis <- function(object, param_type = "fixed", include_constan
     warning("coef.tmb_ml_analysis is only defined for fixed effects. try as.tmb_mcmc_analysis first.")
     return(dplyr::data_frame(term = as.term(character(0)), estimate = numeric(0), sd = numeric(0),
                              zscore = numeric(0), lower = numeric(0),
-                             upper = numeric(0), significance = numeric(0)))
+                             upper = numeric(0), pvalue = numeric(0)))
   }
   NextMethod()
 }

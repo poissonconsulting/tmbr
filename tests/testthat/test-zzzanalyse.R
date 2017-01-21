@@ -66,7 +66,7 @@ test_that("analyse", {
   coef <- coef(analysis)
 
   expect_is(coef, "tbl")
-  expect_identical(colnames(coef), c("term", "estimate", "sd", "zscore", "lower", "upper", "significance"))
+  expect_identical(colnames(coef), c("term", "estimate", "sd", "zscore", "lower", "upper", "pvalue"))
 
   expect_identical(coef$term, as.term(c("bIntercept", "bYear", "log_sDensity")))
 
@@ -107,7 +107,7 @@ test_that("analyse", {
   # coef2 <- coef(analysis2)
   #
   # expect_is(coef2, "tbl")
-  # expect_identical(colnames(coef2), c("term", "estimate", "sd", "zscore", "lower", "upper", "significance"))
+  # expect_identical(colnames(coef2), c("term", "estimate", "sd", "zscore", "lower", "upper", "pvalue"))
   # expect_identical(coef2$term, c("bIntercept", "bYear", "log_sDensity"))
   # expect_warning(coef(analysis2, "derived"))
 })
