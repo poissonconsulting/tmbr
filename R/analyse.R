@@ -94,6 +94,8 @@ tmb_analysis <- function(data, model, tempfile, quick, quiet) {
   obj$model$derived <- names(list_by_name(obj$sd$value))
   obj$duration <- timer$elapsed()
 
+  print(glance(obj))
+
   obj
 }
 

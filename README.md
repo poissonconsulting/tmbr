@@ -16,9 +16,10 @@ Demonstration
 ``` r
 library(ggplot2)
 library(tmbr)
-#> Loading required package: mbr
 #> Loading required package: broom
+#> Loading required package: mbr
 #> Loading required package: mcmcr
+#> Loading required package: coda
 #> 
 #> Attaching package: 'mcmcr'
 #> The following object is masked from 'package:ggplot2':
@@ -66,21 +67,21 @@ gen_inits <- function(data) list(alpha = 4, beta1 = 1, beta2 = 0, beta3 = 0)
 model <- model(template, scale = "Year", gen_inits = gen_inits, new_expr = new_expr)
 
 analysis <- analyse(model, data = data)
-#> Note: Using Makevars in /Users/joe/.R/Makevars
-
-glance(analysis)
+#> Note: Using Makevars in /Users/joe/.R/Makevars 
 #> # A tibble: 1 × 6
 #>       n     K    logLik     AICc minutes converged
 #>   <int> <int>     <dbl>    <dbl>   <int>     <lgl>
 #> 1    40     4 -159.1842 327.5113       0        NA
-tidy(analysis)
-#> # A tibble: 4 × 5
-#>    term     estimate  std.error  statistic       p.value
-#>   <chr>        <dbl>      <dbl>      <dbl>         <dbl>
-#> 1 alpha  4.232280328 0.03004250 140.876456  0.000000e+00
-#> 2 beta1  1.116410020 0.04777944  23.365909 9.497676e-121
-#> 3 beta2  0.007065185 0.02408137   0.293388  7.692256e-01
-#> 4 beta3 -0.233904157 0.02513417  -9.306221  1.324617e-20
+
+coef(analysis)
+#> # A tibble: 4 × 7
+#>         term     estimate         sd     zscore       lower      upper
+#>   <S3: term>        <dbl>      <dbl>      <dbl>       <dbl>      <dbl>
+#> 1      alpha  4.232280328 0.03004250 140.876456  4.17339812  4.2911625
+#> 2      beta1  1.116410020 0.04777944  23.365909  1.02276404  1.2100560
+#> 3      beta2  0.007065185 0.02408137   0.293388 -0.04013343  0.0542638
+#> 4      beta3 -0.233904157 0.02513417  -9.306221 -0.28316623 -0.1846421
+#> # ... with 1 more variables: pvalue <dbl>
 
 year <- predict(analysis, new_data = new_data(data, "Year"))
 
@@ -91,16 +92,6 @@ ggplot(data = year, aes(x = Year, y = estimate)) +
 ```
 
 ![](README-unnamed-chunk-2-1.png)
-
-``` r
-
-# analysis <- reanalyse(analysis)
-# 
-# plot(analysis)
-# 
-# glance(analysis)
-# tidy(analysis)
-```
 
 Installation
 ------------
