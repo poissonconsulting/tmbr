@@ -124,7 +124,7 @@ tmb_mcmc_reanalyse <- function(analysis, rhat = rhat, minutes = minutes, quick =
 # @export
 reanalyse.tmb_mcmc_analysis <- function(analysis,
                                         rhat = getOption("mb.rhat", 1.1),
-                                        minutes = getOption("mb.minutes", 60L),
+                                        minutes = getOption("mb.minutes", 10L),
                                         parallel = getOption("mb.parallel", FALSE),
                                         quick = getOption("mb.quick", FALSE),
                                         quiet = getOption("mb.quiet", TRUE),
@@ -144,7 +144,7 @@ reanalyse.tmb_mcmc_analysis <- function(analysis,
 # @export
 reanalyse.tmb_ml_analysis <- function(analysis,
                                       rhat = getOption("mb.rhat", 1.1),
-                                      minutes = getOption("mb.minutes", 60L),
+                                      minutes = getOption("mb.minutes", 10L),
                                       parallel = getOption("mb.parallel", FALSE),
                                       quick = getOption("mb.quick", FALSE),
                                       quiet = getOption("mb.quiet", TRUE),
