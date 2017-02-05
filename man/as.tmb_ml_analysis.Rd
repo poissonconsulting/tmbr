@@ -14,4 +14,3 @@ as.tmb_ml_analysis(x, ...)
 \description{
 Coerce to an TMB ML Analysis Object
 }
-

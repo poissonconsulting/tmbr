@@ -28,4 +28,3 @@ Coefficients for a TMB analysis.
 The (95\%) \code{lower} and \code{upper} confidence intervals are
 the \code{estimate} +/- 1.96 * \code{std.error}.
 }
-
