@@ -122,6 +122,8 @@ analyse.tmb_model <- function(model, data, drop = character(0),
 
   model %<>% drop_parameters(parameters = drop)
 
+  check_data_model(data, model)
+
   tempfile <- tempfile()
   compile_code(model, tempfile)
 
