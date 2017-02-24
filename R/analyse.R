@@ -4,7 +4,6 @@ compile_code <- function(model, tempfile) {
 
   write(template(model), file = file)
   TMB::compile(file)
-  dyn.load(TMB::dynlib(tempfile))
 }
 
 lmcmcarray <- function(x) {
@@ -132,6 +131,9 @@ analyse.tmb_model <- function(model, data, drop = character(0),
 
   tempfile <- tempfile()
   compile_code(model, tempfile)
+  dynlib <- TMB::dynlib(tempfile)
+  dyn.load(dynlib)
+  on.exit(dyn.unload(dynlib))
 
   if (is.data.frame(data)) {
     return(tmb_analysis(data = data, model = model, tempfile = tempfile, quick = quick, quiet = quiet))
