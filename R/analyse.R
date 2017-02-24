@@ -81,7 +81,6 @@ tmb_analysis <- function(data, model, tempfile, quick, quiet) {
 
   opt <- do.call("optim", ad_fun)
 
-  sd <- TMB::sdreport(ad_fun)
   sd <- try(TMB::sdreport(ad_fun))
 
   if (!is.sdreport(sd)) {
