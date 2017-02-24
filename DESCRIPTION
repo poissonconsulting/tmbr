@@ -8,7 +8,7 @@ License: MIT + file LICENSE
 Depends:
     R (>= 3.3.1),
     broom,
-    mbr (>= 0.0.0.9026),
+    mbr (>= 0.0.0.9030),
     newdata (>= 0.0.0.9002)
 Imports:
     beepr,

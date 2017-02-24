@@ -82,17 +82,24 @@ tmb_analysis <- function(data, model, tempfile, quick, quiet) {
   opt <- do.call("optim", ad_fun)
 
   sd <- TMB::sdreport(ad_fun)
-  report <- ad_fun$report()
+  sd <- try(TMB::sdreport(ad_fun))
 
-  obj %<>% c(inits = list(inits), tempfile = tempfile, map = list(map), ad_fun = list(ad_fun), opt = list(opt),
-             sd = list(sd), report = list(report))
+  if (!is.sdreport(sd)) {
+    class(obj) <- c("mb_null_analysis", "tmb_ml_analysis", "tmb_analysis", "mb_analysis")
+  } else {
 
-  class(obj) <- c("tmb_ml_analysis", "tmb_analysis", "mb_analysis")
+    report <- ad_fun$report()
 
-  obj$mcmcr <- lmcmcr(obj)
-  obj$ngens <- 1L
-  obj$model$derived <- names(list_by_name(obj$sd$value))
-  obj$duration <- timer$elapsed()
+    obj %<>% c(inits = list(inits), tempfile = tempfile, map = list(map), ad_fun = list(ad_fun), opt = list(opt),
+               sd = list(sd), report = list(report))
+
+    class(obj) <- c("tmb_ml_analysis", "tmb_analysis", "mb_analysis")
+
+    obj$mcmcr <- lmcmcr(obj)
+    obj$ngens <- 1L
+    obj$model$derived <- names(list_by_name(obj$sd$value))
+    obj$duration <- timer$elapsed()
+  }
 
   print(glance(obj))
 

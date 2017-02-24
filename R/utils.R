@@ -1,3 +1,5 @@
+is.sdreport <- function(x) inherits(x, "sdreport")
+
 list_by_name <- function(x) {
   list <- list()
   names <- unique(names(x))
