@@ -4,5 +4,5 @@
 #' @param ... Unused.
 #' @export
 converged.tmb_ml_analysis <- function(x, ...) {
-  TRUE
+  !any(is.nan(suppressWarnings(coef(x))$sd))
 }
