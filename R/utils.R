@@ -1,3 +1,5 @@
+is.try_error <- function(x) inherits(x, "try-error")
+
 is.sdreport <- function(x) inherits(x, "sdreport")
 
 list_by_name <- function(x) {
