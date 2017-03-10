@@ -143,5 +143,5 @@ analyse.tmb_model <- function(model, data, drop = character(0),
     return(tmb_analysis(data = data, model = model, tempfile = tempfile, quick = quick, quiet = quiet))
   }
 
-  lapply(data, tmb_analysis, model = model, tempfile = tempfile, quick = quick, quiet = quiet)
+  plapply(data, tmb_analysis, .parallel = parallel, model = model, tempfile = tempfile, quick = quick, quiet = quiet)
 }
