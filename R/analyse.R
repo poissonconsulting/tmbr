@@ -106,6 +106,27 @@ tmb_analysis <- function(data, model, tempfile, quick, quiet) {
   print(glance(obj))
 
   obj
+  return(tempfile)
+}
+
+analyse_tmb_data <- function(data, model, quick, quiet) {
+  print("inside analyse tmb data")
+  print(data)
+
+  tempfile <- tempfile()
+  compile_code(model, tempfile)
+  dynlib <- TMB::dynlib(tempfile)
+  dyn.load(dynlib)
+  on.exit(dyn.unload(dynlib))
+
+ # return(plyr::rlply(length(data), runif(1)))
+  return(plyr::rlply(length(data), tempfile))
+
+  if (is.data.frame(data)) {
+    return(tmb_analysis(data = data, model = model, tempfile = tempfile, quick = quick, quiet = quiet))
+  }
+
+  plyr::llply(data, tmb_analysis, model = model, tempfile = tempfile, quick = quick, quiet = quiet)
 }
 
 #' @export
@@ -133,15 +154,9 @@ analyse.tmb_model <- function(model, data, drop = character(0),
 
   check_data_model(data, model)
 
-  tempfile <- tempfile()
-  compile_code(model, tempfile)
-  dynlib <- TMB::dynlib(tempfile)
-  dyn.load(dynlib)
-  on.exit(dyn.unload(dynlib))
-
-  if (is.data.frame(data)) {
-    return(tmb_analysis(data = data, model = model, tempfile = tempfile, quick = quick, quiet = quiet))
+  if (!parallel || is.data.frame(data)) {
+   return(analyse_tmb_data(data = data, model = model, quick = quick, quiet = quiet))
   }
 
-  plapply(data, tmb_analysis, .parallel = parallel, model = model, tempfile = tempfile, quick = quick, quiet = quiet)
+  plapply_chunks(data, analyse_tmb_data, model = model, quick = quick, quiet = quiet)
 }

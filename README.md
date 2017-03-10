@@ -20,6 +20,15 @@ library(tmbr)
 #> Loading required package: mbr
 #> Loading required package: mcmcr
 #> Loading required package: coda
+#> Loading required package: dplyr
+#> 
+#> Attaching package: 'dplyr'
+#> The following objects are masked from 'package:stats':
+#> 
+#>     filter, lag
+#> The following objects are masked from 'package:base':
+#> 
+#>     intersect, setdiff, setequal, union
 #> 
 #> Attaching package: 'mcmcr'
 #> The following object is masked from 'package:ggplot2':
@@ -71,7 +80,8 @@ analysis <- analyse(model, data = data)
 #> # A tibble: 1 × 6
 #>       n     K    logLik     AICc minutes converged
 #>   <int> <int>     <dbl>    <dbl>   <int>     <lgl>
-#> 1    40     4 -159.1842 327.5113       0        NA
+#> 1    40     4 -159.1842 327.5113       0      TRUE
+#> Warning: 2 external pointers will be removed
 
 coef(analysis)
 #> # A tibble: 4 × 7
