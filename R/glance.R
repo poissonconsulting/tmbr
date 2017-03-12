@@ -5,7 +5,7 @@ glance.tmb_analysis <- function(x, n = NULL, ...) {
     K = nterms(x, include_constant = FALSE),
     logLik = logLik(x),
     AICc = AICc(x, n = n),
-    minutes = elapsed(x),
+    duration = elapsed(x),
     converged = converged(x)
   )
 }

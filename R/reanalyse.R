@@ -111,12 +111,12 @@ tmb_mcmc_reanalyse_internal <- function(analysis, parallel, quiet) {
   analysis
 }
 
-tmb_mcmc_reanalyse <- function(analysis, rhat = rhat, minutes = minutes, quick = quick,
+tmb_mcmc_reanalyse <- function(analysis, rhat = rhat, duration = duration, quick = quick,
                                quiet = quiet, parallel = parallel) {
 
-  if (quick || converged(analysis, rhat) || minutes < elapsed(analysis) * 2) return(analysis)
+  if (quick || converged(analysis, rhat) || duration < elapsed(analysis) * 2) return(analysis)
 
-  while (!converged(analysis, rhat) && minutes >= elapsed(analysis) * 2)
+  while (!converged(analysis, rhat) && duration >= elapsed(analysis) * 2)
     analysis %<>% tmb_mcmc_reanalyse_internal(parallel = parallel, quiet = quiet)
   analysis
 }
@@ -124,13 +124,13 @@ tmb_mcmc_reanalyse <- function(analysis, rhat = rhat, minutes = minutes, quick =
 # @export
 reanalyse.tmb_mcmc_analysis <- function(analysis,
                                         rhat = getOption("mb.rhat", 1.1),
-                                        minutes = getOption("mb.minutes", 10L),
+                                        duration = getOption("mb.durations", dminutes(10)),
                                         parallel = getOption("mb.parallel", FALSE),
                                         quick = getOption("mb.quick", FALSE),
                                         quiet = getOption("mb.quiet", TRUE),
                                         beep = getOption("mb.beep", TRUE), ...) {
   check_number(rhat)
-  check_count(minutes)
+  if(!is.duration) error("duration must be an object of class Duration")
   check_flag(quick)
   check_flag(quiet)
   check_flag(parallel)
@@ -138,13 +138,13 @@ reanalyse.tmb_mcmc_analysis <- function(analysis,
 
   if (beep) on.exit(beepr::beep())
 
-  tmb_mcmc_reanalyse(analysis, rhat = rhat, minutes = minutes, quick = quick, quiet = quiet, parallel = parallel)
+  tmb_mcmc_reanalyse(analysis, rhat = rhat, duration = duration, quick = quick, quiet = quiet, parallel = parallel)
 }
 
 # @export
 reanalyse.tmb_ml_analysis <- function(analysis,
                                       rhat = getOption("mb.rhat", 1.1),
-                                      minutes = getOption("mb.minutes", 10L),
+                                      duration = getOption("mb.duration", 10L),
                                       parallel = getOption("mb.parallel", FALSE),
                                       quick = getOption("mb.quick", FALSE),
                                       quiet = getOption("mb.quiet", TRUE),
@@ -167,7 +167,7 @@ reanalyse.tmb_ml_analysis <- function(analysis,
   nchains <- ifelse(quick, 2L, 4L)
   ngens <- ifelse(quick, 5L, analysis$model$niters %/% 2L)
 
-  analysis$duration <- lubridate::duration(0)
+  analysis$duration <- lubridate::dseconds(0)
   analysis$mcmcr %<>% subset(chains = rep(1L, nchains))
   analysis$ngens <- ngens
 
@@ -175,6 +175,6 @@ reanalyse.tmb_ml_analysis <- function(analysis,
 
   analysis %<>% tmb_mcmc_reanalyse_internal(parallel = parallel, quiet = quiet)
 
-  tmb_mcmc_reanalyse(analysis, rhat = rhat, minutes = minutes, quick = quick,
+  tmb_mcmc_reanalyse(analysis, rhat = rhat, duration = duration, quick = quick,
                       quiet = quiet, parallel = parallel)
 }

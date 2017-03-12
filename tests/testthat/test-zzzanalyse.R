@@ -58,7 +58,7 @@ test_that("analyse", {
 
   glance <- glance(analysis)
   expect_is(glance, "tbl")
-  expect_identical(colnames(glance), c("n", "K", "logLik", "AICc", "minutes", "converged"))
+  expect_identical(colnames(glance), c("n", "K", "logLik", "AICc", "duration", "converged"))
   expect_equal(glance$logLik, -5238.213, tolerance = 0.0000001)
   expect_identical(glance$n, 300L)
   expect_identical(glance$K, 3L)
@@ -88,7 +88,7 @@ test_that("analyse", {
 
   expect_equal(unlist(estimates(analysis)), coef$estimate, check.names = FALSE)
 
-  # analysis2 <- reanalyse(analysis, beep = FALSE, minutes = 0L)
+  # analysis2 <- reanalyse(analysis, beep = FALSE, duration = 0L)
   #
   # expect_identical(as.tmb_ml_analysis(analysis2), analysis)
   #
@@ -97,11 +97,11 @@ test_that("analyse", {
   #
   # glance <- glance(analysis2)
   # expect_is(glance, "tbl")
-  # expect_identical(colnames(glance), c("n", "K", "logLik", "AICc", "minutes", "converged"))
+  # expect_identical(colnames(glance), c("n", "K", "logLik", "AICc", "duration", "converged"))
   # expect_true(is.na(glance$logLik))
   # expect_identical(glance$n, 300L)
   # expect_identical(glance$K, 3L)
-  # expect_identical(glance$minutes, 1L)
+  # expect_identical(glance$durations, 1L)
   # expect_true(!is.na(glance$converged))
   #
   # coef2 <- coef(analysis2)
