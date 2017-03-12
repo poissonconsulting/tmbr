@@ -136,13 +136,12 @@ analyse_tmb_data_parallel <- function(data, model, nworkers, quick, quiet) {
 
   data <- plyr::llply(indices, function(i, x) x[i], x = data)
 
-  data %<>% map(function(x) list(data = x, tempfile = tempfile()))
+  data %<>% purrr::map(function(x) list(data = x, tempfile = tempfile()))
 
-  data %<>% plapply(analyse_tmb_data_chunk,
-                        data = data, model = model,
+  data %<>% plapply(FUN = analyse_tmb_data_chunk, model = model,
                         quick = quick, quiet = quiet)
 
-  data %<>% unlist(recursive = TRUE)
+  data %<>% unlist(recursive = FALSE)
 
   names(data) <- names
   data
