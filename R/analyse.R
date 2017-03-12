@@ -110,7 +110,6 @@ tmb_analysis <- function(data, model, tempfile, quick, quiet) {
 
 analyse_tmb_data <- function(data, model, tempfile, quick, quiet) {
 
-  print(tempfile)
   compile_code(model, tempfile)
   dynlib <- TMB::dynlib(tempfile)
   dyn.load(dynlib)
