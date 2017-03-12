@@ -106,27 +106,46 @@ tmb_analysis <- function(data, model, tempfile, quick, quiet) {
   print(glance(obj))
 
   obj
-  return(tempfile)
 }
 
-analyse_tmb_data <- function(data, model, quick, quiet) {
-  print("inside analyse tmb data")
-  print(data)
+analyse_tmb_data <- function(data, model, tempfile, quick, quiet) {
 
-  tempfile <- tempfile()
+  print(tempfile)
   compile_code(model, tempfile)
   dynlib <- TMB::dynlib(tempfile)
   dyn.load(dynlib)
   on.exit(dyn.unload(dynlib))
-
- # return(plyr::rlply(length(data), runif(1)))
-  return(plyr::rlply(length(data), tempfile))
 
   if (is.data.frame(data)) {
     return(tmb_analysis(data = data, model = model, tempfile = tempfile, quick = quick, quiet = quiet))
   }
 
   plyr::llply(data, tmb_analysis, model = model, tempfile = tempfile, quick = quick, quiet = quiet)
+}
+
+analyse_tmb_data_chunk <- function(data, model, quick, quiet) {
+  analyse_tmb_data(data = data$data, model = model, tempfile = data$tempfile,
+                   quick = quick, quiet = quiet)
+}
+
+analyse_tmb_data_parallel <- function(data, model, nworkers, quick, quiet) {
+
+  indices <- parallel::splitIndices(length(data), nworkers)
+
+  names <- names(data)
+
+  data <- plyr::llply(indices, function(i, x) x[i], x = data)
+
+  data %<>% map(function(x) list(data = x, tempfile = tempfile()))
+
+  data %<>% plapply(analyse_tmb_data_chunk,
+                        data = data, model = model,
+                        quick = quick, quiet = quiet)
+
+  data %<>% unlist(recursive = TRUE)
+
+  names(data) <- names
+  data
 }
 
 #' @export
@@ -154,9 +173,13 @@ analyse.tmb_model <- function(model, data, drop = character(0),
 
   check_data_model(data, model)
 
-  if (!parallel || is.data.frame(data)) {
-   return(analyse_tmb_data(data = data, model = model, quick = quick, quiet = quiet))
+  nworkers <- foreach::getDoParWorkers()
+
+  if (!parallel || is.data.frame(data) || length(data) == 1 || nworkers == 1) {
+   return(analyse_tmb_data(data = data, model = model, tempfile = tempfile(),
+                           quick = quick, quiet = quiet))
   }
 
-  plapply_chunks(data, analyse_tmb_data, model = model, quick = quick, quiet = quiet)
+  analyse_tmb_data_parallel(data, model = model, nworkers = nworkers,
+                            quick = quick, quiet = quiet)
 }

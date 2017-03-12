@@ -15,6 +15,7 @@ Imports:
     coda,
     dplyr,
     datacheckr (>= 0.1.2),
+    foreach,
     mcmcr (>= 0.0.0.9004),
     lubridate,
     magrittr,
