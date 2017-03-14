@@ -1,9 +1,14 @@
-compile_code <- function(model, tempfile) {
+load_dynlib <- function(model, tempfile) {
   file <- paste0(tempfile, ".cpp")
   stopifnot(!file.exists(file))
 
   write(template(model), file = file)
   TMB::compile(file)
+  dyn.load(TMB::dynlib(tempfile))
+}
+
+unload_dynlibs <- function(tempfiles) {
+  for (tempfile in tempfiles) try(dyn.unload(TMB::dynlib(tempfile)), silent = FALSE)
 }
 
 lmcmcarray <- function(x) {
@@ -65,6 +70,9 @@ tmb_analysis <- function(data, model, tempfile, quick, quiet) {
   timer$start()
 
   obj <- list(model = model, data = data)
+  class(obj) <- c("mb_null_analysis", "tmb_ml_analysis", "tmb_analysis", "mb_analysis")
+
+  on.exit(print(glance(obj)))
 
   data %<>% mbr::modify_data(model = model)
 
@@ -75,45 +83,35 @@ tmb_analysis <- function(data, model, tempfile, quick, quiet) {
   inits %<>% lapply(function(x) {x[is.na(x)] <- 0; x})
 
   ad_fun <- TMB::MakeADFun(data = data, inits, map = map,
-                           random = names(model$random_effects),
-                           DLL = basename(tempfile), silent = quiet)
+                               random = names(model$random_effects),
+                               DLL = basename(tempfile), silent = quiet)
 
   opt <- try(do.call("optim", ad_fun))
 
-  if (is.try_error(opt)) {
-    class(obj) <- c("mb_null_analysis", "tmb_ml_analysis", "tmb_analysis", "mb_analysis")
-  } else{
-    sd <- try(TMB::sdreport(ad_fun))
+  if (is.try_error(opt)) return(obj)
 
-    if (is.try_error(sd)) {
-      class(obj) <- c("mb_null_analysis", "tmb_ml_analysis", "tmb_analysis", "mb_analysis")
-    } else {
+  sd <- try(TMB::sdreport(ad_fun))
 
-      report <- ad_fun$report()
+  if (is.try_error(sd)) return(obj)
 
-      obj %<>% c(inits = list(inits), tempfile = tempfile, map = list(map), ad_fun = list(ad_fun), opt = list(opt),
-                 sd = list(sd), report = list(report))
+  report <- ad_fun$report()
 
-      class(obj) <- c("tmb_ml_analysis", "tmb_analysis", "mb_analysis")
+  obj %<>% c(inits = list(inits), tempfile = tempfile, map = list(map),
+             ad_fun = list(ad_fun), opt = list(opt),
+             sd = list(sd), report = list(report))
 
-      obj$mcmcr <- lmcmcr(obj)
-      obj$ngens <- 1L
-      obj$model$derived <- names(list_by_name(obj$sd$value))
-      obj$duration <- timer$elapsed()
-    }
-  }
+  class(obj) <- c("tmb_ml_analysis", "tmb_analysis", "mb_analysis")
 
-  print(glance(obj))
+  obj$mcmcr <- lmcmcr(obj)
+  obj$ngens <- 1L
+  obj$model$derived <- names(list_by_name(obj$sd$value))
+  obj$duration <- timer$elapsed()
 
   obj
 }
 
 analyse_tmb_data <- function(data, model, tempfile, quick, quiet) {
-
-  compile_code(model, tempfile)
-  dynlib <- TMB::dynlib(tempfile)
-  dyn.load(dynlib)
-  on.exit(dyn.unload(dynlib))
+  load_dynlib(model, tempfile)
 
   if (is.data.frame(data)) {
     return(tmb_analysis(data = data, model = model, tempfile = tempfile, quick = quick, quiet = quiet))
@@ -131,18 +129,19 @@ analyse_tmb_data_parallel <- function(data, model, nworkers, quick, quiet) {
 
   indices <- parallel::splitIndices(length(data), nworkers)
 
-  names <- names(data)
-
   data <- plyr::llply(indices, function(i, x) x[i], x = data)
 
-  data %<>% purrr::map(function(x) list(data = x, tempfile = tempfile()))
+  tempfiles <- replicate(length(data), tempfile())
+
+  data %<>% purrr::map2(tempfiles, function(x, y) list(data = x, tempfile = y))
+
+  on.exit(unload_dynlibs(tempfiles))
 
   data %<>% plapply(FUN = analyse_tmb_data_chunk, model = model,
-                        quick = quick, quiet = quiet)
+                    quick = quick, quiet = quiet)
 
   data %<>% unlist(recursive = FALSE)
 
-  names(data) <- names
   data
 }
 
@@ -174,8 +173,10 @@ analyse.tmb_model <- function(model, data, drop = character(0),
   nworkers <- foreach::getDoParWorkers()
 
   if (!parallel || is.data.frame(data) || length(data) == 1 || nworkers == 1) {
-   return(analyse_tmb_data(data = data, model = model, tempfile = tempfile(),
-                           quick = quick, quiet = quiet))
+    tempfile <- tempfile()
+    on.exit(unload_dynlibs(tempfile))
+    return(analyse_tmb_data(data = data, model = model, tempfile = tempfile,
+                            quick = quick, quiet = quiet))
   }
 
   analyse_tmb_data_parallel(data, model = model, nworkers = nworkers,

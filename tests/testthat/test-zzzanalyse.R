@@ -62,6 +62,7 @@ test_that("analyse", {
   expect_equal(glance$logLik, -5238.213, tolerance = 0.0000001)
   expect_identical(glance$n, 300L)
   expect_identical(glance$K, 3L)
+  expect_is(glance$duration, "Duration")
 
   coef <- coef(analysis)
 

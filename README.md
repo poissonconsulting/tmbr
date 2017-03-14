@@ -18,6 +18,16 @@ library(ggplot2)
 library(tmbr)
 #> Loading required package: broom
 #> Loading required package: mbr
+#> Loading required package: doRNG
+#> Loading required package: foreach
+#> Loading required package: rngtools
+#> Loading required package: pkgmaker
+#> Loading required package: registry
+#> 
+#> Attaching package: 'pkgmaker'
+#> The following object is masked from 'package:base':
+#> 
+#>     isNamespaceLoaded
 #> Loading required package: lubridate
 #> 
 #> Attaching package: 'lubridate'
@@ -85,13 +95,12 @@ gen_inits <- function(data) list(alpha = 4, beta1 = 1, beta2 = 0, beta3 = 0)
 model <- model(template, scale = "Year", gen_inits = gen_inits, new_expr = new_expr)
 
 analysis <- analyse(model, data = data)
-#> [1] "/var/folders/48/q6ltldjs251000_wvjrdy_vm0000gn/T//Rtmp8I2b3L/file232e221507b4"
 #> Note: Using Makevars in /Users/joe/.R/Makevars 
 #> # A tibble: 1 × 6
-#>       n     K    logLik     AICc             minutes converged
+#>       n     K    logLik     AICc            duration converged
 #>   <int> <int>     <dbl>    <dbl>      <S4: Duration>     <lgl>
-#> 1    40     4 -159.1842 327.5113 0.0394620895385742s      TRUE
-#> Warning: 4 external pointers will be removed
+#> 1    40     4 -159.1842 327.5113 0.0371859073638916s      TRUE
+#> Warning: 2 external pointers will be removed
 
 coef(analysis)
 #> # A tibble: 4 × 7
