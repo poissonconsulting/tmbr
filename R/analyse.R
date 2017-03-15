@@ -8,7 +8,7 @@ load_dynlib <- function(model, tempfile) {
 }
 
 unload_dynlibs <- function(tempfiles) {
-  for (tempfile in tempfiles) try(dyn.unload(TMB::dynlib(tempfile)), silent = FALSE)
+  for (tempfile in tempfiles) try(dyn.unload(TMB::dynlib(tempfile)), silent = TRUE)
 }
 
 lmcmcarray <- function(x) {
