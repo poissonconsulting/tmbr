@@ -58,10 +58,10 @@ map <- function(inits) {
 
   if (!length(inits)) return(list())
 
-  inits %<>% lapply(as.vector)
-  map <- lapply(inits, function(x) 1:length(x))
+  inits %<>% llply(as.vector)
+  map <- llply(inits, function(x) 1:length(x))
   map <- purrr::map2(map, inits, function(x, y) {is.na(x) <- is.na(y); x})
-  map %<>% lapply(function(x) factor(x))
+  map %<>% llply(function(x) factor(x))
   map
 }
 
@@ -80,7 +80,7 @@ tmb_analysis <- function(data, model, tempfile, quick, quiet) {
 
   map <- map(inits)
 
-  inits %<>% lapply(function(x) {x[is.na(x)] <- 0; x})
+  inits %<>% llply(function(x) {x[is.na(x)] <- 0; x})
 
   ad_fun <- TMB::MakeADFun(data = data, inits, map = map,
                                random = names(model$random_effects),
@@ -157,7 +157,7 @@ analyse.tmb_model <- function(model, data, drop = character(0),
   if (is.data.frame(data)) {
     check_data2(data)
   } else if (is.list(data)) {
-    lapply(data, check_data2)
+    llply(data, check_data2)
   } else error("data must be a data.frame or a list of data.frames")
 
   check_vector(drop, "", min_length = 0)

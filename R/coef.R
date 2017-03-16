@@ -10,7 +10,7 @@ paste_rows <- function(x) {
 
 dims_to_dimensions_vector <- function(dims) {
   if (identical(dims, 1L)) return("")
-  dims %<>% lapply(seq_to)
+  dims %<>% llply(seq_to)
   dims %<>% expand.grid()
   dims %<>% plyr::adply(1, paste_rows)
   dims <- dims$x
@@ -33,7 +33,7 @@ c_name <- function(x) {
 }
 
 par_names_indices <- function(estimates) {
-  estimates %<>% lapply(dims) %>% lapply(dims_to_dimensions_vector)
+  estimates %<>% llply(dims) %>% llply(dims_to_dimensions_vector)
   estimates %<>% purrr::lmap(c_name)
   estimates %<>% sort_nlist()
   estimates
@@ -84,7 +84,7 @@ terms_internal <- function(object, param_type = "fixed", ...) {
     estimates %<>% list_by_name()
     estimates %<>% remap_estimates(object$map)
     inits <- object$inits[names(estimates)]
-    inits %<>% lapply(dims)
+    inits %<>% llply(dims)
     estimates %<>% purrr::map2(inits, by_dims)
   }
 

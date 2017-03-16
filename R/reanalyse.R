@@ -80,7 +80,7 @@ tmb_mcmc_reanalyse_chain <- function(mcmcr, analysis, niters, nthin, quiet) {
   #                      version 1.76 moved MCMC to separate package
   mcmc <- NULL
   mcmc %<>% list_by_name()
-  mcmc %<>% lapply(as.matrix)
+  mcmc %<>% llply(as.matrix)
   mcmc %<>% remap_mcmcs(analysis$map)
   mcmc %<>% redim(mcmcr)
   mcmc %<>% thin(as.integer(nthin))

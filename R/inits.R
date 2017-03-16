@@ -12,8 +12,8 @@ zeros <- function(dims) {
 }
 
 check_dims_inits <- function(x, y) {
-  x %<>% lapply(dims)
-  y %<>% lapply(dims)
+  x %<>% llply(dims)
+  y %<>% llply(dims)
   x <- x[names(x) %in% names(y)]
   y <- y[names(x)]
   if (!identical(x, y))
@@ -53,7 +53,7 @@ random_inits <- function(data, random_effects) {
 
   data %<>% vapply(nlevels, 1L) %>% unlist()
 
-  random_effects %<>% lapply(replace_n, data)
-  random_effects %<>% lapply(zeros)
+  random_effects %<>% llply(replace_n, data)
+  random_effects %<>% llply(zeros)
   random_effects
 }
