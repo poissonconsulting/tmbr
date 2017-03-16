@@ -101,7 +101,7 @@ tmb_mcmc_reanalyse_internal <- function(analysis, parallel, quiet) {
     mcmcr[[i]] <- subset(analysis$mcmcr, chains = i)
   }
 
-  mcmcr %<>% plapply(tmb_mcmc_reanalyse_chain, .parallel = parallel, analysis = analysis,
+  mcmcr %<>% llply(.fun = tmb_mcmc_reanalyse_chain, .parallel = parallel, analysis = analysis,
                      niters = niters, nthin = nthin, quiet = quiet)
 
   mcmcr %<>% purrr::reduce(bind_chains)

@@ -125,7 +125,9 @@ analyse_tmb_data_chunk <- function(data, model, quick, quiet) {
                    quick = quick, quiet = quiet)
 }
 
-analyse_tmb_data_parallel <- function(data, model, nworkers, quick, quiet) {
+analyse_tmb_data_parallel <- function(data, model, quick, quiet) {
+
+  nworkers <- foreach::getDoParWorkers()
 
   indices <- parallel::splitIndices(length(data), nworkers)
 
@@ -137,8 +139,8 @@ analyse_tmb_data_parallel <- function(data, model, nworkers, quick, quiet) {
 
   on.exit(unload_dynlibs(tempfiles))
 
-  data %<>% plapply(FUN = analyse_tmb_data_chunk, model = model,
-                    quick = quick, quiet = quiet)
+  data %<>% llply(.fun = analyse_tmb_data_chunk, .parallel = TRUE,
+                  model = model, quick = quick, quiet = quiet)
 
   data %<>% unlist(recursive = FALSE)
 
@@ -170,15 +172,12 @@ analyse.tmb_model <- function(model, data, drop = character(0),
 
   check_data_model(data, model)
 
-  nworkers <- foreach::getDoParWorkers()
-
-  if (!parallel || is.data.frame(data) || length(data) == 1 || nworkers == 1) {
+  if (!parallel || is.data.frame(data)) {
     tempfile <- tempfile()
     on.exit(unload_dynlibs(tempfile))
     return(analyse_tmb_data(data = data, model = model, tempfile = tempfile,
                             quick = quick, quiet = quiet))
   }
 
-  analyse_tmb_data_parallel(data, model = model, nworkers = nworkers,
-                            quick = quick, quiet = quiet)
+  analyse_tmb_data_parallel(data, model = model, quick = quick, quiet = quiet)
 }
