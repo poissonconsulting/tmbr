@@ -87,9 +87,9 @@ model <- model(template, scale = "Year", gen_inits = gen_inits, new_expr = new_e
 analysis <- analyse(model, data = data)
 #> Note: Using Makevars in /Users/joe/.R/Makevars 
 #> # A tibble: 1 × 6
-#>       n     K    logLik     AICc           duration converged
-#>   <int> <int>     <dbl>    <dbl>     <S4: Duration>     <lgl>
-#> 1    40     4 -159.1842 327.5113 0.038503885269165s      TRUE
+#>       n     K    logLik     AICc            duration converged
+#>   <int> <int>     <dbl>    <dbl>      <S4: Duration>     <lgl>
+#> 1    40     4 -159.1842 327.5113 0.0392019748687744s      TRUE
 #> Warning: 4 external pointers will be removed
 
 coef(analysis)
