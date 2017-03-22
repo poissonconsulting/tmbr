@@ -14,8 +14,9 @@ install:
 
 environment:
   global:
+    R_ARCH: x64
     USE_RTOOLS: true
-    GCC_PATH: mingw_32
+    GCC_PATH: mingw_64
 
 build_script:
   - travis-tool.sh install_r TMB
