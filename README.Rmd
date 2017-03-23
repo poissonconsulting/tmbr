@@ -22,6 +22,17 @@ knitr::opts_chunk$set(
 
 `tmbr` (pronounced timber) is an R package to facilitate analyses using Template Model Builder (TMB).
 
+## Installation
+
+Installation of TMB on Windows is currently proving [challenging](https://github.com/James-Thorson/2016_Spatio-temporal_models/issues/7).
+Until these issues are resolved `tmbr` is only supported on unix-based OSs.
+
+To install from GitHub
+```
+# install.packages("devtools")
+devtools::install_github("poissonconsulting/tmbr")
+```
+
 ## Demonstration
 
 ```{r}
@@ -78,14 +89,6 @@ ggplot(data = year, aes(x = Year, y = estimate)) +
   geom_line() +
   expand_limits(y = 0)
 
-```
-
-## Installation
-
-To install from GitHub
-```
-# install.packages("devtools")
-devtools::install_github("poissonconsulting/tmbr")
 ```
 
 ## Contribution

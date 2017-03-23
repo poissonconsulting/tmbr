@@ -10,6 +10,16 @@ Introduction
 
 `tmbr` (pronounced timber) is an R package to facilitate analyses using Template Model Builder (TMB).
 
+Installation
+------------
+
+Installation of TMB on Windows is currently proving [challenging](https://github.com/James-Thorson/2016_Spatio-temporal_models/issues/7). Until these issues are resolved `tmbr` is only supported on unix-based OSs.
+
+To install from GitHub
+
+    # install.packages("devtools")
+    devtools::install_github("poissonconsulting/tmbr")
+
 Demonstration
 -------------
 
@@ -89,8 +99,8 @@ analysis <- analyse(model, data = data)
 #> # A tibble: 1 × 6
 #>       n     K    logLik     AICc            duration converged
 #>   <int> <int>     <dbl>    <dbl>      <S4: Duration>     <lgl>
-#> 1    40     4 -159.1842 327.5113 0.0392019748687744s      TRUE
-#> Warning: 4 external pointers will be removed
+#> 1    40     4 -159.1842 327.5113 0.0915088653564453s      TRUE
+#> Warning: 2 external pointers will be removed
 
 coef(analysis)
 #> # A tibble: 4 × 7
@@ -111,14 +121,6 @@ ggplot(data = year, aes(x = Year, y = estimate)) +
 ```
 
 ![](README-unnamed-chunk-2-1.png)
-
-Installation
-------------
-
-To install from GitHub
-
-    # install.packages("devtools")
-    devtools::install_github("poissonconsulting/tmbr")
 
 Contribution
 ------------
