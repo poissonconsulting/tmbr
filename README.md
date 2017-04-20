@@ -1,6 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-[![Travis-CI Build Status](https://travis-ci.org/poissonconsulting/tmbr.svg?branch=master)](https://travis-ci.org/poissonconsulting/tmbr) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/poissonconsulting/tmbr?branch=master&svg=true)](https://ci.appveyor.com/project/poissonconsulting/tmbr) [![codecov](https://codecov.io/gh/poissonconsulting/tmbr/branch/master/graph/badge.svg)](https://codecov.io/gh/poissonconsulting/tmbr)
+![stability-unstable](https://img.shields.io/badge/stability-unstable-yellow.svg) [![Travis-CI Build Status](https://travis-ci.org/poissonconsulting/tmbr.svg?branch=master)](https://travis-ci.org/poissonconsulting/tmbr) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/poissonconsulting/tmbr?branch=master&svg=true)](https://ci.appveyor.com/project/poissonconsulting/tmbr) [![codecov](https://codecov.io/gh/poissonconsulting/tmbr/branch/master/graph/badge.svg)](https://codecov.io/gh/poissonconsulting/tmbr) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 tmbr
 ====
@@ -8,7 +8,7 @@ tmbr
 Introduction
 ------------
 
-`tmbr` (pronounced timber) is an R package to facilitate analyses using Template Model Builder (TMB).
+`tmbr` (pronounced timber) is an R package to facilitate analyses using Template Model Builder (TMB). It is part of the [mbr](https://github.com/poissonconsulting/mbr) family of packages.
 
 Installation
 ------------
@@ -95,11 +95,19 @@ gen_inits <- function(data) list(alpha = 4, beta1 = 1, beta2 = 0, beta3 = 0)
 model <- model(template, scale = "Year", gen_inits = gen_inits, new_expr = new_expr)
 
 analysis <- analyse(model, data = data)
-#> Note: Using Makevars in /Users/joe/.R/Makevars 
+#> Note: Using Makevars in /Users/joe/.R/Makevars
+#> Warning in bind_rows_(x, .id): Vectorizing 'term' elements may not preserve
+#> their attributes
+
+#> Warning in bind_rows_(x, .id): Vectorizing 'term' elements may not preserve
+#> their attributes
+
+#> Warning in bind_rows_(x, .id): Vectorizing 'term' elements may not preserve
+#> their attributes
 #> # A tibble: 1 × 6
-#>       n     K    logLik     AICc            duration converged
-#>   <int> <int>     <dbl>    <dbl>      <S4: Duration>     <lgl>
-#> 1    40     4 -159.1842 327.5113 0.0915088653564453s      TRUE
+#>       n     K    logLik     AICc           duration converged
+#>   <int> <int>     <dbl>    <dbl>     <S4: Duration>     <lgl>
+#> 1    40     4 -159.1842 327.5113 0.182139873504639s      TRUE
 #> Warning: 2 external pointers will be removed
 
 coef(analysis)
@@ -113,6 +121,8 @@ coef(analysis)
 #> # ... with 1 more variables: pvalue <dbl>
 
 year <- predict(analysis, new_data = new_data(data, "Year"))
+#> Warning in bind_rows_(x, .id): Vectorizing 'term' elements may not preserve
+#> their attributes
 
 ggplot(data = year, aes(x = Year, y = estimate)) +
   geom_point(data = data, aes(y = Pairs)) +
@@ -120,7 +130,7 @@ ggplot(data = year, aes(x = Year, y = estimate)) +
   expand_limits(y = 0)
 ```
 
-![](README-unnamed-chunk-2-1.png)
+![](tools/README-unnamed-chunk-2-1.png)
 
 Contribution
 ------------
