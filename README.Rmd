@@ -38,10 +38,11 @@ devtools::install_github("poissonconsulting/tmbr")
 
 ## Demonstration
 
-```{r}
-library(ggplot2)
+```{r, message = FALSE}
 library(tmbr)
+```
 
+```{r}
 options("mb.parallel" = TRUE)
 doParallel::registerDoParallel(4)
 
@@ -86,6 +87,10 @@ analysis <- analyse(model, data = data)
 coef(analysis)
 
 year <- predict(analysis, new_data = new_data(data, "Year"))
+```
+
+```{r, message = FALSE}
+library(ggplot2)
 
 ggplot(data = year, aes(x = Year, y = estimate)) +
   geom_point(data = data, aes(y = Pairs)) +

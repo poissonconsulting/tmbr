@@ -1,7 +1,7 @@
 Package: tmbr
 Title: Analyses Using TMB
 Version: 0.0.0.9025
-Date: 2017-04-04
+Date: 2017-04-20
 Authors@R: person("Joe", "Thorley", email = "joe@poissonconsulting.ca", role = c("aut", "cre"))
 Description: Facilitates analyses using 'Template Model Builder'.
 License: MIT + file LICENSE
@@ -11,24 +11,24 @@ Depends:
     R (>= 3.3.1),
     broom,
     mbr (>= 0.0.0.9038),
-    newdata (>= 0.0.0.9002)
+    newdata (>= 0.0.0.9007)
 Imports:
     beepr,
     coda,
     dplyr,
     datacheckr (>= 0.2.0),
     foreach,
-    mcmcr (>= 0.0.0.9004),
+    mcmcr (>= 0.0.0.9008),
     lubridate,
     magrittr,
     plyr,
     purrr,
     pryr,
-    rescale (>= 0.0.0.9000),
+    rescale (>= 0.0.0.9002),
     stringr,
     tibble,
     timer (>= 0.0.1),
-    TMB (>= 1.7.5)
+    TMB (>= 1.7.9)
 Suggests:
     testthat
 Remotes:

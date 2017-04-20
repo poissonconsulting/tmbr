@@ -36,7 +36,8 @@ lmcmcr <- function(object) {
   derived <- coef(object, "derived")
   random <- coef(object, "random")
 
-  coef %<>% dplyr::bind_rows(derived) %>% dplyr::bind_rows(random) %>% dplyr::select_(~term, ~estimate)
+  # Warning in bind_rows_(x, .id): Vectorizing 'term' elements may not preserve attributes
+  suppressWarnings(coef %<>% dplyr::bind_rows(derived) %>% dplyr::bind_rows(random) %>% dplyr::select_(~term, ~estimate))
 
   coef %<>% dplyr::mutate_(parameter = ~str_replace(term, "^(\\w+)(.*)", "\\1"))
 

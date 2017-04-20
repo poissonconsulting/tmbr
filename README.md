@@ -24,37 +24,10 @@ Demonstration
 -------------
 
 ``` r
-library(ggplot2)
 library(tmbr)
-#> Loading required package: broom
-#> Loading required package: mbr
-#> Loading required package: lubridate
-#> 
-#> Attaching package: 'lubridate'
-#> The following object is masked from 'package:base':
-#> 
-#>     date
-#> Loading required package: mcmcr
-#> Loading required package: coda
-#> Loading required package: dplyr
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:lubridate':
-#> 
-#>     intersect, setdiff, union
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
-#> 
-#> Attaching package: 'mcmcr'
-#> The following object is masked from 'package:ggplot2':
-#> 
-#>     derive
-#> Loading required package: newdata
+```
 
+``` r
 options("mb.parallel" = TRUE)
 doParallel::registerDoParallel(4)
 
@@ -95,19 +68,11 @@ gen_inits <- function(data) list(alpha = 4, beta1 = 1, beta2 = 0, beta3 = 0)
 model <- model(template, scale = "Year", gen_inits = gen_inits, new_expr = new_expr)
 
 analysis <- analyse(model, data = data)
-#> Note: Using Makevars in /Users/joe/.R/Makevars
-#> Warning in bind_rows_(x, .id): Vectorizing 'term' elements may not preserve
-#> their attributes
-
-#> Warning in bind_rows_(x, .id): Vectorizing 'term' elements may not preserve
-#> their attributes
-
-#> Warning in bind_rows_(x, .id): Vectorizing 'term' elements may not preserve
-#> their attributes
+#> Note: Using Makevars in /Users/joe/.R/Makevars 
 #> # A tibble: 1 × 6
-#>       n     K    logLik     AICc           duration converged
-#>   <int> <int>     <dbl>    <dbl>     <S4: Duration>     <lgl>
-#> 1    40     4 -159.1842 327.5113 0.182139873504639s      TRUE
+#>       n     K    logLik     AICc          duration converged
+#>   <int> <int>     <dbl>    <dbl>    <S4: Duration>     <lgl>
+#> 1    40     4 -159.1842 327.5113 0.10505485534668s      TRUE
 #> Warning: 2 external pointers will be removed
 
 coef(analysis)
@@ -121,8 +86,10 @@ coef(analysis)
 #> # ... with 1 more variables: pvalue <dbl>
 
 year <- predict(analysis, new_data = new_data(data, "Year"))
-#> Warning in bind_rows_(x, .id): Vectorizing 'term' elements may not preserve
-#> their attributes
+```
+
+``` r
+library(ggplot2)
 
 ggplot(data = year, aes(x = Year, y = estimate)) +
   geom_point(data = data, aes(y = Pairs)) +
@@ -130,7 +97,7 @@ ggplot(data = year, aes(x = Year, y = estimate)) +
   expand_limits(y = 0)
 ```
 
-![](tools/README-unnamed-chunk-2-1.png)
+![](tools/README-unnamed-chunk-4-1.png)
 
 Contribution
 ------------
