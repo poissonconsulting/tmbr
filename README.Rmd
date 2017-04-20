@@ -85,12 +85,12 @@ model <- model(template, scale = "Year", gen_inits = gen_inits, new_expr = new_e
 analysis <- analyse(model, data = data)
 
 coef(analysis)
-
-year <- predict(analysis, new_data = new_data(data, "Year"))
 ```
 
 ```{r, message = FALSE}
 library(ggplot2)
+
+year <- predict(analysis, new_data = new_data(data, "Year"))
 
 ggplot(data = year, aes(x = Year, y = estimate)) +
   geom_point(data = data, aes(y = Pairs)) +

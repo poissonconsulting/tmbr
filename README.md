@@ -70,9 +70,9 @@ model <- model(template, scale = "Year", gen_inits = gen_inits, new_expr = new_e
 analysis <- analyse(model, data = data)
 #> Note: Using Makevars in /Users/joe/.R/Makevars 
 #> # A tibble: 1 × 6
-#>       n     K    logLik     AICc          duration converged
-#>   <int> <int>     <dbl>    <dbl>    <S4: Duration>     <lgl>
-#> 1    40     4 -159.1842 327.5113 0.10505485534668s      TRUE
+#>       n     K    logLik     AICc           duration converged
+#>   <int> <int>     <dbl>    <dbl>     <S4: Duration>     <lgl>
+#> 1    40     4 -159.1842 327.5113 0.118462085723877s      TRUE
 #> Warning: 2 external pointers will be removed
 
 coef(analysis)
@@ -84,12 +84,12 @@ coef(analysis)
 #> 3      beta2  0.007065185 0.02408137   0.293388 -0.04013343  0.0542638
 #> 4      beta3 -0.233904157 0.02513417  -9.306221 -0.28316623 -0.1846421
 #> # ... with 1 more variables: pvalue <dbl>
-
-year <- predict(analysis, new_data = new_data(data, "Year"))
 ```
 
 ``` r
 library(ggplot2)
+
+year <- predict(analysis, new_data = new_data(data, "Year"))
 
 ggplot(data = year, aes(x = Year, y = estimate)) +
   geom_point(data = data, aes(y = Pairs)) +
