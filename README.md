@@ -24,17 +24,13 @@ Demonstration
 -------------
 
 ``` r
+library(magrittr)
+library(ggplot2)
 library(tmbr)
 ```
 
 ``` r
-options("mb.parallel" = TRUE)
-doParallel::registerDoParallel(4)
-
-data <- bauw::peregrine
-
-template <- "
-#include <TMB.hpp>
+model <- model("#include <TMB.hpp>
 
 template<class Type>
 Type objective_function<Type>::operator() () {
@@ -56,23 +52,24 @@ for(int i = 0; i < Pairs.size(); i++){
   nll -= dpois(Pairs(i), ePairs(i), true);
 }
 return nll;
-}"
+}")
 
-new_expr <- "
+model %<>% update_model(new_expr = "
 for (i in 1:length(Pairs)) {
   prediction[i] <- exp(alpha + beta1 * Year[i] + beta2 * Year[i]^2 + beta3 * Year[i]^3)
-}"
+}")
 
-gen_inits <- function(data) list(alpha = 4, beta1 = 1, beta2 = 0, beta3 = 0)
+model %<>% update_model(
+  gen_inits = function(data) list(alpha = 4, beta1 = 1, beta2 = 0, beta3 = 0),
+  scale = "Year"
+)
 
-model <- model(template, scale = "Year", gen_inits = gen_inits, new_expr = new_expr)
-
-analysis <- analyse(model, data = data)
+analysis <- analyse(model, data = bauw::peregrine)
 #> Note: Using Makevars in /Users/joe/.R/Makevars 
 #> # A tibble: 1 × 6
 #>       n     K    logLik     AICc           duration converged
 #>   <int> <int>     <dbl>    <dbl>     <S4: Duration>     <lgl>
-#> 1    40     4 -159.1842 327.5113 0.118462085723877s      TRUE
+#> 1    40     4 -159.1842 327.5113 0.191924810409546s      TRUE
 #> Warning: 2 external pointers will be removed
 
 coef(analysis)
@@ -87,12 +84,10 @@ coef(analysis)
 ```
 
 ``` r
-library(ggplot2)
-
-year <- predict(analysis, new_data = new_data(data, "Year"))
+year <- predict(analysis, new_data = "Year")
 
 ggplot(data = year, aes(x = Year, y = estimate)) +
-  geom_point(data = data, aes(y = Pairs)) +
+  geom_point(data = bauw::peregrine, aes(y = Pairs)) +
   geom_line() +
   expand_limits(y = 0)
 ```
