@@ -76,7 +76,7 @@ for (i in 1:length(Pairs)) {
 
 model %<>% update_model(
   gen_inits = function(data) list(alpha = 4, beta1 = 1, beta2 = 0, beta3 = 0),
-  scale = "Year"
+  select_data = list("Pairs" = integer(), "Year*" = integer())
 )
 
 analysis <- analyse(model, data = bauw::peregrine)

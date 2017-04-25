@@ -42,7 +42,9 @@ test_that("analyse", {
   gen_inits <- function(data) list(bIntercept = 0, bYear = 1, log_sDensity = 0)
 
   model <- model(tmb_template, gen_inits = gen_inits,
-                 center = "Year",
+                 select_data = list("Year+" = numeric(), YearFactor = factor(),
+                                    Site = factor(), Density = numeric(),
+                                    HabitatQuality = factor()),
                  new_expr = new_expr)
 
   analysis <- analyse(model, data = data, beep = FALSE)

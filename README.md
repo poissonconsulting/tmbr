@@ -61,7 +61,7 @@ for (i in 1:length(Pairs)) {
 
 model %<>% update_model(
   gen_inits = function(data) list(alpha = 4, beta1 = 1, beta2 = 0, beta3 = 0),
-  scale = "Year"
+  select_data = list("Pairs" = integer(), "Year*" = integer())
 )
 
 analysis <- analyse(model, data = bauw::peregrine)
@@ -69,7 +69,7 @@ analysis <- analyse(model, data = bauw::peregrine)
 #> # A tibble: 1 × 6
 #>       n     K    logLik     AICc           duration converged
 #>   <int> <int>     <dbl>    <dbl>     <S4: Duration>     <lgl>
-#> 1    40     4 -159.1842 327.5113 0.191924810409546s      TRUE
+#> 1    40     4 -159.1842 327.5113 0.209951162338257s      TRUE
 #> Warning: 2 external pointers will be removed
 
 coef(analysis)
