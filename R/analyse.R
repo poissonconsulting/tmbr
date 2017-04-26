@@ -149,7 +149,7 @@ analyse_tmb_data_parallel <- function(data, model, quick, quiet) {
 }
 
 #' @export
-analyse.tmb_model <- function(model, data, drop = character(0),
+analyse.tmb_model <- function(x, data, drop = character(0),
                               parallel = getOption("mb.parallel", FALSE),
                               quick = getOption("mb.quick", FALSE),
                               quiet = getOption("mb.quiet", TRUE),
@@ -169,16 +169,16 @@ analyse.tmb_model <- function(model, data, drop = character(0),
 
   if (beep) on.exit(beepr::beep())
 
-  model %<>% drop_parameters(parameters = drop)
+  x %<>% drop_parameters(parameters = drop)
 
-  check_data_model(data, model)
+  check_data_model(data, x)
 
   if (!parallel || is.data.frame(data)) {
     tempfile <- tempfile()
     on.exit(unload_dynlibs(tempfile))
-    return(analyse_tmb_data(data = data, model = model, tempfile = tempfile,
+    return(analyse_tmb_data(data = data, model = x, tempfile = tempfile,
                             quick = quick, quiet = quiet))
   }
 
-  analyse_tmb_data_parallel(data, model = model, quick = quick, quiet = quiet)
+  analyse_tmb_data_parallel(data, model = x, quick = quick, quiet = quiet)
 }
