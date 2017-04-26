@@ -47,7 +47,7 @@ test_that("analyse", {
                                     HabitatQuality = factor()),
                  new_expr = new_expr)
 
-  analysis <- analyse(model, data = data, beep = FALSE)
+  analysis <- analyse(model, data = data, glance = FALSE, beep = FALSE)
 
   expect_identical(parameters(analysis), sort(c("bIntercept", "bYear", "log_sDensity")))
   expect_identical(parameters(analysis, "random"), character(0))

@@ -66,14 +66,14 @@ map <- function(inits) {
   map
 }
 
-tmb_analysis <- function(data, model, tempfile, quick, quiet) {
+tmb_analysis <- function(data, model, tempfile, quick, glance, quiet) {
   timer <- timer::Timer$new()
   timer$start()
 
   obj <- list(model = model, data = data)
   class(obj) <- c("mb_null_analysis", "tmb_ml_analysis", "tmb_analysis", "mb_analysis")
 
-  on.exit(print(glance(obj)))
+  if (glance) on.exit(print(glance(obj)))
 
   data %<>% mbr::modify_data(model = model)
 
@@ -111,14 +111,16 @@ tmb_analysis <- function(data, model, tempfile, quick, quiet) {
   obj
 }
 
-analyse_tmb_data <- function(data, model, tempfile, quick, quiet) {
+analyse_tmb_data <- function(data, model, tempfile, quick, glance, quiet) {
   load_dynlib(model, tempfile)
 
   if (is.data.frame(data)) {
-    return(tmb_analysis(data = data, model = model, tempfile = tempfile, quick = quick, quiet = quiet))
+    return(tmb_analysis(data = data, model = model, tempfile = tempfile, quick = quick,
+                        glance = glance, quiet = quiet))
   }
 
-  plyr::llply(data, tmb_analysis, model = model, tempfile = tempfile, quick = quick, quiet = quiet)
+  plyr::llply(data, tmb_analysis, model = model, tempfile = tempfile, quick = quick,
+              glance = glance, quiet = quiet)
 }
 
 analyse_tmb_data_chunk <- function(data, model, quick, quiet) {
@@ -149,10 +151,11 @@ analyse_tmb_data_parallel <- function(data, model, quick, quiet) {
 }
 
 #' @export
-analyse.tmb_model <- function(x, data, drop = character(0),
+analyse.tmb_model <- function(x, data,
                               parallel = getOption("mb.parallel", FALSE),
                               quick = getOption("mb.quick", FALSE),
                               quiet = getOption("mb.quiet", TRUE),
+                              glance = getOption("mb.glance", TRUE),
                               beep = getOption("mb.beep", TRUE),
                               ...) {
   if (is.data.frame(data)) {
@@ -161,15 +164,13 @@ analyse.tmb_model <- function(x, data, drop = character(0),
     llply(data, check_data2)
   } else error("data must be a data.frame or a list of data.frames")
 
-  check_vector(drop, "", min_length = 0)
   check_flag(parallel)
   check_flag(quick)
   check_flag(quiet)
+  check_flag(glance)
   check_flag(beep)
 
   if (beep) on.exit(beepr::beep())
-
-  x %<>% drop_parameters(parameters = drop)
 
   check_data_model(data, x)
 
@@ -177,7 +178,7 @@ analyse.tmb_model <- function(x, data, drop = character(0),
     tempfile <- tempfile()
     on.exit(unload_dynlibs(tempfile))
     return(analyse_tmb_data(data = data, model = x, tempfile = tempfile,
-                            quick = quick, quiet = quiet))
+                            quick = quick, quiet = quiet, glance = glance))
   }
 
   analyse_tmb_data_parallel(data, model = x, quick = quick, quiet = quiet)
