@@ -65,11 +65,19 @@ model %<>% update_model(
 )
 
 analysis <- analyse(model, data = bauw::peregrine)
-#> Note: Using Makevars in /Users/joe/.R/Makevars 
+#> Note: Using Makevars in /Users/joe/.R/Makevars
+#> Warning in bind_rows_(x, .id): Vectorizing 'term' elements may not preserve
+#> their attributes
+
+#> Warning in bind_rows_(x, .id): Vectorizing 'term' elements may not preserve
+#> their attributes
+
+#> Warning in bind_rows_(x, .id): Vectorizing 'term' elements may not preserve
+#> their attributes
 #> # A tibble: 1 × 6
 #>       n     K    logLik     AICc           duration converged
 #>   <int> <int>     <dbl>    <dbl>     <S4: Duration>     <lgl>
-#> 1    40     4 -159.1842 327.5113 0.209951162338257s      TRUE
+#> 1    40     4 -159.1842 327.5113 0.199319124221802s      TRUE
 #> Warning: 2 external pointers will be removed
 
 coef(analysis)
@@ -85,6 +93,8 @@ coef(analysis)
 
 ``` r
 year <- predict(analysis, new_data = "Year")
+#> Warning in bind_rows_(x, .id): Vectorizing 'term' elements may not preserve
+#> their attributes
 
 ggplot(data = year, aes(x = Year, y = estimate)) +
   geom_point(data = bauw::peregrine, aes(y = Pairs)) +
