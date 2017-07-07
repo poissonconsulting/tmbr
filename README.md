@@ -1,6 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-![stability-unstable](https://img.shields.io/badge/stability-unstable-yellow.svg) [![Travis-CI Build Status](https://travis-ci.org/poissonconsulting/tmbr.svg?branch=master)](https://travis-ci.org/poissonconsulting/tmbr) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/poissonconsulting/tmbr?branch=master&svg=true)](https://ci.appveyor.com/project/poissonconsulting/tmbr) [![codecov](https://codecov.io/gh/poissonconsulting/tmbr/branch/master/graph/badge.svg)](https://codecov.io/gh/poissonconsulting/tmbr) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+![stability-unstable](https://img.shields.io/badge/stability-unstable-yellow.svg) [![Travis-CI Build Status](https://travis-ci.org/poissonconsulting/tmbr.svg?branch=master)](https://travis-ci.org/poissonconsulting/tmbr) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/poissonconsulting/tmbr?branch=master&svg=true)](https://ci.appveyor.com/project/poissonconsulting/tmbr) [![codecov](https://codecov.io/gh/poissonconsulting/smbr/branch/master/graph/badge.svg)](https://codecov.io/gh/poissonconsulting/smbr) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 tmbr
 ====
@@ -27,6 +27,7 @@ Demonstration
 library(magrittr)
 library(ggplot2)
 library(tmbr)
+#> Warning: package 'dplyr' was built under R version 3.4.1
 ```
 
 ``` r
@@ -37,34 +38,49 @@ Type objective_function<Type>::operator() () {
 
 DATA_VECTOR(Pairs);
 DATA_VECTOR(Year);
+DATA_FACTOR(Annual);
+DATA_INTEGER(nAnnual);
 
 PARAMETER(alpha);
 PARAMETER(beta1);
 PARAMETER(beta2);
 PARAMETER(beta3);
+PARAMETER_VECTOR(bAnnual);
+PARAMETER(log_sAnnual);
+
+Type sAnnual = exp(log_sAnnual);
 
 vector<Type> ePairs = Pairs;
 
 Type nll = 0.0;
 
+for(int i = 0; i < nAnnual; i++){
+  nll -= dnorm(bAnnual(i), Type(0), sAnnual, true);
+}
+
 for(int i = 0; i < Pairs.size(); i++){
-  ePairs(i) = exp(alpha + beta1 * Year(i) + beta2 * pow(Year(i), 2) + beta3 * pow(Year(i), 3));
+  ePairs(i) = exp(alpha + beta1 * Year(i) + beta2 * pow(Year(i), 2) + beta3 * pow(Year(i), 3) + bAnnual(Annual(i)));
   nll -= dpois(Pairs(i), ePairs(i), true);
 }
 return nll;
 }")
 
+# add R code to calculate derived parameters
 model %<>% update_model(new_expr = "
 for (i in 1:length(Pairs)) {
-  prediction[i] <- exp(alpha + beta1 * Year[i] + beta2 * Year[i]^2 + beta3 * Year[i]^3)
+  log(prediction[i]) <- alpha + beta1 * Year[i] + beta2 * Year[i]^2 + beta3 * Year[i]^3 + bAnnual[Annual[i]]
 }")
 
+# define data types and center year
 model %<>% update_model(
-  gen_inits = function(data) list(alpha = 4, beta1 = 1, beta2 = 0, beta3 = 0),
-  select_data = list("Pairs" = integer(), "Year*" = integer())
-)
+  gen_inits = function(data) list(alpha = 4, beta1 = 1, beta2 = 0, beta3 = 0, log_sAnnual = 0, bAnnual = rep(0, data$nAnnual)),
+  select_data = list("Pairs" = integer(), "Year*" = integer(), Annual = factor()),
+  random_effects = list(bAnnual = "Annual"))
 
-analysis <- analyse(model, data = bauw::peregrine)
+data <- bauw::peregrine
+data$Annual <- factor(data$Year)
+
+analysis <- analyse(model, data = data)
 #> Note: Using Makevars in /Users/joe/.R/Makevars
 #> Warning in bind_rows_(x, .id): Vectorizing 'term' elements may not preserve
 #> their attributes
@@ -74,27 +90,26 @@ analysis <- analyse(model, data = bauw::peregrine)
 
 #> Warning in bind_rows_(x, .id): Vectorizing 'term' elements may not preserve
 #> their attributes
-#> # A tibble: 1 × 6
-#>       n     K    logLik     AICc           duration converged
-#>   <int> <int>     <dbl>    <dbl>     <S4: Duration>     <lgl>
-#> 1    40     4 -159.1842 327.5113 0.199319124221802s      TRUE
-#> Warning: 2 external pointers will be removed
+#> # A tibble: 1 x 6
+#>       n     K    logLik     AICc       duration converged
+#>   <int> <int>     <dbl>    <dbl> <S4: Duration>     <lgl>
+#> 1    40     5 -154.4664 320.6974           2.5s      TRUE
+#> Warning: 5 external pointers will be removed
 
 coef(analysis)
-#> # A tibble: 4 × 7
-#>         term     estimate         sd     zscore       lower      upper
-#>   <S3: term>        <dbl>      <dbl>      <dbl>       <dbl>      <dbl>
-#> 1      alpha  4.232280328 0.03004250 140.876456  4.17339812  4.2911625
-#> 2      beta1  1.116410020 0.04777944  23.365909  1.02276404  1.2100560
-#> 3      beta2  0.007065185 0.02408137   0.293388 -0.04013343  0.0542638
-#> 4      beta3 -0.233904157 0.02513417  -9.306221 -0.28316623 -0.1846421
+#> # A tibble: 5 x 7
+#>          term    estimate         sd     zscore       lower      upper
+#>    <S3: term>       <dbl>      <dbl>      <dbl>       <dbl>      <dbl>
+#> 1       alpha  4.21204711 0.03885239 108.411527  4.13589782  4.2881964
+#> 2       beta1  1.19085200 0.06944561  17.147982  1.05474111  1.3269629
+#> 3       beta2  0.01719698 0.02984903   0.576132 -0.04130604  0.0757000
+#> 4       beta3 -0.27161560 0.03566621  -7.615488 -0.34152009 -0.2017111
+#> 5 log_sAnnual -2.30854794 0.27060756  -8.530981 -2.83892901 -1.7781669
 #> # ... with 1 more variables: pvalue <dbl>
 ```
 
 ``` r
 year <- predict(analysis, new_data = "Year")
-#> Warning in bind_rows_(x, .id): Vectorizing 'term' elements may not preserve
-#> their attributes
 
 ggplot(data = year, aes(x = Year, y = estimate)) +
   geom_point(data = bauw::peregrine, aes(y = Pairs)) +

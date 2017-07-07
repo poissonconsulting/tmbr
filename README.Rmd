@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 ![stability-unstable](https://img.shields.io/badge/stability-unstable-yellow.svg)
 [![Travis-CI Build Status](https://travis-ci.org/poissonconsulting/tmbr.svg?branch=master)](https://travis-ci.org/poissonconsulting/tmbr)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/poissonconsulting/tmbr?branch=master&svg=true)](https://ci.appveyor.com/project/poissonconsulting/tmbr)
-[![codecov](https://codecov.io/gh/poissonconsulting/tmbr/branch/master/graph/badge.svg)](https://codecov.io/gh/poissonconsulting/tmbr)
+[![codecov](https://codecov.io/gh/poissonconsulting/smbr/branch/master/graph/badge.svg)](https://codecov.io/gh/poissonconsulting/smbr)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 # tmbr
@@ -52,34 +52,49 @@ Type objective_function<Type>::operator() () {
 
 DATA_VECTOR(Pairs);
 DATA_VECTOR(Year);
+DATA_FACTOR(Annual);
+DATA_INTEGER(nAnnual);
 
 PARAMETER(alpha);
 PARAMETER(beta1);
 PARAMETER(beta2);
 PARAMETER(beta3);
+PARAMETER_VECTOR(bAnnual);
+PARAMETER(log_sAnnual);
+
+Type sAnnual = exp(log_sAnnual);
 
 vector<Type> ePairs = Pairs;
 
 Type nll = 0.0;
 
+for(int i = 0; i < nAnnual; i++){
+  nll -= dnorm(bAnnual(i), Type(0), sAnnual, true);
+}
+
 for(int i = 0; i < Pairs.size(); i++){
-  ePairs(i) = exp(alpha + beta1 * Year(i) + beta2 * pow(Year(i), 2) + beta3 * pow(Year(i), 3));
+  ePairs(i) = exp(alpha + beta1 * Year(i) + beta2 * pow(Year(i), 2) + beta3 * pow(Year(i), 3) + bAnnual(Annual(i)));
   nll -= dpois(Pairs(i), ePairs(i), true);
 }
 return nll;
 }")
 
+# add R code to calculate derived parameters
 model %<>% update_model(new_expr = "
 for (i in 1:length(Pairs)) {
-  prediction[i] <- exp(alpha + beta1 * Year[i] + beta2 * Year[i]^2 + beta3 * Year[i]^3)
+  log(prediction[i]) <- alpha + beta1 * Year[i] + beta2 * Year[i]^2 + beta3 * Year[i]^3 + bAnnual[Annual[i]]
 }")
 
+# define data types and center year
 model %<>% update_model(
-  gen_inits = function(data) list(alpha = 4, beta1 = 1, beta2 = 0, beta3 = 0),
-  select_data = list("Pairs" = integer(), "Year*" = integer())
-)
+  gen_inits = function(data) list(alpha = 4, beta1 = 1, beta2 = 0, beta3 = 0, log_sAnnual = 0, bAnnual = rep(0, data$nAnnual)),
+  select_data = list("Pairs" = integer(), "Year*" = integer(), Annual = factor()),
+  random_effects = list(bAnnual = "Annual"))
 
-analysis <- analyse(model, data = bauw::peregrine)
+data <- bauw::peregrine
+data$Annual <- factor(data$Year)
+
+analysis <- analyse(model, data = data)
 
 coef(analysis)
 ```
