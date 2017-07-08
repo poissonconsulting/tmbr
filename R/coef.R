@@ -79,7 +79,6 @@ terms_internal <- function(param_type, object) {
     terms %<>%
       purrr::map(terms_internal, object = object) %>%
       unlist()
-    print(terms)
     terms %<>%
       sort()
 
@@ -165,13 +164,11 @@ coef.tmb_ml_analysis <- function(object, param_type = "fixed", include_constant 
                              upper = numeric(0), pvalue = numeric(0)))
   }
 
-  # param_type all is handled by summary.sdreport but does not allow derived to be last
-  if (param_type %in% c("primary", "all")) {
-    coef <- c("fixed", "random")
-    if (param_type == "all") coef %<>% c("derived")
-
-    coef %<>%
-      purrr::map_df(coef_arg2to1, object = object, include_constant = include_constant,
+  # param_type all is handled by summary.sdreport
+  if (param_type == "primary") {
+    coef <- c("fixed", "random") %>%
+      purrr::map_df(coef_arg2to1, object = object,
+                    include_constant = include_constant,
                     conf_level = conf_level, ...)
     coef$term %<>% as.term()
     coef <- coef[order(coef$term),]

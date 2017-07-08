@@ -1,14 +1,19 @@
 #' @export
-parameters.tmb_code <- function(x, param_type = "fixed", scalar = TRUE, ...) {
+parameters.tmb_code <- function(x, param_type = "all", scalar_only = FALSE, ...) {
   check_scalar(param_type, c("fixed", "random", "derived", "primary", "all"))
-  check_flag(scalar)
+  check_flag(scalar_only)
 
-  if (param_type %in% c("primary", "all")) {
-    parameters <- c("fixed") # can't currently separate fixed and random from tmb code but can separate scalar
-    if (param_type == "all") parameters %<>% c("derived")
+  if (param_type %in% c("fixed", "random"))
+    error("parameters.tmb_code is not currently able to separate 'fixed' or 'random' parameter types - set param_type = 'primary' instead")
+
+  if (param_type == "derived" && scalar_only)
+    error("parameters.tmb is not currently able to identify scalar 'derived' parameter types - set scalar_only = FALSE instead")
+
+  if (param_type == "all") {
+    parameters <- c("primary", "derived")
 
     parameters %<>%
-      purrr::map(parameters_arg2to1, x = x, scalar = scalar, ...) %>%
+      purrr::map(parameters_arg2to1, x = x, scalar_only = scalar_only, ...) %>%
       unlist() %>%
       sort()
 
@@ -17,16 +22,14 @@ parameters.tmb_code <- function(x, param_type = "fixed", scalar = TRUE, ...) {
 
   x %<>% template() %>% str_replace_all(" ", "")
 
-  # ignore REPORT parameters as easily generate using predict
-  if (param_type == "derived") { # can't deterimne which derived parameters are scalar
-    x %<>% str_extract_all("\\s(ADREPORT)[(]\\w+[)]", simplify = TRUE)
-  } else {# can't currently separate fixed and random from tmb code but can separate scalar
-    if(scalar) {
+  if (param_type == "primary") {
+    if (scalar_only) {
       x %<>% str_extract_all("\\s(PARAMETER)[(]\\w+[)]", simplify = TRUE)
-    } else {
-      x %<>% str_extract_all("\\s(PARAMETER(_VECTOR|_MATRIX|_ARRAY))[(]\\w+[)]", simplify = TRUE)
-    }
-  }
+    } else
+      x %<>% str_extract_all("\\s(PARAMETER(|_VECTOR|_MATRIX|_ARRAY))[(]\\w+[)]", simplify = TRUE)
+  } else # ignore REPORT parameters as easily generate using predict
+    x %<>% str_extract_all("\\s(ADREPORT)[(]\\w+[)]", simplify = TRUE)
+
   x %<>%
     as.vector() %>%
     str_replace_all("\\s\\w+[(](\\w+)[)]", "\\1") %>%
