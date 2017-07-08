@@ -51,6 +51,9 @@ test_that("analyse", {
 
   expect_identical(parameters(analysis), sort(c("bIntercept", "bYear", "log_sDensity")))
   expect_identical(parameters(analysis, "random"), character(0))
+  expect_identical(parameters(analysis, "all"), sort(c("bIntercept", "bYear", "log_sDensity", "sDensity")))
+  expect_identical(parameters(analysis, "primary"), sort(c("bIntercept", "bYear", "log_sDensity")))
+  expect_error(parameters(analysis, "some"))
 
   expect_is(as.mcmcr(analysis), "mcmcr")
   expect_identical(nchains(analysis), 1L)
@@ -71,8 +74,8 @@ test_that("analyse", {
 
   expect_identical(coef$term, as.term(c("bIntercept", "bYear", "log_sDensity")))
 
-  coef2 <- coef(analysis, "derived")
-  expect_identical(nrow(coef2), 1L)
+  expect_identical(coef(analysis, "derived")$term, as.term("sDensity"))
+  expect_identical(coef(analysis, "all")$term, as.term(c("bIntercept", "bYear", "log_sDensity", "sDensity")))
 
   tidy <- tidy(analysis)
   expect_identical(colnames(tidy), c("term", "estimate", "std.error", "statistic", "p.value"))

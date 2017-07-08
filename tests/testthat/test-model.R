@@ -61,11 +61,15 @@ test_that("analyse", {
                 }"
 
   expect_identical(parameters(mb_code(template)),
-            c("bAdultsInitial", "bDisturbance", "bHunterDays", "bPDO", "bSurvival",
-              "bYearlingsInitial", "log_sMales"))
+                   c("bAdultsInitial", "bDisturbance", "bHunterDays", "bPDO", "bSurvival",
+                     "bYearlingsInitial", "log_sMales"))
 
   expect_identical(parameters(mb_code(template), "derived"),
                    "sMales")
+
+  expect_identical(parameters(mb_code(template), "all"),
+                   c("bAdultsInitial", "bDisturbance", "bHunterDays", "bPDO", "bSurvival",
+                     "bYearlingsInitial", "log_sMales", "sMales"))
 
   expect_error(parameters(mb_code(template), "adreport"))
   expect_error(parameters(mb_code(template), "report"))
