@@ -17,5 +17,5 @@ check_model_parameters.tmb_code <- function(x, fixed, random, derived, drops) {
   if (length(drops) && !all(unlist(drops) %in% parameters(x, param_type = "primary", scalar_only = TRUE)))
     error("drops parameters missing from primary scalar code parameters")
 
-  invisible(x)
+  derived
 }
