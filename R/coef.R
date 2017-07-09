@@ -159,9 +159,11 @@ coef.tmb_ml_analysis <- function(object, param_type = "fixed", include_constant 
   terms <- terms_internal(param_type, object)
 
   if (!length(terms)) {
-    return(dplyr::data_frame(term = as.term(character(0)), estimate = numeric(0), sd = numeric(0),
+    coef <- dplyr::data_frame(term = as.term(character(0)), estimate = numeric(0), sd = numeric(0),
                              zscore = numeric(0), lower = numeric(0),
-                             upper = numeric(0), pvalue = numeric(0)))
+                             upper = numeric(0), pvalue = numeric(0))
+    class(coef) %<>% c("mb_analysis_coef", .)
+    return(coef)
   }
 
   # param_type all is handled by summary.sdreport
@@ -172,6 +174,7 @@ coef.tmb_ml_analysis <- function(object, param_type = "fixed", include_constant 
                     conf_level = conf_level, ...)
     coef$term %<>% as.term()
     coef <- coef[order(coef$term),]
+    class(coef) %<>% c("mb_analysis_coef", .)
     return(coef)
   }
 
@@ -199,5 +202,6 @@ coef.tmb_ml_analysis <- function(object, param_type = "fixed", include_constant 
     dplyr::mutate_(constant = ~NULL) %>%
     dplyr::as.tbl()
   coef <- coef[order(coef$term),]
+  class(coef) %<>% c("mb_analysis_coef", .)
   coef
 }
