@@ -84,9 +84,9 @@ data$Annual <- factor(data$Year)
 analysis <- analyse(model, data = data)
 #> Note: Using Makevars in /Users/joe/.R/Makevars 
 #> # A tibble: 1 x 6
-#>       n     K    logLik     AICc       duration converged
+#>       n     K    logLik       IC       duration converged
 #>   <int> <int>     <dbl>    <dbl> <S4: Duration>     <lgl>
-#> 1    40     5 -154.4664 320.6974           1.3s      TRUE
+#> 1    40     5 -154.4664 320.6974           1.6s      TRUE
 #> Warning: 6 external pointers will be removed
 
 coef(analysis)

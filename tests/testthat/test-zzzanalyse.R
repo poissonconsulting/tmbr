@@ -2,95 +2,111 @@ context("analyse")
 
 test_that("analyse", {
 
-  data <- density99
-  data$YearFactor <- factor(data$Year)
+  tmb_template <- "#include <TMB.hpp>
 
-  tmb_template <- "
-#include <TMB.hpp>
+template<class Type>
+Type objective_function<Type>::operator() () {
 
-  template<class Type>
-  Type objective_function<Type>::operator() () {
+DATA_VECTOR(Pairs);
+DATA_VECTOR(Year);
+DATA_FACTOR(Annual);
+DATA_INTEGER(nAnnual);
 
-  DATA_VECTOR(Density);
-  DATA_VECTOR(Year);
+PARAMETER(alpha);
+PARAMETER(beta1);
+PARAMETER(beta2);
+PARAMETER(beta3);
+PARAMETER_VECTOR(bAnnual);
+PARAMETER(log_sAnnual);
 
-  PARAMETER(bIntercept);
-  PARAMETER(bYear);
+Type sAnnual = exp(log_sAnnual);
 
-  PARAMETER(log_sDensity);
+vector<Type> ePairs = Pairs;
 
-  Type sDensity = exp(log_sDensity);
+Type nll = 0.0;
 
-  vector<Type> eDensity = Density;
+for(int i = 0; i < nAnnual; i++){
+  nll -= dnorm(bAnnual(i), Type(0), sAnnual, true);
+}
 
-  ADREPORT(sDensity)
-
-  Type nll = 0.0;
-
-  for(int i = 0; i < Density.size(); i++){
-    eDensity(i) = exp(bIntercept  + bYear * Year(i));
-    nll -= dnorm(Density(i), log(eDensity(i)), sDensity ,true);
-  }
-  return nll;
+for(int i = 0; i < Pairs.size(); i++){
+  ePairs(i) = exp(alpha + beta1 * Year(i) + beta2 * pow(Year(i), 2) + beta3 * pow(Year(i), 3) + bAnnual(Annual(i)));
+  nll -= dpois(Pairs(i), ePairs(i), true);
+}
+ADREPORT(sAnnual)
+return nll;
 }"
 
-  new_expr <- "
-  for(i in 1:length(Density)) {
-    prediction[i] <- exp(bIntercept + bYear * Year[i])
-  } "
+new_expr <- "
+for (i in 1:length(Pairs)) {
+  log(prediction[i]) <- alpha + beta1 * Year[i] + beta2 * Year[i]^2 + beta3 * Year[i]^3 + bAnnual[Annual[i]]
+}"
 
-  gen_inits <- function(data) list(bIntercept = 0, bYear = 1, log_sDensity = 0)
+gen_inits <- function(data) list(alpha = 4, beta1 = 1, beta2 = 0, beta3 = 0, log_sAnnual = 0, bAnnual = rep(0, data$nAnnual))
 
-  model <- model(tmb_template, gen_inits = gen_inits,
-                 select_data = list("Year+" = numeric(), YearFactor = factor(),
-                                    Site = factor(), Density = numeric(),
-                                    HabitatQuality = factor()),
-                 new_expr = new_expr)
+data <- bauw::peregrine
+data$Annual <- factor(data$Year)
 
-  expect_identical(parameters(model$derived), "sDensity")
 
-  analysis <- analyse(model, data = data, glance = FALSE, beep = FALSE)
+model <- model(tmb_template, gen_inits = gen_inits,
+               select_data = list("Pairs" = integer(), "Year*" = integer(), Annual = factor()),
+               random_effects = list(bAnnual = "Annual"),
+               new_expr = new_expr)
 
-  expect_identical(parameters(analysis), sort(c("bIntercept", "bYear", "log_sDensity")))
-  expect_identical(parameters(analysis, "random"), character(0))
-  expect_identical(parameters(analysis, "all"), sort(c("bIntercept", "bYear", "log_sDensity", "sDensity")))
-  expect_identical(parameters(analysis, "primary"), sort(c("bIntercept", "bYear", "log_sDensity")))
-  expect_error(parameters(analysis, "some"))
+expect_identical(parameters(model$derived), "sAnnual")
 
-  expect_is(as.mcmcr(analysis), "mcmcr")
-  expect_identical(nchains(analysis), 1L)
-  expect_identical(niters(analysis), 1L)
+analysis <- analyse(model, data = data, glance = FALSE, beep = FALSE)
 
-  glance <- glance(analysis)
-  expect_is(glance, "tbl")
-  expect_identical(colnames(glance), c("n", "K", "logLik", "IC", "duration", "converged"))
-  expect_equal(glance$logLik, -5238.213, tolerance = 0.0000001)
-  expect_identical(glance$n, 300L)
-  expect_identical(glance$K, 3L)
-  expect_is(glance$duration, "Duration")
+expect_identical(parameters(analysis), sort(c("alpha", "beta1", "beta2", "beta3", "log_sAnnual")))
+expect_identical(parameters(analysis, "random"), "bAnnual")
+expect_identical(parameters(analysis, "all"), sort(c("alpha", "bAnnual", "beta1", "beta2", "beta3", "log_sAnnual", "sAnnual")))
+expect_identical(parameters(analysis, "primary"), sort(c("alpha", "bAnnual", "beta1", "beta2", "beta3", "log_sAnnual")))
+expect_error(parameters(analysis, "some"))
 
-  coef <- coef(analysis)
+expect_is(as.mcmcr(analysis), "mcmcr")
+expect_identical(nchains(analysis), 1L)
+expect_identical(niters(analysis), 1L)
 
-  expect_is(coef, "tbl")
-  expect_identical(colnames(coef), c("term", "estimate", "sd", "zscore", "lower", "upper", "pvalue"))
+glance <- glance(analysis)
+expect_is(glance, "tbl")
+expect_identical(colnames(glance), c("n", "K", "logLik", "IC", "duration", "converged"))
+expect_equal(glance$logLik, -154.4664, tolerance = 0.000001)
+expect_equal(glance$IC, 320.6974, tolerance = 0.000001)
+expect_identical(glance$n, 40L)
+expect_identical(glance$K, 5L)
+expect_true(glance$converged)
+expect_is(glance$duration, "Duration")
 
-  expect_identical(coef$term, as.term(c("bIntercept", "bYear", "log_sDensity")))
+coef <- coef(analysis)
 
-  expect_identical(coef(analysis, "derived")$term, as.term("sDensity"))
-  expect_identical(coef(analysis, "all")$term, as.term(c("bIntercept", "bYear", "log_sDensity", "sDensity")))
+expect_is(coef, "tbl")
+expect_is(coef, "mb_analysis_coef")
+expect_identical(colnames(coef), c("term", "estimate", "sd", "zscore", "lower", "upper", "pvalue"))
 
-  tidy <- tidy(analysis)
-  expect_identical(colnames(tidy), c("term", "estimate", "std.error", "statistic", "p.value"))
-  expect_identical(tidy$estimate, coef$estimate)
+expect_identical(coef$term, sort(as.term(c("alpha", "beta1", "beta2", "beta3", "log_sAnnual"))))
 
-  year <- predict(analysis, new_data = "Year")
+expect_identical(coef(analysis, "derived")$term, as.term("sAnnual"))
+expect_identical(coef(analysis, "all")$term, sort(as.term(c("alpha", paste0("bAnnual[", 1:40,"]"), "beta1", "beta2", "beta3", "log_sAnnual", "sAnnual"))))
 
-  expect_is(year, "tbl")
-  expect_identical(colnames(year), c("Site", "HabitatQuality", "Year", "Visit",
-                                     "Density", "YearFactor",
-                                     "estimate", "sd", "zscore", "lower", "upper", "pvalue"))
-  expect_false(is.unsorted(year$estimate))
-  expect_true(all(is.na(year$lower)))
+tidy <- tidy(analysis)
+expect_identical(colnames(tidy), c("term", "estimate", "std.error", "statistic", "p.value"))
+expect_identical(tidy$estimate, coef$estimate)
 
-  expect_equal(unlist(estimates(analysis)), coef$estimate, check.names = FALSE)
+year <- predict(analysis, new_data = "Year")
+
+expect_is(year, "tbl")
+expect_identical(colnames(year), c("Year", "Pairs", "R.Pairs", "Eyasses", "Annual",
+                                   "estimate", "sd", "zscore", "lower", "upper", "pvalue"))
+expect_true(all(is.na(year$lower)))
+
+year2 <- predict(analysis, new_data = "Year", marginal = "alpha")
+
+expect_identical(colnames(year2), c("Year", "Pairs", "R.Pairs", "Eyasses", "Annual",
+                                    "estimate", "sd", "zscore", "lower", "upper", "pvalue"))
+
+expect_identical(year2$estimate, year$estimate)
+expect_true(all(year2$estimate > year2$lower))
+expect_true(all(year2$estimate < year2$upper))
+
+expect_equal(unlist(estimates(analysis)), coef$estimate, check.names = FALSE)
 })
