@@ -1,5 +1,6 @@
 #' @export
 glance.tmb_analysis <- function(x, n = NULL, ...) {
+
   dplyr::data_frame(
     n = sample_size(x),
     K = nterms(x, include_constant = FALSE),

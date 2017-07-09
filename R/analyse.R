@@ -11,44 +11,6 @@ unload_dynlibs <- function(tempfiles) {
   for (tempfile in tempfiles) try(dyn.unload(TMB::dynlib(tempfile)), silent = TRUE)
 }
 
-lmcmcarray <- function(x) {
-
-  nrow <- nrow(x)
-
-  if (identical(nrow, 1L)) {
-    dims <- 1L
-  } else {
-    dims <- str_replace(x$term[nrow], "^(\\w+)(.*)", "\\2") %>% str_replace("^(\\[)(.*)(\\])$", "\\2")
-    dims %<>% str_split(",", simplify = FALSE) %>% unlist()
-    dims %<>% as.integer()
-  }
-
-  dims %<>% c(1L, 1L, .)
-
-  samples <- array(x$estimate, dim = dims)
-  class(samples) <- "mcmcarray"
-
-  samples
-}
-
-lmcmcr <- function(object) {
-  coef <- coef(object)
-  derived <- coef(object, "derived")
-  random <- coef(object, "random")
-
-  coef %<>%
-    dplyr::bind_rows(derived) %>%
-    dplyr::bind_rows(random) %>%
-    dplyr::select_(~term, ~estimate) %>%
-    dplyr::mutate_(parameter = ~str_replace(term, "^(\\w+)(.*)", "\\1")) %>%
-    plyr::dlply(~parameter, lmcmcarray)
-
-  class(coef) <- "mcmcr"
-
-  coef %<>% sort()
-  coef
-}
-
 # Constructs a list identifying which parameters to fix (based on missing values in inits).
 map <- function(inits) {
   check_uniquely_named_list(inits)
@@ -103,7 +65,7 @@ tmb_analysis <- function(data, model, tempfile, quick, glance, quiet) {
 
   class(obj) <- c("tmb_ml_analysis", "tmb_analysis", "mb_analysis")
 
-  obj$mcmcr <- lmcmcr(obj)
+  obj$mcmcr <- as.mcmcr(obj)
   obj$ngens <- 1L
   obj$model$derived <- names(list_by_name(obj$sd$value))
   obj$duration <- timer$elapsed()

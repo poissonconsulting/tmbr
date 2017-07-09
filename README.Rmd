@@ -76,6 +76,7 @@ for(int i = 0; i < Pairs.size(); i++){
   ePairs(i) = exp(alpha + beta1 * Year(i) + beta2 * pow(Year(i), 2) + beta3 * pow(Year(i), 3) + bAnnual(Annual(i)));
   nll -= dpois(Pairs(i), ePairs(i), true);
 }
+ADREPORT(sAnnual)
 return nll;
 }")
 
