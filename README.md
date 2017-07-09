@@ -62,6 +62,7 @@ for(int i = 0; i < Pairs.size(); i++){
   ePairs(i) = exp(alpha + beta1 * Year(i) + beta2 * pow(Year(i), 2) + beta3 * pow(Year(i), 3) + bAnnual(Annual(i)));
   nll -= dpois(Pairs(i), ePairs(i), true);
 }
+ADREPORT(sAnnual)
 return nll;
 }")
 
@@ -81,20 +82,12 @@ data <- bauw::peregrine
 data$Annual <- factor(data$Year)
 
 analysis <- analyse(model, data = data)
-#> Note: Using Makevars in /Users/joe/.R/Makevars
-#> Warning in bind_rows_(x, .id): Vectorizing 'term' elements may not preserve
-#> their attributes
-
-#> Warning in bind_rows_(x, .id): Vectorizing 'term' elements may not preserve
-#> their attributes
-
-#> Warning in bind_rows_(x, .id): Vectorizing 'term' elements may not preserve
-#> their attributes
+#> Note: Using Makevars in /Users/joe/.R/Makevars 
 #> # A tibble: 1 x 6
 #>       n     K    logLik     AICc       duration converged
 #>   <int> <int>     <dbl>    <dbl> <S4: Duration>     <lgl>
-#> 1    40     5 -154.4664 320.6974           2.5s      TRUE
-#> Warning: 5 external pointers will be removed
+#> 1    40     5 -154.4664 320.6974           1.3s      TRUE
+#> Warning: 6 external pointers will be removed
 
 coef(analysis)
 #> # A tibble: 5 x 7

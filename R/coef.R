@@ -181,8 +181,9 @@ coef.tmb_ml_analysis <- function(object, param_type = "fixed", include_constant 
   coef <- summary(object$sd, select = param_type, p.value = TRUE) %>%
     as.data.frame()
 
+  coef %<>% dplyr::mutate_(term = ~row.names(coef))
+
   coef %<>%
-    dplyr::mutate_(term = ~row.names(coef)) %>%
     dplyr::select_(term = ~term, estimate = ~Estimate, sd = ~`Std. Error`,
                    zscore = ~`z value`, pvalue = ~`Pr(>|z^2|)`) %>%
     dplyr::mutate_(lower = ~estimate + sd * qnorm((1 - conf_level) / 2),
@@ -191,11 +192,12 @@ coef.tmb_ml_analysis <- function(object, param_type = "fixed", include_constant 
     dplyr::arrange_(~term) %>%
     remap_coef(object$map)
 
+  coef$term <- as.term(terms)
+
   if (!include_constant) coef %<>% dplyr::filter_(~!constant)
   coef %<>%
     dplyr::mutate_(constant = ~NULL) %>%
     dplyr::as.tbl()
-  coef$term %<>% as.term()
   coef <- coef[order(coef$term),]
   coef
 }
