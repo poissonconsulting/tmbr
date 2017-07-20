@@ -27,7 +27,6 @@ Demonstration
 library(magrittr)
 library(ggplot2)
 library(tmbr)
-#> Warning: package 'dplyr' was built under R version 3.4.1
 ```
 
 ``` r
@@ -86,8 +85,8 @@ analysis <- analyse(model, data = data)
 #> # A tibble: 1 x 6
 #>       n     K    logLik       IC       duration converged
 #>   <int> <int>     <dbl>    <dbl> <S4: Duration>     <lgl>
-#> 1    40     5 -154.4664 320.6974           1.6s      TRUE
-#> Warning: 6 external pointers will be removed
+#> 1    40     5 -154.4664 320.6974           1.2s      TRUE
+#> Warning: 4 external pointers will be removed
 
 coef(analysis)
 #> # A tibble: 5 x 7
@@ -103,6 +102,14 @@ coef(analysis)
 
 ``` r
 year <- predict(analysis, new_data = "Year")
+#> Warning in bind_rows_(x, .id): Vectorizing 'term' elements may not preserve
+#> their attributes
+
+#> Warning in bind_rows_(x, .id): Vectorizing 'term' elements may not preserve
+#> their attributes
+
+#> Warning in bind_rows_(x, .id): Vectorizing 'term' elements may not preserve
+#> their attributes
 
 ggplot(data = year, aes(x = Year, y = estimate)) +
   geom_point(data = bauw::peregrine, aes(y = Pairs)) +
