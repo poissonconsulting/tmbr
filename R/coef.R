@@ -78,8 +78,7 @@ terms_internal <- function(param_type, object) {
     if (param_type == "all") terms %<>% c("derived")
     terms %<>%
       purrr::map(terms_internal, object = object) %>%
-      unlist()
-    terms %<>%
+      unlist() %>%
       sort()
 
     return(terms)
@@ -87,7 +86,10 @@ terms_internal <- function(param_type, object) {
 
   if (param_type == "derived") {
     estimates <- list_by_name(object$sd$value) %>%
-      remap_estimates(object$map)
+      remap_estimates(object$map) %>%
+      sort_nlist() %>%
+      named_estimates() %>%
+      names()
   } else {
     if (param_type == "fixed") {
       estimates <- object$sd$par.fixed
@@ -99,15 +101,14 @@ terms_internal <- function(param_type, object) {
       remap_estimates(object$map)
     inits <- object$inits[names(estimates)]
     inits %<>% llply(dims)
-    estimates %<>% purrr::map2(inits, by_dims)
+    estimates %<>%
+      purrr::map2(inits, by_dims) %>%
+      sort_nlist() %>%
+      named_estimates() %>%
+      names()
+    if (!is.null(estimates)) estimates %<>% sort()
   }
 
-  estimates %<>%
-    sort_nlist() %>%
-    named_estimates() %>%
-    names()
-
-  if (!is.null(estimates)) estimates %<>% sort()
   estimates
 }
 
@@ -160,8 +161,8 @@ coef.tmb_ml_analysis <- function(object, param_type = "fixed", include_constant 
 
   if (!length(terms)) {
     coef <- dplyr::data_frame(term = as.term(character(0)), estimate = numeric(0), sd = numeric(0),
-                             zscore = numeric(0), lower = numeric(0),
-                             upper = numeric(0), pvalue = numeric(0))
+                              zscore = numeric(0), lower = numeric(0),
+                              upper = numeric(0), pvalue = numeric(0))
     class(coef) %<>% c("mb_analysis_coef", .)
     return(coef)
   }
@@ -201,7 +202,9 @@ coef.tmb_ml_analysis <- function(object, param_type = "fixed", include_constant 
   coef %<>%
     dplyr::mutate_(constant = ~NULL) %>%
     dplyr::as.tbl()
+
   coef <- coef[order(coef$term),]
+
   class(coef) %<>% c("mb_analysis_coef", .)
   coef
 }
