@@ -86,10 +86,7 @@ terms_internal <- function(param_type, object) {
 
   if (param_type == "derived") {
     estimates <- list_by_name(object$sd$value) %>%
-      remap_estimates(object$map) %>%
-      sort_nlist() %>%
-      named_estimates() %>%
-      names()
+      remap_estimates(object$map)
   } else {
     if (param_type == "fixed") {
       estimates <- object$sd$par.fixed
@@ -102,12 +99,15 @@ terms_internal <- function(param_type, object) {
     inits <- object$inits[names(estimates)]
     inits %<>% llply(dims)
     estimates %<>%
-      purrr::map2(inits, by_dims) %>%
+      purrr::map2(inits, by_dims)
+  }
+
+   estimates %<>%
       sort_nlist() %>%
       named_estimates() %>%
       names()
-    if (!is.null(estimates)) estimates %<>% sort()
-  }
+
+  if (!is.null(estimates)) estimates %<>% sort()
 
   estimates
 }
@@ -135,6 +135,16 @@ remap_coef <- function(coef, map) {
   coef[names(map)] %<>% purrr::map2(map, remap_data)
   coef %<>% plyr::ldply()
   coef %<>% dplyr::mutate_(.id = ~NULL)
+  coef
+}
+
+
+summary_sd <- function(sd, param_type) {
+  if (param_type == "derived") param_type <- "report"
+
+  coef <- summary(sd, select = param_type, p.value = TRUE) %>%
+    as.data.frame()
+
   coef
 }
 
@@ -179,11 +189,7 @@ coef.tmb_ml_analysis <- function(object, param_type = "fixed", include_constant 
     return(coef)
   }
 
-  # necessary due to summary args!
-  if (param_type == "derived") param_type <- "report"
-
-  coef <- summary(object$sd, select = param_type, p.value = TRUE) %>%
-    as.data.frame()
+  coef <- summary_sd(object$sd, param_type)
 
   coef %<>% dplyr::mutate_(term = ~row.names(coef))
 
