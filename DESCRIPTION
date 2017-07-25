@@ -29,8 +29,10 @@ Imports:
     timer (>= 0.0.1),
     TMB (>= 1.7.9)
 Suggests:
+    bauw,
     testthat
 Remotes:
+    poissonconsulting/bauw,
     poissonconsulting/mbr,
     poissonconsulting/mcmcr,
     poissonconsulting/rescale,
