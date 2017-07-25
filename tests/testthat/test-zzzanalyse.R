@@ -99,14 +99,5 @@ expect_identical(colnames(year), c("Year", "Pairs", "R.Pairs", "Eyasses", "Annua
                                    "estimate", "sd", "zscore", "lower", "upper", "pvalue"))
 expect_true(all(is.na(year$lower)))
 
-year2 <- predict(analysis, new_data = "Year", marginal = "alpha")
-
-expect_identical(colnames(year2), c("Year", "Pairs", "R.Pairs", "Eyasses", "Annual",
-                                    "estimate", "sd", "zscore", "lower", "upper", "pvalue"))
-
-expect_identical(year2$estimate, year$estimate)
-expect_true(all(year2$estimate > year2$lower))
-expect_true(all(year2$estimate < year2$upper))
-
 expect_equal(unlist(estimates(analysis)), coef$estimate, check.names = FALSE)
 })
