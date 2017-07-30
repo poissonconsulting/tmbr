@@ -57,11 +57,9 @@ tmb_analysis <- function(data, model, tempfile, quick, glance, quiet) {
 
   if (is.try_error(sd)) return(obj)
 
-  report <- ad_fun$report()
-
   obj %<>% c(inits = list(inits), tempfile = tempfile, map = list(map),
-             ad_fun = list(ad_fun), opt = list(opt),
-             sd = list(sd), report = list(report))
+             opt = list(opt),
+             sd = list(sd))
 
   class(obj) <- c("tmb_ml_analysis", "tmb_analysis", "mb_analysis")
 
