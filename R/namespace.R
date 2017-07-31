@@ -4,4 +4,5 @@
 #' @importFrom lubridate dminutes is.duration
 #' @importFrom magrittr %<>% %>%
 #' @importFrom plyr llply
+#' @importFrom stats coef
 NULL

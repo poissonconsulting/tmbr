@@ -8,11 +8,21 @@ list_by_name <- function(x) {
   list
 }
 
+add_report <- function(x) {
+  x %<>% str_replace_all("\\sREPORT[(][^)]+[)];", "\n")
+  x %<>% str_replace_all("\\sADREPORT[(]([^)]+)[)]", "REPORT(\\1);\nADREPORT(\\1)")
+  x
+}
+
 load_dynlib <- function(model, tempfile) {
   file <- paste0(tempfile, ".cpp")
   stopifnot(!file.exists(file))
 
-  write(template(model), file = file)
+  template <- template(model)
+
+  template %<>% add_report()
+
+  write(template, file = file)
   TMB::compile(file)
   dyn.load(TMB::dynlib(tempfile))
 }
@@ -36,6 +46,45 @@ map <- function(inits) {
   map <- purrr::map2(map, inits, function(x, y) {is.na(x) <- is.na(y); x})
   map %<>% llply(function(x) factor(x))
   map
+}
+
+set_dim <- function(x, dim) {
+  x <- x$value
+  if (length(dim) == 1) return(x)
+  dim(x) <- dim
+  x
+}
+
+adreport <- function(ad_fun, sd) {
+  dims <- purrr::map(ad_fun$report(), dims)
+
+  if (!length(dims)) return(list(estimate = list(), sd = list()))
+
+  sum <- summary(sd, select = "report") %>%
+    as.data.frame()
+
+  sum$parameter <- row.names(sum)
+  row.names(sum) <- NULL
+
+  estimate <- dplyr::select_(sum, value = ~Estimate, ~parameter) %>%
+    plyr::dlply("parameter", function(x) {dplyr::select_(x, ~-parameter)})
+
+  sd <- dplyr::select_(sum, value = ~`Std. Error`, ~parameter) %>%
+    plyr::dlply("parameter", function(x) {dplyr::select_(x, ~-parameter)})
+
+  attr(estimate, "split_type") <- NULL
+  attr(estimate, "split_labels") <- NULL
+  attr(sd, "split_type") <- NULL
+  attr(sd, "split_labels") <- NULL
+
+  estimate <- estimate[order(names(estimate))]
+  sd <- sd[order(names(sd))]
+  dims <- dims[order(names(dims))]
+
+  estimate %<>% purrr::map2(dims, set_dim)
+  sd %<>% purrr::map2(dims, set_dim)
+
+  return(list(estimate = estimate, sd = sd))
 }
 
 tmb_analysis <- function(data, model, tempfile, quick, glance, quiet) {
@@ -67,14 +116,23 @@ tmb_analysis <- function(data, model, tempfile, quick, glance, quiet) {
 
   if (is.try_error(sd)) return(obj)
 
+  adreport <- adreport(ad_fun, sd)
+
   logLik <- opt$value * -1
-  mcmcr <- as.list(sd, "Est")
+
+  estimate <- as.list(sd, "Est")
   sd <- as.list(sd, "Std")
 
-  attr(mcmcr, which = "what") <- NULL
+  attr(estimate, which = "what") <- NULL
   attr(sd, which = "what") <- NULL
 
-  mcmcr %<>% as.mcmcr()
+  estimate %<>% c(adreport$estimate)
+  sd %<>% c(adreport$sd)
+
+  estimate <- estimate[order(names(estimate))]
+  sd <- sd[order(names(sd))]
+
+  mcmcr <- as.mcmcr(estimate)
 
   obj %<>% c(inits = list(inits),
              logLik = logLik,
@@ -84,7 +142,6 @@ tmb_analysis <- function(data, model, tempfile, quick, glance, quiet) {
   class(obj) <- c("tmb_ml_analysis", "tmb_analysis", "mb_analysis")
 
   obj$ngens <- 1L
-  obj$model$derived <- names(list_by_name(obj$sd$value))
   obj$duration <- timer$elapsed()
 
   obj

@@ -28,7 +28,6 @@ test_that("analyse", {
                 Type sMales = exp(log_sMales);
 
                 ADREPORT(sMales);
-                REPORT(eSurvival);
 
                 vector<Type> bAdults = Males;
                 vector<Type> bYearlings = Males;

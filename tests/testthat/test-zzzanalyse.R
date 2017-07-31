@@ -33,7 +33,8 @@ for(int i = 0; i < Pairs.size(); i++){
   ePairs(i) = exp(alpha + beta1 * Year(i) + beta2 * pow(Year(i), 2) + beta3 * pow(Year(i), 3) + bAnnual(Annual(i)));
   nll -= dpois(Pairs(i), ePairs(i), true);
 }
-ADREPORT(sAnnual)
+ADREPORT(sAnnual);
+ADREPORT(ePairs);
 return nll;
 }"
 
@@ -53,7 +54,7 @@ model <- model(tmb_template, gen_inits = gen_inits,
                random_effects = list(bAnnual = "Annual"),
                new_expr = new_expr)
 
-expect_identical(parameters(model$derived), "sAnnual")
+expect_identical(parameters(model$derived), c("ePairs","sAnnual"))
 
 analysis <- analyse(model, data = data, glance = FALSE, beep = FALSE)
 
@@ -63,7 +64,7 @@ expect_identical(parameters(analysis, "fixed"), sort(c("alpha", "beta1", "beta2"
 expect_identical(parameters(analysis, "random"), "bAnnual")
 
 # not including derived parameters....
-expect_identical(parameters(analysis), sort(c("alpha", "bAnnual", "beta1", "beta2", "beta3", "log_sAnnual", "sAnnual")))
+expect_identical(parameters(analysis), sort(c("alpha", "bAnnual", "beta1", "beta2", "beta3", "ePairs", "log_sAnnual", "sAnnual")))
 expect_identical(parameters(analysis, "primary"), sort(c("alpha", "bAnnual", "beta1", "beta2", "beta3", "log_sAnnual")))
 expect_error(parameters(analysis, "some"))
 
@@ -88,9 +89,6 @@ expect_is(coef, "mb_analysis_coef")
 expect_identical(colnames(coef), c("term", "estimate", "sd", "zscore", "lower", "upper", "pvalue"))
 
 expect_identical(coef$term, sort(as.term(c("alpha", "beta1", "beta2", "beta3", "log_sAnnual"))))
-
-expect_identical(coef(analysis, "derived")$term, as.term("sAnnual"))
-expect_identical(coef(analysis, "all")$term, sort(as.term(c("alpha", paste0("bAnnual[", 1:40,"]"), "beta1", "beta2", "beta3", "log_sAnnual", "sAnnual"))))
 
 tidy <- tidy(analysis)
 expect_identical(colnames(tidy), c("term", "estimate", "std.error", "statistic", "p.value"))
