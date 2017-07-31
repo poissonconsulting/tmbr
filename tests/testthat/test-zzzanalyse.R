@@ -57,8 +57,12 @@ expect_identical(parameters(model$derived), "sAnnual")
 
 analysis <- analyse(model, data = data, glance = FALSE, beep = FALSE)
 
+expect_identical(terms(analysis, "fixed", include_constant = FALSE), as.term(sort(c("alpha", "beta1", "beta2", "beta3", "log_sAnnual"))))
+
 expect_identical(parameters(analysis, "fixed"), sort(c("alpha", "beta1", "beta2", "beta3", "log_sAnnual")))
 expect_identical(parameters(analysis, "random"), "bAnnual")
+
+# not including derived parameters....
 expect_identical(parameters(analysis), sort(c("alpha", "bAnnual", "beta1", "beta2", "beta3", "log_sAnnual", "sAnnual")))
 expect_identical(parameters(analysis, "primary"), sort(c("alpha", "bAnnual", "beta1", "beta2", "beta3", "log_sAnnual")))
 expect_error(parameters(analysis, "some"))

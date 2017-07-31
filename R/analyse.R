@@ -1,3 +1,13 @@
+list_by_name <- function(x) {
+  list <- list()
+  names <- unique(names(x))
+  for (name in names) {
+    list %<>% c(list(unname(x[names(x) == name])))
+  }
+  names(list) <- names
+  list
+}
+
 load_dynlib <- function(model, tempfile) {
   file <- paste0(tempfile, ".cpp")
   stopifnot(!file.exists(file))
@@ -46,8 +56,8 @@ tmb_analysis <- function(data, model, tempfile, quick, glance, quiet) {
   inits %<>% llply(function(x) {x[is.na(x)] <- 0; x})
 
   ad_fun <- TMB::MakeADFun(data = data, inits, map = map,
-                               random = names(model$random_effects),
-                               DLL = basename(tempfile), silent = quiet)
+                           random = names(model$random_effects),
+                           DLL = basename(tempfile), silent = quiet)
 
   opt <- try(do.call("optim", ad_fun))
 
@@ -57,8 +67,18 @@ tmb_analysis <- function(data, model, tempfile, quick, glance, quiet) {
 
   if (is.try_error(sd)) return(obj)
 
-  obj %<>% c(inits = list(inits), tempfile = tempfile, map = list(map),
-             opt = list(opt),
+  logLik <- opt$value * -1
+  mcmcr <- as.list(sd, "Est")
+  sd <- as.list(sd, "Std")
+
+  attr(mcmcr, which = "what") <- NULL
+  attr(sd, which = "what") <- NULL
+
+  mcmcr %<>% as.mcmcr()
+
+  obj %<>% c(inits = list(inits),
+             logLik = logLik,
+             mcmcr = list(mcmcr),
              sd = list(sd))
 
   class(obj) <- c("tmb_ml_analysis", "tmb_analysis", "mb_analysis")

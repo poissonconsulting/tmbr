@@ -1,3 +1,7 @@
+parameters_arg2to1 <- function(param_type, x, scalar_only, ...) {
+  parameters(x = x, param_type = param_type, scalar_only = scalar_only, ...)
+}
+
 #' @export
 parameters.tmb_code <- function(x, param_type = "all", scalar_only = FALSE, ...) {
   check_scalar(param_type, c("fixed", "random", "derived", "primary", "all"))

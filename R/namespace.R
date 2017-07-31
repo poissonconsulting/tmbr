@@ -4,5 +4,4 @@
 #' @importFrom lubridate dminutes is.duration
 #' @importFrom magrittr %<>% %>%
 #' @importFrom plyr llply
-#' @importFrom stats coef logLik predict
 NULL
