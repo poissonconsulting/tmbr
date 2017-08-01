@@ -161,7 +161,7 @@ analyse_tmb_data <- function(data, model, tempfile, quick, glance, quiet) {
 
 analyse_tmb_data_chunk <- function(data, model, quick, quiet) {
   analyse_tmb_data(data = data$data, model = model, tempfile = data$tempfile,
-                   quick = quick, quiet = quiet)
+                   quick = quick, quiet = quiet, glance = FALSE)
 }
 
 analyse_tmb_data_parallel <- function(data, model, quick, quiet) {
