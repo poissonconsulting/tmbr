@@ -15,6 +15,7 @@ test_that("analyse", {
                 DATA_FACTOR(Year);
                 DATA_INTEGER(nYear);
 
+                // PARAMETER(bxx);
                 PARAMETER(bSurvival);
                 PARAMETER(bDisturbance);
                 PARAMETER(bPDO);
