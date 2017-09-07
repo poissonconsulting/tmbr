@@ -1,9 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-![stability-unstable](https://img.shields.io/badge/stability-unstable-yellow.svg) [![Travis-CI Build Status](https://travis-ci.org/poissonconsulting/tmbr.svg?branch=master)](https://travis-ci.org/poissonconsulting/tmbr) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/poissonconsulting/tmbr?branch=master&svg=true)](https://ci.appveyor.com/project/poissonconsulting/tmbr) [![codecov](https://codecov.io/gh/poissonconsulting/smbr/branch/master/graph/badge.svg)](https://codecov.io/gh/poissonconsulting/smbr) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-
-tmbr
-====
+[![stability-unstable](https://img.shields.io/badge/stability-unstable-yellow.svg)](https://github.com/joethorley/stability-badges#unstable)[![Travis-CI Build Status](https://travis-ci.org/poissonconsulting/tmbr.svg?branch=master)](https://travis-ci.org/poissonconsulting/tmbr) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/poissonconsulting/tmbr?branch=master&svg=true)](https://ci.appveyor.com/project/poissonconsulting/tmbr) [![codecov](https://codecov.io/gh/poissonconsulting/smbr/branch/master/graph/badge.svg)](https://codecov.io/gh/poissonconsulting/smbr) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/tmbr)](https://cran.r-project.org/package=tmbr) \# tmbr
 
 Introduction
 ------------
@@ -81,12 +78,16 @@ data <- bauw::peregrine
 data$Annual <- factor(data$Year)
 
 analysis <- analyse(model, data = data)
+#> Warning in checkMatrixPackageVersion(): Package version inconsistency detected.
+#> TMB was built with Matrix version 1.2.10
+#> Current Matrix version is 1.2.11
+#> Please re-install 'TMB' from source or restore original 'Matrix' package
 #> Note: Using Makevars in /Users/joe/.R/Makevars 
 #> # A tibble: 1 x 6
 #>       n     K    logLik       IC       duration converged
 #>   <int> <int>     <dbl>    <dbl> <S4: Duration>     <lgl>
-#> 1    40     5 -154.4664 320.6974           1.2s      TRUE
-#> Warning: 4 external pointers will be removed
+#> 1    40     5 -154.4664 320.6974           1.4s      TRUE
+#> Warning: 6 external pointers will be removed
 
 coef(analysis)
 #> # A tibble: 5 x 7
@@ -102,14 +103,6 @@ coef(analysis)
 
 ``` r
 year <- predict(analysis, new_data = "Year")
-#> Warning in bind_rows_(x, .id): Vectorizing 'term' elements may not preserve
-#> their attributes
-
-#> Warning in bind_rows_(x, .id): Vectorizing 'term' elements may not preserve
-#> their attributes
-
-#> Warning in bind_rows_(x, .id): Vectorizing 'term' elements may not preserve
-#> their attributes
 
 ggplot(data = year, aes(x = Year, y = estimate)) +
   geom_point(data = bauw::peregrine, aes(y = Pairs)) +
