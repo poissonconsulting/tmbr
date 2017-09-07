@@ -86,7 +86,7 @@ analysis <- analyse(model, data = data)
 #> # A tibble: 1 x 6
 #>       n     K    logLik       IC       duration converged
 #>   <int> <int>     <dbl>    <dbl> <S4: Duration>     <lgl>
-#> 1    40     5 -154.4664 320.6974           1.4s      TRUE
+#> 1    40     5 -154.4664 320.6974           1.3s      TRUE
 #> Warning: 6 external pointers will be removed
 
 coef(analysis)
