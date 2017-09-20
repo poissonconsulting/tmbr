@@ -83,10 +83,10 @@ analysis <- analyse(model, data = data)
 #> Current Matrix version is 1.2.11
 #> Please re-install 'TMB' from source or restore original 'Matrix' package
 #> Note: Using Makevars in /Users/joe/.R/Makevars 
-#> # A tibble: 1 x 6
-#>       n     K    logLik       IC       duration converged
-#>   <int> <int>     <dbl>    <dbl> <S4: Duration>     <lgl>
-#> 1    40     5 -154.4664 320.6974           1.3s      TRUE
+#> # A tibble: 1 x 5
+#>       n     K    logLik       IC converged
+#>   <int> <int>     <dbl>    <dbl>     <lgl>
+#> 1    40     5 -154.4664 320.6974      TRUE
 #> Warning: 6 external pointers will be removed
 
 coef(analysis)

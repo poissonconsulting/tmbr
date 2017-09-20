@@ -74,13 +74,12 @@ expect_identical(niters(analysis), 1L)
 
 glance <- glance(analysis)
 expect_is(glance, "tbl")
-expect_identical(colnames(glance), c("n", "K", "logLik", "IC", "duration", "converged"))
+expect_identical(colnames(glance), c("n", "K", "logLik", "IC", "converged"))
 expect_equal(glance$logLik, -154.4664, tolerance = 0.000001)
 expect_equal(glance$IC, 320.6974, tolerance = 0.000001)
 expect_identical(glance$n, 40L)
 expect_identical(glance$K, 5L)
 expect_true(glance$converged)
-expect_is(glance$duration, "Duration")
 
 coef <- coef(analysis)
 
