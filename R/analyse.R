@@ -87,7 +87,7 @@ adreport <- function(ad_fun, sd) {
   return(list(estimate = estimate, sd = sd))
 }
 
-tmb_analysis <- function(data, model, tempfile, quick, glance, quiet) {
+tmb_analysis <- function(data, model, tempfile, glance, quiet) {
   timer <- timer::Timer$new()
   timer$start()
 
@@ -147,24 +147,22 @@ tmb_analysis <- function(data, model, tempfile, quick, glance, quiet) {
   obj
 }
 
-analyse_tmb_data <- function(data, model, tempfile, quick, glance, quiet) {
+analyse_tmb_data <- function(data, model, tempfile, glance, quiet) {
   load_dynlib(model, tempfile)
 
   if (is.data.frame(data)) {
-    return(tmb_analysis(data = data, model = model, tempfile = tempfile, quick = quick,
-                        glance = glance, quiet = quiet))
+    return(tmb_analysis(data = data, model = model, tempfile = tempfile, glance = glance, quiet = quiet))
   }
 
-  plyr::llply(data, tmb_analysis, model = model, tempfile = tempfile, quick = quick,
-              glance = glance, quiet = quiet)
+  plyr::llply(data, tmb_analysis, model = model, tempfile = tempfile, glance = glance, quiet = quiet)
 }
 
-analyse_tmb_data_chunk <- function(data, model, quick, quiet) {
+analyse_tmb_data_chunk <- function(data, model, quiet) {
   analyse_tmb_data(data = data$data, model = model, tempfile = data$tempfile,
-                   quick = quick, quiet = quiet, glance = FALSE)
+                   quiet = quiet, glance = FALSE)
 }
 
-analyse_tmb_data_parallel <- function(data, model, quick, quiet) {
+analyse_tmb_data_parallel <- function(data, model, quiet) {
 
   nworkers <- foreach::getDoParWorkers()
 
@@ -179,7 +177,7 @@ analyse_tmb_data_parallel <- function(data, model, quick, quiet) {
   on.exit(unload_dynlibs(tempfiles))
 
   data %<>% llply(.fun = analyse_tmb_data_chunk, .parallel = TRUE,
-                  model = model, quick = quick, quiet = quiet)
+                  model = model, quiet = quiet)
 
   data %<>% unlist(recursive = FALSE)
 
@@ -188,12 +186,17 @@ analyse_tmb_data_parallel <- function(data, model, quick, quiet) {
 
 #' @export
 analyse.tmb_model <- function(x, data,
+                              nchains = getOption("mb.nchains", 3L),
+                              niters = getOption("mb.niters", 1000L),
+                              nthin = getOption("mb.thin", NULL),
                               parallel = getOption("mb.parallel", FALSE),
-                              quick = getOption("mb.quick", FALSE),
                               quiet = getOption("mb.quiet", TRUE),
                               glance = getOption("mb.glance", TRUE),
                               beep = getOption("mb.beep", TRUE),
                               ...) {
+  check_flag(beep)
+  if (beep) on.exit(beepr::beep())
+
   if (is.data.frame(data)) {
     check_data2(data)
   } else if (is.list(data)) {
@@ -201,12 +204,8 @@ analyse.tmb_model <- function(x, data,
   } else error("data must be a data.frame or a list of data.frames")
 
   check_flag(parallel)
-  check_flag(quick)
   check_flag(quiet)
   check_flag(glance)
-  check_flag(beep)
-
-  if (beep) on.exit(beepr::beep())
 
   check_data_model(data, x)
 
@@ -214,8 +213,8 @@ analyse.tmb_model <- function(x, data,
     tempfile <- tempfile()
     on.exit(unload_dynlibs(tempfile))
     return(analyse_tmb_data(data = data, model = x, tempfile = tempfile,
-                            quick = quick, quiet = quiet, glance = glance))
+                            quiet = quiet, glance = glance))
   }
 
-  analyse_tmb_data_parallel(data, model = x, quick = quick, quiet = quiet)
+  analyse_tmb_data_parallel(data, model = x, quiet = quiet)
 }
