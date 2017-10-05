@@ -90,8 +90,7 @@ expect_identical(colnames(coef), c("term", "estimate", "sd", "zscore", "lower", 
 expect_identical(coef$term, sort(as.term(c("alpha", "beta1", "beta2", "beta3", "log_sAnnual"))))
 
 tidy <- tidy(analysis)
-expect_identical(colnames(tidy), c("term", "estimate", "std.error", "statistic", "p.value"))
-expect_identical(tidy$estimate, coef$estimate)
+expect_identical(colnames(tidy), c("term", "estimate", "lower", "upper"))
 
 year <- predict(analysis, new_data = "Year")
 
