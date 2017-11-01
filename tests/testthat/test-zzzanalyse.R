@@ -89,6 +89,16 @@ expect_identical(colnames(coef), c("term", "estimate", "sd", "zscore", "lower", 
 
 expect_identical(coef$term, sort(as.term(c("alpha", "beta1", "beta2", "beta3", "log_sAnnual"))))
 
+profile <- coef(analysis, profile = TRUE)
+
+expect_identical(colnames(profile), c("term", "estimate", "sd", "zscore", "lower", "upper", "pvalue"))
+
+expect_identical(profile[c("term", "estimate", "zscore")],
+                 coef[c("term", "estimate", "zscore")])
+
+expect_equal(coef$lower[coef$term == "log_sAnnual"], -2.838932, tolerance = 0.0000001)
+expect_equal(profile$lower[profile$term == "log_sAnnual"], -3.01573026)
+
 tidy <- tidy(analysis)
 expect_identical(colnames(tidy), c("term", "estimate", "lower", "upper"))
 

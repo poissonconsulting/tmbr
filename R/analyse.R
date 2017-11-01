@@ -137,7 +137,8 @@ tmb_analysis <- function(data, model, tempfile, glance, quiet) {
   obj %<>% c(inits = list(inits),
              logLik = logLik,
              mcmcr = list(mcmcr),
-             sd = list(sd))
+             sd = list(sd),
+             opt = list(opt))
 
   class(obj) <- c("tmb_ml_analysis", "tmb_analysis", "mb_analysis")
 

@@ -24,7 +24,6 @@ Demonstration
 library(magrittr)
 library(ggplot2)
 library(tmbr)
-#> Warning: package 'dplyr' was built under R version 3.4.2
 ```
 
 ``` r
@@ -92,13 +91,13 @@ analysis <- analyse(model, data = data)
 
 coef(analysis)
 #> # A tibble: 5 x 7
-#>          term    estimate         sd     zscore       lower      upper
-#>    <S3: term>       <dbl>      <dbl>      <dbl>       <dbl>      <dbl>
-#> 1       alpha  4.21204711 0.03885239 108.411527  4.13589782  4.2881964
-#> 2       beta1  1.19085200 0.06944561  17.147982  1.05474111  1.3269629
-#> 3       beta2  0.01719698 0.02984903   0.576132 -0.04130604  0.0757000
-#> 4       beta3 -0.27161560 0.03566621  -7.615488 -0.34152009 -0.2017111
-#> 5 log_sAnnual -2.30854794 0.27060756  -8.530981 -2.83892901 -1.7781669
+#>          term    estimate         sd      zscore       lower       upper
+#>    <S3: term>       <dbl>      <dbl>       <dbl>       <dbl>       <dbl>
+#> 1       alpha  4.26299018 0.03794731 112.3397262  4.18861482  4.33736553
+#> 2       beta1  1.19083194 0.06972240  17.0796180  1.05417855  1.32748533
+#> 3       beta2 -0.01765263 0.02888677  -0.6110972 -0.07426966  0.03896441
+#> 4       beta3 -0.27161541 0.03566616  -7.6154930 -0.34151980 -0.20171102
+#> 5 log_sAnnual -2.30854997 0.27060795  -8.5309762 -2.83893180 -1.77816813
 #> # ... with 1 more variables: pvalue <dbl>
 ```
 

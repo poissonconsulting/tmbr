@@ -1,7 +1,7 @@
 Package: tmbr
 Title: Analyses Using TMB
-Version: 0.0.0.9034
-Date: 2017-10-04
+Version: 0.0.0.9035
+Date: 2017-11-01
 Authors@R: person("Joe", "Thorley", email = "joe@poissonconsulting.ca", role = c("aut", "cre"))
 Description: Facilitates analyses using 'Template Model Builder'.
 License: MIT + file LICENSE
@@ -23,8 +23,10 @@ Imports:
     plyr,
     purrr,
     pryr,
+    rlang,
     rescale (>= 0.0.0.9003),
     stringr,
+    stats,
     tibble,
     timer (>= 0.0.1),
     TMB (>= 1.7.9)

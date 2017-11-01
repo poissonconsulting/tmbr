@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • tmbr</title>
+<title>Confint — confint.tmb_ml_analysis • tmbr</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -37,7 +37,7 @@
   </head>
 
   <body>
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -78,82 +78,48 @@
       </header>
 
       <div class="row">
-  <div class="col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>
-        Reference
-        <small>version&nbsp;0.0.0.9035</small>
-      </h1>
+    <h1>Confint</h1>
     </div>
 
-    <div class="contents">
-      <table class="ref-index">
+    
+    <p>Confint</p>
+    
 
-      <colgroup>
-        <col class="alias" />
-        <col class="title" />
-      </colgroup>
+    <pre class="usage"><span class='co'># S3 method for tmb_ml_analysis</span>
+<span class='fu'>confint</span>(<span class='no'>object</span>, <span class='kw'>parm</span> <span class='kw'>=</span> <span class='fu'>terms</span>(<span class='no'>object</span>),
+  <span class='kw'>level</span> <span class='kw'>=</span> <span class='fu'>getOption</span>(<span class='st'>"mb.conf_level"</span>, <span class='fl'>0.95</span>), <span class='no'>...</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>object</th>
+      <td><p>The tmb_ml_analysis object.</p></td>
+    </tr>
+    <tr>
+      <th>parm</th>
+      <td><p>A character vector of the <em>terms</em> to get the confidence interval for.</p></td>
+    </tr>
+    <tr>
+      <th>level</th>
+      <td><p>A number specifying the confidence level. By default 0.95.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Addtional arguments passed to TMB::tmbprofile</p></td>
+    </tr>
+    </table>
+    
 
-      <tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-            <p class="section-desc"></p>
-          </th>
-        </tr>
-        <tr>
-          <!--  -->
-          <td>
-            <p><code><a href="confint.tmb_ml_analysis.html">confint</a></code> </p>
-          </td>
-          <td><p>Confint</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="converged.tmb_ml_analysis.html">converged</a></code> </p>
-          </td>
-          <td><p>Is Converged</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="is.tmb_analysis.html">is.tmb_analysis</a></code> </p>
-          </td>
-          <td><p>Is a TMB Analysis</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="is.tmb_code.html">is.tmb_code</a></code> </p>
-          </td>
-          <td><p>Is a TMB Code</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="is.tmb_mcmc_analysis.html">is.tmb_mcmc_analysis</a></code> </p>
-          </td>
-          <td><p>Is a TMB MCMC Analysis</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="is.tmb_ml_analysis.html">is.tmb_ml_analysis</a></code> </p>
-          </td>
-          <td><p>Is a TMB ML Analysis</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="is.tmb_model.html">is.tmb_model</a></code> </p>
-          </td>
-          <td><p>Is a TMB Model</p></td>
-        </tr>
-      </tbody>
-      </table>
-    </div>
   </div>
-
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
-    </ul>
+      <li><a href="#arguments">Arguments</a></li>
+                </ul>
+
   </div>
 </div>
 

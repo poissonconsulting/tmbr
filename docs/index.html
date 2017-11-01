@@ -81,8 +81,7 @@ devtools::install_github("poissonconsulting/tmbr")</a></code></pre>
 <a href="#demonstration" class="anchor"></a>Demonstration</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(magrittr)
 <span class="kw">library</span>(ggplot2)
-<span class="kw">library</span>(tmbr)
-<span class="co">#&gt; Warning: package 'dplyr' was built under R version 3.4.2</span></code></pre></div>
+<span class="kw">library</span>(tmbr)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model &lt;-<span class="st"> </span><span class="kw">model</span>(<span class="st">"#include &lt;TMB.hpp&gt;</span>
 
 <span class="st">template&lt;class Type&gt;</span>
@@ -147,13 +146,13 @@ analysis &lt;-<span class="st"> </span><span class="kw">analyse</span>(model, <s
 
 <span class="kw">coef</span>(analysis)
 <span class="co">#&gt; # A tibble: 5 x 7</span>
-<span class="co">#&gt;          term    estimate         sd     zscore       lower      upper</span>
-<span class="co">#&gt;    &lt;S3: term&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;      &lt;dbl&gt;</span>
-<span class="co">#&gt; 1       alpha  4.21204711 0.03885239 108.411527  4.13589782  4.2881964</span>
-<span class="co">#&gt; 2       beta1  1.19085200 0.06944561  17.147982  1.05474111  1.3269629</span>
-<span class="co">#&gt; 3       beta2  0.01719698 0.02984903   0.576132 -0.04130604  0.0757000</span>
-<span class="co">#&gt; 4       beta3 -0.27161560 0.03566621  -7.615488 -0.34152009 -0.2017111</span>
-<span class="co">#&gt; 5 log_sAnnual -2.30854794 0.27060756  -8.530981 -2.83892901 -1.7781669</span>
+<span class="co">#&gt;          term    estimate         sd      zscore       lower       upper</span>
+<span class="co">#&gt;    &lt;S3: term&gt;       &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;</span>
+<span class="co">#&gt; 1       alpha  4.26299018 0.03794731 112.3397262  4.18861482  4.33736553</span>
+<span class="co">#&gt; 2       beta1  1.19083194 0.06972240  17.0796180  1.05417855  1.32748533</span>
+<span class="co">#&gt; 3       beta2 -0.01765263 0.02888677  -0.6110972 -0.07426966  0.03896441</span>
+<span class="co">#&gt; 4       beta3 -0.27161541 0.03566616  -7.6154930 -0.34151980 -0.20171102</span>
+<span class="co">#&gt; 5 log_sAnnual -2.30854997 0.27060795  -8.5309762 -2.83893180 -1.77816813</span>
 <span class="co">#&gt; # ... with 1 more variables: pvalue &lt;dbl&gt;</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">year &lt;-<span class="st"> </span><span class="kw">predict</span>(analysis, <span class="dt">new_data =</span> <span class="st">"Year"</span>)
 
