@@ -68,6 +68,8 @@ expect_identical(parameters(analysis), sort(c("alpha", "bAnnual", "beta1", "beta
 expect_identical(parameters(analysis, "primary"), sort(c("alpha", "bAnnual", "beta1", "beta2", "beta3", "log_sAnnual")))
 expect_error(parameters(analysis, "some"))
 
+expect_identical(nterms(analysis, "all"), 86L)
+
 expect_is(as.mcmcr(analysis), "mcmcr")
 expect_identical(nchains(analysis), 1L)
 expect_identical(niters(analysis), 1L)
