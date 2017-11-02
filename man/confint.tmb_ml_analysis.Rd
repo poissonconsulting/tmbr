@@ -5,7 +5,9 @@
 \title{Confint}
 \usage{
 \method{confint}{tmb_ml_analysis}(object, parm = terms(object),
-  level = getOption("mb.conf_level", 0.95), ...)
+  level = getOption("mb.conf_level", 0.95),
+  parallel = getOption("mb.parallel", FALSE), beep = getOption("mb.beep",
+  FALSE), ...)
 }
 \arguments{
 \item{object}{The tmb_ml_analysis object.}
@@ -13,6 +15,10 @@
 \item{parm}{A character vector of the \emph{terms} to get the confidence interval for.}
 
 \item{level}{A number specifying the confidence level. By default 0.95.}
+
+\item{parallel}{A flag indicating whether to using parallel backend provided by foreach.}
+
+\item{beep}{A flag indicating whether to beep on completion of the analysis.}
 
 \item{...}{Addtional arguments passed to TMB::tmbprofile}
 }

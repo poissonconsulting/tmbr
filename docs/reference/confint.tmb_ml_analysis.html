@@ -89,7 +89,9 @@
 
     <pre class="usage"><span class='co'># S3 method for tmb_ml_analysis</span>
 <span class='fu'>confint</span>(<span class='no'>object</span>, <span class='kw'>parm</span> <span class='kw'>=</span> <span class='fu'>terms</span>(<span class='no'>object</span>),
-  <span class='kw'>level</span> <span class='kw'>=</span> <span class='fu'>getOption</span>(<span class='st'>"mb.conf_level"</span>, <span class='fl'>0.95</span>), <span class='no'>...</span>)</pre>
+  <span class='kw'>level</span> <span class='kw'>=</span> <span class='fu'>getOption</span>(<span class='st'>"mb.conf_level"</span>, <span class='fl'>0.95</span>),
+  <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fu'>getOption</span>(<span class='st'>"mb.parallel"</span>, <span class='fl'>FALSE</span>), <span class='kw'>beep</span> <span class='kw'>=</span> <span class='fu'>getOption</span>(<span class='st'>"mb.beep"</span>,
+  <span class='fl'>FALSE</span>), <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -105,6 +107,14 @@
     <tr>
       <th>level</th>
       <td><p>A number specifying the confidence level. By default 0.95.</p></td>
+    </tr>
+    <tr>
+      <th>parallel</th>
+      <td><p>A flag indicating whether to using parallel backend provided by foreach.</p></td>
+    </tr>
+    <tr>
+      <th>beep</th>
+      <td><p>A flag indicating whether to beep on completion of the analysis.</p></td>
     </tr>
     <tr>
       <th>...</th>
