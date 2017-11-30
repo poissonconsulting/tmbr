@@ -91,7 +91,7 @@ expect_identical(colnames(coef), c("term", "estimate", "sd", "zscore", "lower", 
 
 expect_identical(coef$term, sort(as.term(c("alpha", "beta1", "beta2", "beta3", "log_sAnnual"))))
 
-profile <- coef(analysis, profile = TRUE)
+profile <- coef_profile(analysis, beep = FALSE)
 
 expect_identical(colnames(profile), c("term", "estimate", "sd", "zscore", "lower", "upper", "pvalue"))
 
