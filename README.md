@@ -9,15 +9,16 @@ Status](https://ci.appveyor.com/api/projects/status/github/poissonconsulting/tmb
 [![codecov](https://codecov.io/gh/poissonconsulting/smbr/branch/master/graph/badge.svg)](https://codecov.io/gh/poissonconsulting/smbr)
 [![License:
 MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/tmbr)](https://cran.r-project.org/package=tmbr)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1162374.svg)](https://doi.org/10.5281/zenodo.1162374)
 
 # tmbr
 
 ## Introduction
 
 `tmbr` (pronounced timber) is an R package to facilitate analyses using
-Template Model Builder (TMB). It is part of the
-[mbr](https://github.com/poissonconsulting/mbr) family of packages.
+Template Model Builder ([`TMB`](https://github.com/kaskr/adcomp)). It is
+part of the [mbr](https://github.com/poissonconsulting/mbr) family of
+packages.
 
 ## Installation
 
@@ -120,6 +121,27 @@ ggplot(data = year, aes(x = Year, y = estimate)) +
 
 ![](tools/README-unnamed-chunk-4-1.png)<!-- -->
 
+## Citation
+
+``` 
+
+To cite tmbr in publications use:
+
+  Joe Thorley (2018) tmbr: Analyses Using TMB. doi:
+  https://doi.org/10.5281/zenodo.1162374.
+
+A BibTeX entry for LaTeX users is
+
+  @Misc{,
+    author = {Joe Thorley},
+    year = {2018},
+    title = {tmbr: Analyses Using TMB},
+    doi = {https://doi.org/10.5281/zenodo.1162374},
+  }
+
+Please also cite TMB.
+```
+
 ## Contribution
 
 Please report any
@@ -131,11 +153,3 @@ always welcome.
 Please note that this project is released with a [Contributor Code of
 Conduct](CONDUCT.md). By participating in this project you agree to
 abide by its terms.
-
-## Inspiration
-
-  - [jaggernaut](https://github.com/poissonconsulting/jaggernaut)
-
-## Documentation
-
-  - [TMB](https://github.com/kaskr/adcomp)

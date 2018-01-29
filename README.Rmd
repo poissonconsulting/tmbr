@@ -17,13 +17,13 @@ knitr::opts_chunk$set(
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/poissonconsulting/tmbr?branch=master&svg=true)](https://ci.appveyor.com/project/poissonconsulting/tmbr)
 [![codecov](https://codecov.io/gh/poissonconsulting/smbr/branch/master/graph/badge.svg)](https://codecov.io/gh/poissonconsulting/smbr)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/tmbr)](https://cran.r-project.org/package=tmbr)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1162374.svg)](https://doi.org/10.5281/zenodo.1162374)
 
 # tmbr
 
 ## Introduction
 
-`tmbr` (pronounced timber) is an R package to facilitate analyses using Template Model Builder (TMB).
+`tmbr` (pronounced timber) is an R package to facilitate analyses using Template Model Builder ([`TMB`](https://github.com/kaskr/adcomp)).
 It is part of the [mbr](https://github.com/poissonconsulting/mbr) family of packages.
 
 ## Installation
@@ -110,6 +110,12 @@ ggplot(data = year, aes(x = Year, y = estimate)) +
   expand_limits(y = 0)
 ```
 
+## Citation
+
+```{r, comment="", echo=FALSE}
+citation(package = 'tmbr')
+```
+
 ## Contribution
 
 Please report any [issues](https://github.com/poissonconsulting/tmbr/issues).
@@ -117,11 +123,3 @@ Please report any [issues](https://github.com/poissonconsulting/tmbr/issues).
 [Pull requests](https://github.com/poissonconsulting/tmbr/pulls) are always welcome.
 
 Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
-
-## Inspiration
-
-- [jaggernaut](https://github.com/poissonconsulting/jaggernaut)
-
-## Documentation
-
-- [TMB](https://github.com/kaskr/adcomp)

@@ -256,6 +256,23 @@
   ],
   "contIntegration": "https://travis-ci.org/poissonconsulting/tmbr",
   "readme": "https://github.com/poissonconsulting/tmbr/blob/master/README.md",
-  "fileSize": "40.351KB",
-  "releaseNotes": "https://github.com/poissonconsulting/tmbr/blob/master/NEWS.md"
+  "fileSize": "40.667KB",
+  "releaseNotes": "https://github.com/poissonconsulting/tmbr/blob/master/NEWS.md",
+  "citation": [
+    {
+      "@type": "CreativeWork",
+      "datePublished": "2018",
+      "author": [
+        {
+          "@type": "Person",
+          "givenName": "Joe",
+          "familyName": "Thorley"
+        }
+      ],
+      "name": "tmbr: Analyses Using TMB",
+      "identifier": "https://doi.org/10.5281/zenodo.1162374",
+      "@id": "https://doi.org/10.5281/zenodo.1162374",
+      "sameAs": "https://doi.org/10.5281/zenodo.1162374"
+    }
+  ]
 }
