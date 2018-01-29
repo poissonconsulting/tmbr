@@ -1,8 +1,8 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-[![stability-unstable](https://img.shields.io/badge/stability-unstable-yellow.svg)](https://github.com/joethorley/stability-badges#unstable)[![Travis-CI
-Build
+[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![Travis-CI Build
 Status](https://travis-ci.org/poissonconsulting/tmbr.svg?branch=master)](https://travis-ci.org/poissonconsulting/tmbr)
 [![AppVeyor Build
 Status](https://ci.appveyor.com/api/projects/status/github/poissonconsulting/tmbr?branch=master&svg=true)](https://ci.appveyor.com/project/poissonconsulting/tmbr)
@@ -10,7 +10,8 @@ Status](https://ci.appveyor.com/api/projects/status/github/poissonconsulting/tmb
 [![License:
 MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/tmbr)](https://cran.r-project.org/package=tmbr)
-\# tmbr
+
+# tmbr
 
 ## Introduction
 
@@ -95,7 +96,7 @@ analysis <- analyse(model, data = data)
 #>       n     K logLik    IC converged
 #>   <int> <int>  <dbl> <dbl> <lgl>    
 #> 1    40     5   -154   321 T        
-#> Warning: 4 external pointers will be removed
+#> Warning: 6 external pointers will be removed
 
 coef(analysis)
 #> # A tibble: 5 x 7
