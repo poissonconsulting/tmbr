@@ -96,7 +96,7 @@ analysis <- analyse(model, data = data)
 #>       n     K logLik    IC converged
 #>   <int> <int>  <dbl> <dbl> <lgl>    
 #> 1    40     5   -154   321 T        
-#> Warning: 6 external pointers will be removed
+#> Warning: 4 external pointers will be removed
 
 coef(analysis)
 #> # A tibble: 5 x 7

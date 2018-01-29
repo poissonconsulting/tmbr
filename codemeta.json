@@ -1,5 +1,8 @@
 {
-  "@context": ["http://purl.org/codemeta/2.0", "http://schema.org"],
+  "@context": [
+    "http://purl.org/codemeta/2.0",
+    "http://schema.org"
+  ],
   "@type": "SoftwareSourceCode",
   "identifier": "tmbr",
   "description": "Facilitates analyses using 'Template Model Builder'.",
@@ -253,5 +256,6 @@
   ],
   "contIntegration": "https://travis-ci.org/poissonconsulting/tmbr",
   "readme": "https://github.com/poissonconsulting/tmbr/blob/master/README.md",
-  "fileSize": "40.439KB"
+  "fileSize": "40.351KB",
+  "releaseNotes": "https://github.com/poissonconsulting/tmbr/blob/master/NEWS.md"
 }
