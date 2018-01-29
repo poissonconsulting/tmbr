@@ -79,7 +79,7 @@ confint.tmb_ml_analysis <- function(object, parm = terms(object),
   beep <- FALSE
 
   check_vector(parm, "")
-  check_number(level, c(0.5, 0.99))
+  check_vector(level, c(0.5, 0.99), length = 1)
   check_flag(parallel)
 
   if(!all(parm %in% terms(object, "all"))) error("not all terms recognised")

@@ -1,24 +1,36 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-[![stability-unstable](https://img.shields.io/badge/stability-unstable-yellow.svg)](https://github.com/joethorley/stability-badges#unstable)[![Travis-CI Build Status](https://travis-ci.org/poissonconsulting/tmbr.svg?branch=master)](https://travis-ci.org/poissonconsulting/tmbr) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/poissonconsulting/tmbr?branch=master&svg=true)](https://ci.appveyor.com/project/poissonconsulting/tmbr) [![codecov](https://codecov.io/gh/poissonconsulting/smbr/branch/master/graph/badge.svg)](https://codecov.io/gh/poissonconsulting/smbr) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/tmbr)](https://cran.r-project.org/package=tmbr) \# tmbr
 
-Introduction
-------------
+[![stability-unstable](https://img.shields.io/badge/stability-unstable-yellow.svg)](https://github.com/joethorley/stability-badges#unstable)[![Travis-CI
+Build
+Status](https://travis-ci.org/poissonconsulting/tmbr.svg?branch=master)](https://travis-ci.org/poissonconsulting/tmbr)
+[![AppVeyor Build
+Status](https://ci.appveyor.com/api/projects/status/github/poissonconsulting/tmbr?branch=master&svg=true)](https://ci.appveyor.com/project/poissonconsulting/tmbr)
+[![codecov](https://codecov.io/gh/poissonconsulting/smbr/branch/master/graph/badge.svg)](https://codecov.io/gh/poissonconsulting/smbr)
+[![License:
+MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/tmbr)](https://cran.r-project.org/package=tmbr)
+\# tmbr
 
-`tmbr` (pronounced timber) is an R package to facilitate analyses using Template Model Builder (TMB). It is part of the [mbr](https://github.com/poissonconsulting/mbr) family of packages.
+## Introduction
 
-Installation
-------------
+`tmbr` (pronounced timber) is an R package to facilitate analyses using
+Template Model Builder (TMB). It is part of the
+[mbr](https://github.com/poissonconsulting/mbr) family of packages.
 
-Installation of TMB on Windows is currently proving [challenging](https://github.com/James-Thorson/2016_Spatio-temporal_models/issues/7). Until these issues are resolved `tmbr` is only supported on unix-based OSs.
+## Installation
+
+Installation of TMB on Windows is currently proving
+[challenging](https://github.com/James-Thorson/2016_Spatio-temporal_models/issues/7).
+Until these issues are resolved `tmbr` is only supported on unix-based
+OSs.
 
 To install from GitHub
 
     # install.packages("devtools")
     devtools::install_github("poissonconsulting/tmbr")
 
-Demonstration
--------------
+## Demonstration
 
 ``` r
 library(magrittr)
@@ -78,27 +90,22 @@ data <- bauw::peregrine
 data$Annual <- factor(data$Year)
 
 analysis <- analyse(model, data = data)
-#> Warning in checkMatrixPackageVersion(): Package version inconsistency detected.
-#> TMB was built with Matrix version 1.2.10
-#> Current Matrix version is 1.2.11
-#> Please re-install 'TMB' from source or restore original 'Matrix' package
 #> Note: Using Makevars in /Users/joe/.R/Makevars 
 #> # A tibble: 1 x 5
-#>       n     K    logLik       IC converged
-#>   <int> <int>     <dbl>    <dbl>     <lgl>
-#> 1    40     5 -154.4664 320.6974      TRUE
-#> Warning: 6 external pointers will be removed
+#>       n     K logLik    IC converged
+#>   <int> <int>  <dbl> <dbl> <lgl>    
+#> 1    40     5   -154   321 T        
+#> Warning: 4 external pointers will be removed
 
 coef(analysis)
 #> # A tibble: 5 x 7
-#>          term    estimate         sd      zscore       lower       upper
-#>    <S3: term>       <dbl>      <dbl>       <dbl>       <dbl>       <dbl>
-#> 1       alpha  4.26299018 0.03794731 112.3397262  4.18861482  4.33736553
-#> 2       beta1  1.19083194 0.06972240  17.0796180  1.05417855  1.32748533
-#> 3       beta2 -0.01765263 0.02888677  -0.6110972 -0.07426966  0.03896441
-#> 4       beta3 -0.27161541 0.03566616  -7.6154930 -0.34151980 -0.20171102
-#> 5 log_sAnnual -2.30854997 0.27060795  -8.5309762 -2.83893180 -1.77816813
-#> # ... with 1 more variables: pvalue <dbl>
+#>   term        estimate     sd   zscore   lower   upper              pvalue
+#>   <S3: term>     <dbl>  <dbl>    <dbl>   <dbl>   <dbl>               <dbl>
+#> 1 alpha         4.26   0.0379  112      4.19    4.34              0       
+#> 2 beta1         1.19   0.0697   17.1    1.05    1.33              2.10e⁻⁶⁵
+#> 3 beta2        -0.0177 0.0289 -  0.611 -0.0743  0.0390            5.41e⁻ ¹
+#> 4 beta3        -0.272  0.0357 -  7.62  -0.342  -0.202             2.63e⁻¹⁴
+#> 5 log_sAnnual  -2.31   0.271  -  8.53  -2.84   -1.78              1.45e⁻¹⁷
 ```
 
 ``` r
@@ -110,23 +117,24 @@ ggplot(data = year, aes(x = Year, y = estimate)) +
   expand_limits(y = 0)
 ```
 
-![](tools/README-unnamed-chunk-4-1.png)
+![](tools/README-unnamed-chunk-4-1.png)<!-- -->
 
-Contribution
-------------
+## Contribution
 
-Please report any [issues](https://github.com/poissonconsulting/tmbr/issues).
+Please report any
+[issues](https://github.com/poissonconsulting/tmbr/issues).
 
-[Pull requests](https://github.com/poissonconsulting/tmbr/pulls) are always welcome.
+[Pull requests](https://github.com/poissonconsulting/tmbr/pulls) are
+always welcome.
 
-Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
+Please note that this project is released with a [Contributor Code of
+Conduct](CONDUCT.md). By participating in this project you agree to
+abide by its terms.
 
-Inspiration
------------
+## Inspiration
 
--   [jaggernaut](https://github.com/poissonconsulting/jaggernaut)
+  - [jaggernaut](https://github.com/poissonconsulting/jaggernaut)
 
-Documentation
--------------
+## Documentation
 
--   [TMB](https://github.com/kaskr/adcomp)
+  - [TMB](https://github.com/kaskr/adcomp)

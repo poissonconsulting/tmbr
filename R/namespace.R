@@ -1,4 +1,4 @@
-#' @import datacheckr mcmcr mbr rlang stringr
+#' @import checkr mcmcr mbr rlang stringr
 #' @importFrom broom glance
 #' @importFrom coda thin
 #' @importFrom lubridate dminutes is.duration

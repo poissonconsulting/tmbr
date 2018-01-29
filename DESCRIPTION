@@ -1,7 +1,7 @@
 Package: tmbr
 Title: Analyses Using TMB
-Version: 0.0.0.9035
-Date: 2017-11-01
+Version: 0.0.1
+Date: 2018-01-29
 Authors@R: person("Joe", "Thorley", email = "joe@poissonconsulting.ca", role = c("aut", "cre"))
 Description: Facilitates analyses using 'Template Model Builder'.
 License: MIT + file LICENSE
@@ -15,7 +15,7 @@ Imports:
     beepr,
     coda,
     dplyr,
-    datacheckr (>= 0.2.0),
+    checkr,
     foreach,
     mcmcr (>= 0.0.0.9016),
     lubridate,
@@ -33,12 +33,7 @@ Imports:
 Suggests:
     bauw,
     testthat
-Remotes:
-    poissonconsulting/bauw,
-    poissonconsulting/mbr,
-    poissonconsulting/mcmcr,
-    poissonconsulting/rescale,
-    poissonconsulting/timer
+Additional_Repositories: http://poissonconsulting.github.io/drat
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
