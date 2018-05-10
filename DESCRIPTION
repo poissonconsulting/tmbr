@@ -1,14 +1,14 @@
 Package: tmbr
 Title: Analyses Using TMB
-Version: 0.0.1
-Date: 2018-01-29
+Version: 0.0.1.9001
+Date: 2018-05-09
 Authors@R: person("Joe", "Thorley", email = "joe@poissonconsulting.ca", role = c("aut", "cre"))
 Description: Facilitates analyses using 'Template Model Builder'.
 License: MIT + file LICENSE
 URL: https://github.com/poissonconsulting/tmbr
 BugReports: https://github.com/poissonconsulting/tmbr/issues
 Depends:
-    R (>= 3.3.1),
+    R (>= 3.4.0),
     broom,
     mbr (>= 0.0.0.9066)
 Imports:
@@ -17,7 +17,7 @@ Imports:
     dplyr,
     checkr,
     foreach,
-    mcmcr (>= 0.0.0.9016),
+    mcmcr,
     lubridate,
     magrittr,
     plyr,
@@ -29,7 +29,7 @@ Imports:
     stats,
     tibble,
     timer (>= 0.0.1),
-    TMB (>= 1.7.9)
+    TMB (>= 1.7.13)
 Suggests:
     bauw,
     testthat
