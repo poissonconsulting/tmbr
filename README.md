@@ -1,47 +1,32 @@
----
-output: github_document
----
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-
-
- [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
- [![Travis-CI Build Status](https://travis-ci.org/poissonconsulting/tmbr.svg?branch=master)](https://travis-ci.org/poissonconsulting/tmbr)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/poissonconsulting/tmbr?branch=master&svg=true)](https://ci.appveyor.com/project/poissonconsulting/tmbr)
+[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![Travis-CI Build
+Status](https://travis-ci.org/poissonconsulting/tmbr.svg?branch=master)](https://travis-ci.org/poissonconsulting/tmbr)
 [![codecov](https://codecov.io/gh/poissonconsulting/smbr/branch/master/graph/badge.svg)](https://codecov.io/gh/poissonconsulting/smbr)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![License:
+MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1162374.svg)](https://doi.org/10.5281/zenodo.1162374)
 
 # tmbr
 
 ## Introduction
 
-`tmbr` (pronounced timber) is an R package to facilitate analyses using Template Model Builder ([`TMB`](https://github.com/kaskr/adcomp)).
-It is part of the [mbr](https://github.com/poissonconsulting/mbr) family of packages.
-
-## Installation
-
-Installation of TMB on Windows is currently proving [challenging](https://github.com/James-Thorson/2016_Spatio-temporal_models/issues/7).
-Until these issues are resolved `tmbr` is only supported on unix-based OSs.
-
-To install from GitHub
-```
-# install.packages("devtools")
-devtools::install_github("poissonconsulting/tmbr")
-```
+`tmbr` (pronounced timber) is an R package to facilitate analyses using
+Template Model Builder ([`TMB`](https://github.com/kaskr/adcomp)). It is
+part of the [mbr](https://github.com/poissonconsulting/mbr) family of
+packages.
 
 ## Demonstration
 
-
-```r
+``` r
 library(magrittr)
 library(ggplot2)
 library(tmbr)
 ```
 
-
-```r
+``` r
 model <- model("#include <TMB.hpp>
 
 template<class Type>
@@ -110,8 +95,7 @@ coef(analysis)
 #> 5 log_sAnnual  -2.31   0.271    -8.53  -2.84   -1.78   1.45e-17
 ```
 
-
-```r
+``` r
 year <- predict(analysis, new_data = "Year")
 
 ggplot(data = year, aes(x = Year, y = estimate)) +
@@ -120,12 +104,25 @@ ggplot(data = year, aes(x = Year, y = estimate)) +
   expand_limits(y = 0)
 ```
 
-![plot of chunk unnamed-chunk-4](tools/README-unnamed-chunk-4-1.png)
+![](tools/README-unnamed-chunk-4-1.png)<!-- -->
+
+## Installation
+
+To install from GitHub
+
+    install.packages("devtools")
+    devtools::install_github("poissonconsulting/jmbr")
+
+or the Poisson [drat](https://github.com/poissonconsulting/drat)
+repository
+
+    install.packages("drat")
+    drat::addRepo("poissonconsulting")
+    install.packages("jmbr")
 
 ## Citation
 
-
-```
+``` 
 
 To cite tmbr in publications use:
 
@@ -146,8 +143,12 @@ Please also cite TMB.
 
 ## Contribution
 
-Please report any [issues](https://github.com/poissonconsulting/tmbr/issues).
+Please report any
+[issues](https://github.com/poissonconsulting/tmbr/issues).
 
-[Pull requests](https://github.com/poissonconsulting/tmbr/pulls) are always welcome.
+[Pull requests](https://github.com/poissonconsulting/tmbr/pulls) are
+always welcome.
 
-Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
+Please note that this project is released with a [Contributor Code of
+Conduct](CONDUCT.md). By participating in this project you agree to
+abide by its terms.

@@ -6,8 +6,8 @@
 \usage{
 \method{confint}{tmb_ml_analysis}(object, parm = terms(object),
   level = getOption("mb.conf_level", 0.95),
-  parallel = getOption("mb.parallel", FALSE), beep = getOption("mb.beep",
-  FALSE), ...)
+  parallel = getOption("mb.parallel", FALSE),
+  beep = getOption("mb.beep", FALSE), ...)
 }
 \arguments{
 \item{object}{The tmb_ml_analysis object.}

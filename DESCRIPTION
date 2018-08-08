@@ -1,7 +1,7 @@
 Package: tmbr
 Title: Analyses Using TMB
-Version: 0.0.1.9001
-Date: 2018-05-09
+Version: 0.0.1.9002
+Date: 2018-08-08
 Authors@R: person("Joe", "Thorley", email = "joe@poissonconsulting.ca", role = c("aut", "cre"))
 Description: Facilitates analyses using 'Template Model Builder'.
 License: MIT + file LICENSE
@@ -36,4 +36,4 @@ Suggests:
 Additional_Repositories: http://poissonconsulting.github.io/drat
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0

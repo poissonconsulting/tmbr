@@ -12,9 +12,8 @@ knitr::opts_chunk$set(
 )
 ```
 
- [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
- [![Travis-CI Build Status](https://travis-ci.org/poissonconsulting/tmbr.svg?branch=master)](https://travis-ci.org/poissonconsulting/tmbr)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/poissonconsulting/tmbr?branch=master&svg=true)](https://ci.appveyor.com/project/poissonconsulting/tmbr)
+[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![Travis-CI Build Status](https://travis-ci.org/poissonconsulting/tmbr.svg?branch=master)](https://travis-ci.org/poissonconsulting/tmbr)
 [![codecov](https://codecov.io/gh/poissonconsulting/smbr/branch/master/graph/badge.svg)](https://codecov.io/gh/poissonconsulting/smbr)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1162374.svg)](https://doi.org/10.5281/zenodo.1162374)
@@ -25,17 +24,6 @@ knitr::opts_chunk$set(
 
 `tmbr` (pronounced timber) is an R package to facilitate analyses using Template Model Builder ([`TMB`](https://github.com/kaskr/adcomp)).
 It is part of the [mbr](https://github.com/poissonconsulting/mbr) family of packages.
-
-## Installation
-
-Installation of TMB on Windows is currently proving [challenging](https://github.com/James-Thorson/2016_Spatio-temporal_models/issues/7).
-Until these issues are resolved `tmbr` is only supported on unix-based OSs.
-
-To install from GitHub
-```
-# install.packages("devtools")
-devtools::install_github("poissonconsulting/tmbr")
-```
 
 ## Demonstration
 
@@ -110,6 +98,21 @@ ggplot(data = year, aes(x = Year, y = estimate)) +
   expand_limits(y = 0)
 ```
 
+## Installation
+
+To install from GitHub
+```
+install.packages("devtools")
+devtools::install_github("poissonconsulting/jmbr")
+```
+
+or the Poisson [drat](https://github.com/poissonconsulting/drat) repository
+
+```
+install.packages("drat")
+drat::addRepo("poissonconsulting")
+install.packages("jmbr")
+```
 ## Citation
 
 ```{r, comment="", echo=FALSE}
