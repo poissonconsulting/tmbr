@@ -28,12 +28,25 @@ Imports:
     stringr,
     stats,
     tibble,
+    term,
     timer (>= 0.0.1),
     TMB (>= 1.7.13)
 Suggests:
     bauw,
     testthat
-Additional_Repositories: http://poissonconsulting.github.io/drat
+Remotes: 
+    poissonconsulting/err,
+    poissonconsulting/checkr,
+    poissonconsulting/mcmcr,
+    poissonconsulting/mcmcdata,
+    poissonconsulting/mcmcderive,
+    poissonconsulting/newdata,
+    poissonconsulting/rescale,
+    poissonconsulting/timer,
+    poissonconsulting/term,
+    poissonconsulting/nlist,
+    poissonconsulting/mbr,
+    poissonconsulting/bauw
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
