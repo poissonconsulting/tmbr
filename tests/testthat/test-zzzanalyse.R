@@ -54,19 +54,19 @@ model <- model(tmb_template, gen_inits = gen_inits,
                random_effects = list(bAnnual = "Annual"),
                new_expr = new_expr)
 
-expect_identical(parameters(model$derived), c("ePairs","sAnnual"))
+expect_identical(pars(as.term(model$derived)), c("ePairs","sAnnual"))
 
 analysis <- analyse(model, data = data, glance = FALSE, beep = FALSE)
 
 expect_identical(terms(analysis, "fixed", include_constant = FALSE), as.term(sort(c("alpha", "beta1", "beta2", "beta3", "log_sAnnual"))))
 
-expect_identical(parameters(analysis, "fixed"), sort(c("alpha", "beta1", "beta2", "beta3", "log_sAnnual")))
-expect_identical(parameters(analysis, "random"), "bAnnual")
+expect_identical(pars(analysis, "fixed"), sort(c("alpha", "beta1", "beta2", "beta3", "log_sAnnual")))
+expect_identical(pars(analysis, "random"), "bAnnual")
 
 # not including derived parameters....
-expect_identical(parameters(analysis), sort(c("alpha", "bAnnual", "beta1", "beta2", "beta3", "ePairs", "log_sAnnual", "sAnnual")))
-expect_identical(parameters(analysis, "primary"), sort(c("alpha", "bAnnual", "beta1", "beta2", "beta3", "log_sAnnual")))
-expect_error(parameters(analysis, "some"))
+expect_identical(pars(analysis), sort(c("alpha", "bAnnual", "beta1", "beta2", "beta3", "ePairs", "log_sAnnual", "sAnnual")))
+expect_identical(pars(analysis, "primary"), sort(c("alpha", "bAnnual", "beta1", "beta2", "beta3", "log_sAnnual")))
+expect_error(pars(analysis, "some"))
 
 expect_identical(nterms(analysis, "all"), 86L)
 

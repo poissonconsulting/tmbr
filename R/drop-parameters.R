@@ -1,13 +1,13 @@
 #' @export
-drop_parameters.tmb_code <- function(x, parameters = character(0), ...) {
-  check_vector(parameters, "")
-  check_unique(parameters)
+drop_pars.tmb_code <- function(x, pars = character(0), ...) {
+  check_vector(pars, "")
+  check_unique(pars)
 
-  if (!length(parameters)) return(x)
+  if (!length(pars)) return(x)
 
   template <- template(x)
 
-  for (parameter in parameters) {
+  for (parameter in pars) {
     if (!str_detect(template, str_c("PARAMETER[(]", parameter, "[)]")))
       error("fixed scalar parameter '", parameter, "' not found in model code")
     template %<>% str_replace(str_c("PARAMETER[(]", parameter, "[)]"),

@@ -1,5 +1,5 @@
-parameters_arg2to1 <- function(param_type, x, scalar_only, ...) {
-  parameters(x = x, param_type = param_type, scalar_only = scalar_only, ...)
+pars_arg2to1 <- function(param_type, x, scalar_only, ...) {
+  pars(x = x, param_type = param_type, scalar_only = scalar_only, ...)
 }
 
 #' @export
@@ -15,14 +15,14 @@ pars.tmb_code <- function(x, param_type = "all", scalar_only = FALSE, ...) {
     error("parameters.tmb is not currently able to identify scalar 'derived' parameter types - set scalar_only = FALSE instead")
 
   if (param_type == "all") {
-    parameters <- c("primary", "derived")
+    pars <- c("primary", "derived")
 
-    parameters %<>%
-      purrr::map(parameters_arg2to1, x = x, scalar_only = scalar_only, ...) %>%
+    pars %<>%
+      purrr::map(pars_arg2to1, x = x, scalar_only = scalar_only, ...) %>%
       unlist() %>%
       sort()
 
-    return(parameters)
+    return(pars)
   }
 
   x %<>% template() %>% str_replace_all(" ", "")

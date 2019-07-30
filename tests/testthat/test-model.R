@@ -60,19 +60,19 @@ test_that("analyse", {
                 return nll;
                 }"
 
-  expect_identical(parameters(mb_code(template), "primary"),
+  expect_identical(pars(mb_code(template), "primary"),
                    c("bAdultsInitial", "bDisturbance", "bHunterDays", "bPDO", "bSurvival",
                      "bYearlingsInitial", "log_sMales"))
 
-  expect_identical(parameters(mb_code(template), "derived"),
+  expect_identical(pars(mb_code(template), "derived"),
                    "sMales")
 
-  expect_identical(parameters(mb_code(template), "all"),
+  expect_identical(pars(mb_code(template), "all"),
                    c("bAdultsInitial", "bDisturbance", "bHunterDays", "bPDO", "bSurvival",
                      "bYearlingsInitial", "log_sMales", "sMales"))
 
-  expect_error(parameters(mb_code(template), "adreport"))
-  expect_error(parameters(mb_code(template), "report"))
+  expect_error(pars(mb_code(template), "adreport"))
+  expect_error(pars(mb_code(template), "report"))
 
   gen_inits <- function(data) {
     inits <- list()

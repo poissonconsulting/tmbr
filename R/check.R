@@ -1,23 +1,23 @@
 #' @export
-check_model_parameters.tmb_code <- function(x, fixed, random, derived, drops) {
+check_model_pars.tmb_code <- function(x, fixed, random, derived, drops) {
   check_string(fixed)
   checkor(check_null(random), check_vector(random, character(0)))
   checkor(check_null(derived), check_vector(derived, character(0)))
   checkor(check_null(drops), check_vector(drops, character(0)))
 
-  if (!any(str_detect(parameters(x, param_type = "primary"), fixed)))
+  if (!any(str_detect(pars(x, param_type = "primary"), fixed)))
     error("fixed does not match any primary code parameters")
 
-  if (length(random) && !all(random %in% parameters(x, param_type = "primary")))
+  if (length(random) && !all(random %in% pars(x, param_type = "primary")))
     error("random effects parameters missing from primary code parameters")
 
-  if (length(derived) && !all(derived %in% parameters(x, param_type = "derived")))
+  if (length(derived) && !all(derived %in% pars(x, param_type = "derived")))
     error("derived parameters missing from derived code parameters")
 
-  if (length(drops) && !all(unlist(drops) %in% parameters(x, param_type = "primary", scalar_only = TRUE)))
-    error("drops parameters missing from primary scalar code parameters")
+  if (length(drops) && !all(unlist(drops) %in% pars(x, param_type = "primary", scalar_only = TRUE)))
+    error("drops parameters missing from primary scalar code pars")
 
-  parameters(x, param_type = "derived")
+  pars(x, param_type = "derived")
 }
 
 check_data_model <- function(data, model) {
