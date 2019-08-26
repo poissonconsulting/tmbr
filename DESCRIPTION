@@ -13,6 +13,7 @@ Depends:
     mbr (>= 0.0.0.9066)
 Imports:
     beepr,
+    chk,
     coda,
     dplyr,
     checkr,
@@ -35,6 +36,7 @@ Suggests:
     bauw,
     testthat
 Remotes: 
+    poissonconsulting/chk,
     poissonconsulting/err,
     poissonconsulting/checkr,
     poissonconsulting/mcmcr,
