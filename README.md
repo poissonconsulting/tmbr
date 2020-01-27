@@ -3,7 +3,7 @@
 
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![Travis-CI Build
-Status](https://travis-ci.org/poissonconsulting/tmbr.svg?branch=master)](https://travis-ci.org/poissonconsulting/tmbr)
+Status](https://travis-ci.com/poissonconsulting/tmbr.svg?branch=master)](https://travis-ci.com/poissonconsulting/tmbr)
 [![codecov](https://codecov.io/gh/poissonconsulting/smbr/branch/master/graph/badge.svg)](https://codecov.io/gh/poissonconsulting/smbr)
 [![License:
 MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
@@ -86,17 +86,21 @@ analysis <- analyse(model, data = data)
 
 coef(analysis)
 #> # A tibble: 5 x 7
-#>   term        estimate     sd   zscore   lower   upper   pvalue
-#>   <S3: term>     <dbl>  <dbl>    <dbl>   <dbl>   <dbl>    <dbl>
-#> 1 alpha         4.26   0.0379  112.     4.19    4.34   0.      
-#> 2 beta1         1.19   0.0697   17.1    1.05    1.33   2.10e-65
-#> 3 beta2        -0.0177 0.0289   -0.611 -0.0743  0.0390 5.41e- 1
-#> 4 beta3        -0.272  0.0357   -7.62  -0.342  -0.202  2.63e-14
-#> 5 log_sAnnual  -2.31   0.271    -8.53  -2.84   -1.78   1.45e-17
+#>   term        estimate     sd  zscore   lower   upper   pvalue
+#>   <term>         <dbl>  <dbl>   <dbl>   <dbl>   <dbl>    <dbl>
+#> 1 alpha         4.26   0.0379 112.     4.19    4.34   0.      
+#> 2 beta1         1.19   0.0697  17.1    1.05    1.33   2.10e-65
+#> 3 beta2        -0.0177 0.0289  -0.611 -0.0743  0.0390 5.41e- 1
+#> 4 beta3        -0.272  0.0357  -7.62  -0.342  -0.202  2.63e-14
+#> 5 log_sAnnual  -2.31   0.271   -8.53  -2.84   -1.78   1.45e-17
 ```
 
 ``` r
 year <- predict(analysis, new_data = "Year")
+#> Warning: The following variables were not in expr and so were dropped from
+#> values: 'nAnnual' and 'nObs'.
+#> Warning: The following parameters were not in expr and so were dropped from
+#> object: 'log_sAnnual', 'sAnnual'.
 
 ggplot(data = year, aes(x = Year, y = estimate)) +
   geom_point(data = bauw::peregrine, aes(y = Pairs)) +
