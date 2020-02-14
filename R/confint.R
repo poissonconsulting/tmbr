@@ -78,7 +78,6 @@ confint.tmb_ml_analysis <- function(object, parm = terms(object),
   if (beep) on.exit(beepr::beep())
   beep <- FALSE
 
-  check_vector(parm, "")
   check_vector(level, c(0.5, 0.99), length = 1)
   check_flag(parallel)
 
