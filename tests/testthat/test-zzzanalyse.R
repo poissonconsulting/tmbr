@@ -54,11 +54,11 @@ model <- model(tmb_template, gen_inits = gen_inits,
                random_effects = list(bAnnual = "Annual"),
                new_expr = new_expr)
 
-expect_identical(pars(as.term(model$derived)), c("ePairs","sAnnual"))
+expect_identical(pars(as_term(model$derived)), c("ePairs","sAnnual"))
 
 analysis <- analyse(model, data = data, glance = FALSE, beep = FALSE)
 
-expect_identical(terms(analysis, "fixed", include_constant = FALSE), as.term(sort(c("alpha", "beta1", "beta2", "beta3", "log_sAnnual"))))
+expect_identical(terms(analysis, "fixed", include_constant = FALSE), as_term(sort(c("alpha", "beta1", "beta2", "beta3", "log_sAnnual"))))
 
 expect_identical(pars(analysis, "fixed"), sort(c("alpha", "beta1", "beta2", "beta3", "log_sAnnual")))
 expect_identical(pars(analysis, "random"), "bAnnual")
@@ -89,7 +89,7 @@ expect_is(coef, "tbl")
 expect_is(coef, "mb_analysis_coef")
 expect_identical(colnames(coef), c("term", "estimate", "sd", "zscore", "lower", "upper", "pvalue"))
 
-expect_identical(coef$term, sort(as.term(c("alpha", "beta1", "beta2", "beta3", "log_sAnnual"))))
+expect_identical(coef$term, sort(as_term(c("alpha", "beta1", "beta2", "beta3", "log_sAnnual"))))
 
 profile <- coef_profile(analysis, beep = FALSE)
 

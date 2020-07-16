@@ -26,7 +26,7 @@ adfun_confint <- function(terms, object, tempfile, level, ...) {
   opt <- try(do.call("optim", ad_fun))
 
   confint <- purrr::map_df(terms, profile_confint, ad_fun, level = level, ...)
-  confint$term %<>% as.term()
+  confint$term %<>% as_term()
   confint
 }
 
@@ -53,7 +53,7 @@ adfun_confint_parallel <- function(terms, object, level, ...) {
                    object = object, level = level, ...)
 
   terms %<>% dplyr::bind_rows()
-  terms$term %<>% as.term()
+  terms$term %<>% as_term()
 
   terms
 }
