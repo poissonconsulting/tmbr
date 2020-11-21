@@ -93,10 +93,10 @@ expect_identical(coef$term, sort(as_term(c("alpha", "beta1", "beta2", "beta3", "
 
 profile <- coef_profile(analysis, beep = FALSE)
 
-expect_identical(colnames(profile), c("term", "estimate", "sd", "zscore", "lower", "upper", "pvalue"))
+expect_identical(colnames(profile), c("term", "estimate", "lower", "upper", "svalue"))
 
-expect_identical(profile[c("term", "estimate", "zscore")],
-                 coef[c("term", "estimate", "zscore")])
+expect_identical(profile[c("term", "estimate")],
+                 coef[c("term", "estimate")])
 
 expect_equal(coef$lower[coef$term == "log_sAnnual"], -2.838932, tolerance = 0.0000001)
 expect_equal(profile$lower[profile$term == "log_sAnnual"], -3.01573026)

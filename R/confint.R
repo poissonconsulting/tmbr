@@ -1,12 +1,9 @@
 profile_confint <- function(term, ad_fun, level = level, ...) {
   confint <- TMB::tmbprofile(ad_fun, term, trace = FALSE, ...) %>%
     confint(level = level) %>%
-    tibble::as_data_frame()
+    tibble::as_tibble()
   confint$term <- term
-  confint %<>% dplyr::select(UQ(parse_quosure("term")),
-                             UQ(parse_quosure("lower")),
-                             UQ(parse_quosure("upper")))
-  confint
+  confint[c("term", "lower", "upper")]
 }
 
 adfun_confint <- function(terms, object, tempfile, level, ...) {
