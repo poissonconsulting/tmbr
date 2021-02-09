@@ -1,13 +1,16 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
-[![Travis-CI Build
-Status](https://travis-ci.com/poissonconsulting/tmbr.svg?branch=master)](https://travis-ci.com/poissonconsulting/tmbr)
-[![codecov](https://codecov.io/gh/poissonconsulting/smbr/branch/master/graph/badge.svg)](https://codecov.io/gh/poissonconsulting/smbr)
+<!-- badges: start --> [![Lifecycle:
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+[![R build
+status](https://github.com/poissonconsulting/tmbr/workflows/R-CMD-check/badge.svg)](https://github.com/poissonconsulting/tmbr/actions)
+[![Codecov test
+coverage](https://codecov.io/gh/poissonconsulting/tmbr/branch/master/graph/badge.svg)](https://codecov.io/gh/poissonconsulting/tmbr?branch=master)
 [![License:
 MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1162374.svg)](https://doi.org/10.5281/zenodo.1162374)
+<!-- badges: end -->
 
 # tmbr
 
@@ -24,6 +27,8 @@ packages.
 library(magrittr)
 library(ggplot2)
 library(tmbr)
+#> Warning: replacing previous import 'extras::as_list' by 'rlang::as_list' when
+#> loading 'tmbr'
 ```
 
 ``` r
@@ -78,6 +83,9 @@ data <- bauw::peregrine
 data$Annual <- factor(data$Year)
 
 analysis <- analyse(model, data = data)
+#> Warning: The `simplify` argument of `coef()` must be TRUE as of mcmcr 0.4.1.
+#> This warning is displayed once every 8 hours.
+#> Call `lifecycle::last_warnings()` to see where this warning was generated.
 #> # A tibble: 1 x 5
 #>       n     K logLik    IC converged
 #>   <int> <int>  <dbl> <dbl> <lgl>    
@@ -97,10 +105,6 @@ coef(analysis)
 
 ``` r
 year <- predict(analysis, new_data = "Year")
-#> Warning: The following variables were not in expr and so were dropped from
-#> values: 'nAnnual' and 'nObs'.
-#> Warning: The following parameters were not in expr and so were dropped from
-#> object: 'log_sAnnual', 'sAnnual'.
 
 ggplot(data = year, aes(x = Year, y = estimate)) +
   geom_point(data = bauw::peregrine, aes(y = Pairs)) +
@@ -126,24 +130,22 @@ repository
 
 ## Citation
 
-``` 
 
-To cite tmbr in publications use:
+    To cite tmbr in publications use:
 
-  Joe Thorley (2018) tmbr: Analyses Using TMB. doi:
-  https://doi.org/10.5281/zenodo.1162374.
+      Joe Thorley (2018) tmbr: Analyses Using TMB. doi:
+      https://doi.org/10.5281/zenodo.1162374.
 
-A BibTeX entry for LaTeX users is
+    A BibTeX entry for LaTeX users is
 
-  @Misc{,
-    author = {Joe Thorley},
-    year = {2018},
-    title = {tmbr: Analyses Using TMB},
-    doi = {https://doi.org/10.5281/zenodo.1162374},
-  }
+      @Misc{,
+        author = {Joe Thorley},
+        year = {2018},
+        title = {tmbr: Analyses Using TMB},
+        doi = {https://doi.org/10.5281/zenodo.1162374},
+      }
 
-Please also cite TMB.
-```
+    Please also cite TMB.
 
 ## Contribution
 
@@ -153,6 +155,9 @@ Please report any
 [Pull requests](https://github.com/poissonconsulting/tmbr/pulls) are
 always welcome.
 
-Please note that this project is released with a [Contributor Code of
-Conduct](CONDUCT.md). By participating in this project you agree to
-abide by its terms.
+## Code of Conduct
+
+Please note that the tmbr project is released with a [Contributor Code
+of
+Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms.
