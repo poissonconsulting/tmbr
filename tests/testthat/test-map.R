@@ -1,5 +1,3 @@
-context("map")
-
 test_that("map", {
   expect_identical(map(list()), list())
   expect_identical(map(list(x = c(1,2))), list())

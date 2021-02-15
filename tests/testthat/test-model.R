@@ -1,5 +1,3 @@
-context("analyse")
-
 test_that("analyse", {
 
   template <- "
