@@ -1,7 +1,8 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+<!-- badges: start -->
 
-<!-- badges: start --> [![Lifecycle:
+[![Lifecycle:
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![R build
 status](https://github.com/poissonconsulting/tmbr/workflows/R-CMD-check/badge.svg)](https://github.com/poissonconsulting/tmbr/actions)
@@ -84,8 +85,6 @@ data$Annual <- factor(data$Year)
 
 analysis <- analyse(model, data = data)
 #> Warning: The `simplify` argument of `coef()` must be TRUE as of mcmcr 0.4.1.
-#> This warning is displayed once every 8 hours.
-#> Call `lifecycle::last_warnings()` to see where this warning was generated.
 #> # A tibble: 1 x 5
 #>       n     K logLik    IC converged
 #>   <int> <int>  <dbl> <dbl> <lgl>    
@@ -119,14 +118,14 @@ ggplot(data = year, aes(x = Year, y = estimate)) +
 To install from GitHub
 
     install.packages("devtools")
-    devtools::install_github("poissonconsulting/jmbr")
+    devtools::install_github("poissonconsulting/tmbr")
 
 or the Poisson [drat](https://github.com/poissonconsulting/drat)
 repository
 
     install.packages("drat")
     drat::addRepo("poissonconsulting")
-    install.packages("jmbr")
+    install.packages("tmbr")
 
 ## Citation
 
