@@ -1,9 +1,9 @@
 #' @export
 check_model_pars.tmb_code <- function(x, fixed, random, derived, drops) {
-  check_string(fixed)
-  checkor(check_null(random), check_vector(random, character(0)))
-  checkor(check_null(derived), check_vector(derived, character(0)))
-  checkor(check_null(drops), check_vector(drops, character(0)))
+  chk_string(fixed)
+  chkor(chk_null(random), chk_vector(random, character(0)))
+  chkor(chk_null(derived), chk_vector(derived, character(0)))
+  chkor(chk_null(drops), chk_vector(drops, character(0)))
 
   if (!any(str_detect(pars(x, param_type = "primary"), fixed)))
     error("fixed does not match any primary code parameters")

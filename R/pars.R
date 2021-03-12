@@ -4,8 +4,8 @@ pars_arg2to1 <- function(param_type, x, scalar, ...) {
 
 #' @export
 pars.tmb_code <- function(x, param_type = "all", scalar = NA, ...) {
-  check_vector(param_type, c("fixed", "random", "derived", "primary", "all"),
-               length = 1)
+  chk_string(param_type)
+  chk_subset(param_type, c("fixed", "random", "derived", "primary", "all"))
   chk_lgl(scalar)
   chk_unused(...)
 

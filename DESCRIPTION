@@ -15,7 +15,6 @@ Imports:
     coda,
     generics,
     dplyr,
-    checkr,
     foreach,
     mcmcr,
     lubridate,
