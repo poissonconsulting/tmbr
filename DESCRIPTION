@@ -39,7 +39,6 @@ Suggests:
 Remotes: 
     poissonconsulting/chk,
     poissonconsulting/err,
-    poissonconsulting/checkr,
     poissonconsulting/mcmcr,
     poissonconsulting/mcmcdata,
     poissonconsulting/mcmcderive,

@@ -75,6 +75,7 @@ confint.tmb_ml_analysis <- function(object, parm = terms(object),
   if (beep) on.exit(beepr::beep())
   beep <- FALSE
 
+  chk_scalar(level)
   chk_vector(level, c(0.5, 0.99))
   chk_flag(parallel)
 
