@@ -1,5 +1,4 @@
-#' @import checkr universals extras mcmcr mbr rlang stringr term
-#' @importFrom chk chk_lgl chk_unused
+#' @import chk universals mcmcr mbr rlang stringr term
 #' @importFrom coda thin
 #' @importFrom lubridate dminutes is.duration
 #' @importFrom magrittr %<>% %>%

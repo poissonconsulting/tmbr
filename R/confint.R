@@ -71,12 +71,13 @@ confint.tmb_ml_analysis <- function(object, parm = terms(object),
                                     beep = getOption("mb.beep", FALSE),
                                     ...) {
 
-  check_flag(beep)
+  chk_flag(beep)
   if (beep) on.exit(beepr::beep())
   beep <- FALSE
 
-  check_vector(level, c(0.5, 0.99), length = 1)
-  check_flag(parallel)
+  chk_scalar(level)
+  chk_vector(level, c(0.5, 0.99))
+  chk_flag(parallel)
 
   if(!all(parm %in% terms(object, "all"))) error("not all terms recognised")
 

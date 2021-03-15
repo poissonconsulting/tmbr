@@ -1,7 +1,7 @@
 #' @export
 drop_pars.tmb_code <- function(x, pars = character(0), ...) {
-  check_vector(pars, "")
-  check_unique(pars)
+  chk_vector(pars, "")
+  chk_unique(pars)
 
   if (!length(pars)) return(x)
 

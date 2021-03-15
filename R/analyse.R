@@ -197,7 +197,7 @@ analyse.tmb_model <- function(x, data,
                               glance = getOption("mb.glance", TRUE),
                               beep = getOption("mb.beep", TRUE),
                               ...) {
-  check_flag(beep)
+  chk_flag(beep)
   if (beep) on.exit(beepr::beep())
 
   if (is.data.frame(data)) {
@@ -206,9 +206,9 @@ analyse.tmb_model <- function(x, data,
     llply(data, check_data)
   } else error("data must be a data.frame or a list of data.frames")
 
-  check_flag(parallel)
-  check_flag(quiet)
-  check_flag(glance)
+  chk_flag(parallel)
+  chk_flag(quiet)
+  chk_flag(glance)
 
   check_data_model(data, x)
 
