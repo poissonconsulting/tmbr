@@ -1,56 +1,52 @@
 Package: tmbr
 Title: Analyses Using TMB
 Version: 0.0.1.9003
-Authors@R: person("Joe", "Thorley", email = "joe@poissonconsulting.ca", role = c("aut", "cre"))
+Authors@R: 
+    person(given = "Joe",
+           family = "Thorley",
+           role = c("aut", "cre"),
+           email = "joe@poissonconsulting.ca")
 Description: Facilitates analyses using 'Template Model Builder'.
 License: MIT + file LICENSE
 URL: https://github.com/poissonconsulting/tmbr
 BugReports: https://github.com/poissonconsulting/tmbr/issues
 Depends:
-    R (>= 3.4.0),
-    mbr (>= 0.0.1.9027)
+    R (>= 4.0)
 Imports:
     beepr,
     chk,
     coda,
-    generics,
     dplyr,
     foreach,
-    mcmcr,
+    generics,
     lubridate,
     magrittr,
+    mbr,
+    mcmcr,
     plyr,
-    purrr,
     pryr,
+    purrr,
+    rescale,
     rlang,
-    rescale (>= 0.0.0.9003),
-    stringr,
     stats,
-    tibble,
+    stringr,
     term,
-    timer (>= 0.0.1),
+    tibble,
+    timer,
     TMB (>= 1.7.13),
     universals
 Suggests:
     bauw,
-    testthat,
     covr,
-    extras
+    extras,
+    testthat
 Remotes: 
-    poissonconsulting/chk,
-    poissonconsulting/err,
-    poissonconsulting/mcmcr,
+    poissonconsulting/bauw,
+    poissonconsulting/mbr,
     poissonconsulting/mcmcdata,
-    poissonconsulting/mcmcderive,
     poissonconsulting/newdata,
     poissonconsulting/rescale,
-    poissonconsulting/timer,
-    poissonconsulting/term,
-    poissonconsulting/nlist,
-    poissonconsulting/mbr,
-    poissonconsulting/universals,
-    poissonconsulting/bauw,
-    poissonconsulting/extras
+    poissonconsulting/timer
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
