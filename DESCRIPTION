@@ -26,6 +26,7 @@ Imports:
     plyr,
     pryr,
     purrr,
+    RcppEigen,
     rescale,
     rlang,
     stats,
