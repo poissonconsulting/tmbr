@@ -68,11 +68,11 @@ adreport <- function(ad_fun, sd) {
 
   sum$parameter <- str_replace(sum$parameter, "[.]\\d+$", "")
 
-  estimate <- dplyr::select(sum, value = .data$Estimate, .data$parameter) %>%
-    plyr::dlply("parameter", function(x) {dplyr::select(x, -.data$parameter)})
+  estimate <- dplyr::select(sum, value = "Estimate", "parameter") %>%
+    plyr::dlply("parameter", function(x) {dplyr::select(x, !"parameter")})
 
-  sd <- dplyr::select(sum, value = .data$`Std. Error`, .data$parameter) %>%
-    plyr::dlply("parameter", function(x) {dplyr::select(x, -.data$parameter)})
+  sd <- dplyr::select(sum, value = "Std. Error", "parameter") %>%
+    plyr::dlply("parameter", function(x) {dplyr::select(x, !"parameter")})
 
   attr(estimate, "split_type") <- NULL
   attr(estimate, "split_labels") <- NULL

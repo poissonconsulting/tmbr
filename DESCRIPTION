@@ -18,36 +18,38 @@ Imports:
     coda,
     dplyr,
     foreach,
-    generics,
     lubridate,
     magrittr,
     mbr,
     mcmcr,
     plyr,
-    pryr,
     purrr,
+    rlang,
+    Rcpp,
     RcppEigen,
     rescale,
-    rlang,
     stats,
     stringr,
     term,
     tibble,
     timer,
-    TMB (>= 1.7.13),
+    TMB,
     universals
 Suggests:
     bauw,
     covr,
     extras,
     testthat
+LinkingTo: 
+    Rcpp,
+    RcppEigen,
+    TMB
 Remotes: 
     poissonconsulting/bauw,
     poissonconsulting/mbr,
     poissonconsulting/mcmcdata,
     poissonconsulting/newdata,
-    poissonconsulting/rescale,
     poissonconsulting/timer
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
