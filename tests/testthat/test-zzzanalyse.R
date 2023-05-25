@@ -81,11 +81,11 @@ expect_identical(glance$n, 40L)
 expect_identical(glance$K, 5L)
 expect_true(glance$converged)
 
-coef <- coef(analysis)
+coef <- coef(analysis, simplify = TRUE)
 
 expect_is(coef, "tbl")
 expect_is(coef, "mb_analysis_coef")
-expect_identical(colnames(coef), c("term", "estimate", "sd", "zscore", "lower", "upper", "pvalue"))
+expect_identical(colnames(coef), c("term", "estimate", "lower", "upper", "svalue"))
 
 expect_identical(coef$term, sort(as_term(c("alpha", "beta1", "beta2", "beta3", "log_sAnnual"))))
 
@@ -106,7 +106,7 @@ year <- predict(analysis, new_data = "Year")
 
 expect_is(year, "tbl")
 expect_identical(colnames(year), c("Year", "Pairs", "R.Pairs", "Eyasses", "Annual",
-                                   "estimate", "sd", "zscore", "lower", "upper", "pvalue"))
+                                   "estimate", "lower", "upper", "svalue"))
 expect_true(all(is.na(year$lower)))
 
 expect_equal(unlist(estimates(analysis)), coef$estimate, check.names = FALSE)
