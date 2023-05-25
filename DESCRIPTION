@@ -25,12 +25,13 @@ Imports:
     plyr,
     purrr,
     rlang,
+    RcppEigen,
     stats,
     stringr,
     term,
     tibble,
     timer,
-    TMB (>= 1.7.13),
+    TMB,
     universals
 Suggests:
     bauw,
