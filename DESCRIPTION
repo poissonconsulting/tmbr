@@ -18,15 +18,12 @@ Imports:
     coda,
     dplyr,
     foreach,
-    generics,
     lubridate,
     magrittr,
     mbr,
     mcmcr,
     plyr,
-    pryr,
     purrr,
-    rescale,
     rlang,
     stats,
     stringr,
@@ -45,7 +42,6 @@ Remotes:
     poissonconsulting/mbr,
     poissonconsulting/mcmcdata,
     poissonconsulting/newdata,
-    poissonconsulting/rescale,
     poissonconsulting/timer
 Encoding: UTF-8
 LazyData: true
