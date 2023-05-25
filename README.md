@@ -4,8 +4,7 @@
 
 [![Lifecycle:
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
-[![R build
-status](https://github.com/poissonconsulting/tmbr/workflows/R-CMD-check/badge.svg)](https://github.com/poissonconsulting/tmbr/actions)
+[![R-CMD-check](https://github.com/poissonconsulting/tmbr/workflows/R-CMD-check/badge.svg)](https://github.com/poissonconsulting/tmbr/actions)
 [![Codecov test
 coverage](https://codecov.io/gh/poissonconsulting/tmbr/branch/master/graph/badge.svg)](https://codecov.io/gh/poissonconsulting/tmbr?branch=master)
 [![License:
@@ -27,9 +26,8 @@ packages.
 ``` r
 library(magrittr)
 library(ggplot2)
+library(mbr)
 library(tmbr)
-#> Warning: replacing previous import 'extras::as_list' by 'rlang::as_list' when
-#> loading 'tmbr'
 ```
 
 ``` r
@@ -84,22 +82,24 @@ data <- bauw::peregrine
 data$Annual <- factor(data$Year)
 
 analysis <- analyse(model, data = data)
-#> Warning: The `simplify` argument of `coef()` must be TRUE as of mcmcr 0.4.1.
-#> # A tibble: 1 x 5
+#> Note: Using Makevars in /Users/joe/.R/Makevars
+#> using C++ compiler: 'Apple clang version 14.0.3 (clang-1403.0.22.14.1)'
+#> using SDK: ''
+#> # A tibble: 1 × 5
 #>       n     K logLik    IC converged
 #>   <int> <int>  <dbl> <dbl> <lgl>    
 #> 1    40     5  -154.  321. TRUE     
 #> Warning: 4 external pointers will be removed
 
 coef(analysis)
-#> # A tibble: 5 x 7
-#>   term        estimate     sd  zscore   lower   upper   pvalue
-#>   <term>         <dbl>  <dbl>   <dbl>   <dbl>   <dbl>    <dbl>
-#> 1 alpha         4.26   0.0379 112.     4.19    4.34   0.      
-#> 2 beta1         1.19   0.0697  17.1    1.05    1.33   2.10e-65
-#> 3 beta2        -0.0177 0.0289  -0.611 -0.0743  0.0390 5.41e- 1
-#> 4 beta3        -0.272  0.0357  -7.62  -0.342  -0.202  2.63e-14
-#> 5 log_sAnnual  -2.31   0.271   -8.53  -2.84   -1.78   1.45e-17
+#> # A tibble: 5 × 8
+#>   term        estimate   lower   upper svalue     sd  zscore   pvalue
+#>   <term>         <dbl>   <dbl>   <dbl>  <dbl>  <dbl>   <dbl>    <dbl>
+#> 1 alpha         4.26    4.19    4.34        1 0.0379 112.    0       
+#> 2 beta1         1.19    1.05    1.33        1 0.0697  17.1   2.10e-65
+#> 3 beta2        -0.0177 -0.0743  0.0390      1 0.0289  -0.611 5.41e- 1
+#> 4 beta3        -0.272  -0.342  -0.202       1 0.0357  -7.62  2.63e-14
+#> 5 log_sAnnual  -2.31   -2.84   -1.78        1 0.271   -8.53  1.45e-17
 ```
 
 ``` r
@@ -121,7 +121,6 @@ To install from GitHub
     devtools::install_github("poissonconsulting/tmbr")
 
 ## Citation
-
 
     To cite tmbr in publications use:
 
