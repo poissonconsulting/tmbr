@@ -9,7 +9,7 @@ profile_confint <- function(term, ad_fun, level = level, ...) {
 adfun_confint <- function(terms, object, tempfile, level, ...) {
   model <- model(object)
   data <- data_set(object) %>%
-    mbr::modify_data(model = model)
+    modify_data(model = model)
 
   inits <- estimates(object, "primary")
   map <- map(inits(data, model$gen_inits, model$random_effects))
