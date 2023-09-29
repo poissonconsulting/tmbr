@@ -47,7 +47,7 @@ data <- bauw::peregrine
 data$Annual <- factor(data$Year)
 
 
-model <- model(tmb_template, gen_inits = gen_inits,
+model <- model(code = tmb_template, gen_inits = gen_inits,
                select_data = list("Pairs" = integer(), "Year*" = integer(), Annual = factor()),
                random_effects = list(bAnnual = "Annual"),
                new_expr = new_expr)

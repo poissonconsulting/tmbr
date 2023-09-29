@@ -109,10 +109,12 @@ r2 <- 1 - var(Males - eMales) / var(Males)
 "
 
   model <- model(
-    template,  gen_inits,
+    code = template,
+    gen_inits = gen_inits,
     select_data = list(Males = 1, "Disturbance*" = 1, Year = factor(1), PDO = 1, "HunterDays*" = 1),
     modify_data = modify_data,
-    new_expr = new_expr,  drops = list("bDisturbance", "bPDO", "bHunterDays"))
+    new_expr = new_expr,  drops = list("bDisturbance", "bPDO", "bHunterDays")
+  )
 
   models <- make_all_models(model)
 
