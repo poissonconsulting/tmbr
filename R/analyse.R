@@ -98,7 +98,7 @@ tmb_analysis <- function(data, model, tempfile, glance, quiet) {
 
   if (glance) on.exit(print(glance(obj)))
 
-  data %<>% mbr::modify_data(model = model)
+  data %<>% modify_data(model = model)
 
   inits <- inits(data, model$gen_inits, model$random_effects)
 

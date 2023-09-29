@@ -17,10 +17,10 @@ Imports:
     chk,
     coda,
     dplyr,
+    embr,
     foreach,
     lubridate,
     magrittr,
-    mbr,
     mcmcr,
     plyr,
     purrr,
@@ -44,10 +44,9 @@ LinkingTo:
     TMB
 Remotes: 
     poissonconsulting/bauw,
-    poissonconsulting/mbr,
+    poissonconsulting/embr,
     poissonconsulting/mcmcdata,
     poissonconsulting/newdata,
     poissonconsulting/timer
 Encoding: UTF-8
-LazyData: true
 RoxygenNote: 7.2.3
