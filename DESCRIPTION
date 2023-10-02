@@ -1,6 +1,6 @@
 Package: tmbr
 Title: Analyses Using TMB
-Version: 0.0.1.9003
+Version: 0.0.1.9004
 Authors@R: 
     person(given = "Joe",
            family = "Thorley",
