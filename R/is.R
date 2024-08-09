@@ -57,5 +57,3 @@ is.tmb_ml_analysis <- function(x) {
 is.tmb_mcmc_analysis <- function(x) {
   inherits(x, "tmb_mcmc_analysis")
 }
-
-

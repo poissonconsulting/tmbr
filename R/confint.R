@@ -16,9 +16,11 @@ adfun_confint <- function(terms, object, tempfile, level, ...) {
 
   load_dynlib(model, tempfile)
 
-  ad_fun <- TMB::MakeADFun(data = data, inits, map = map,
-                           random = names(model$random_effects),
-                           DLL = basename(tempfile), silent = TRUE)
+  ad_fun <- TMB::MakeADFun(
+    data = data, inits, map = map,
+    random = names(model$random_effects),
+    DLL = basename(tempfile), silent = TRUE
+  )
 
   opt <- try(do.call("optim", ad_fun))
 
@@ -28,12 +30,13 @@ adfun_confint <- function(terms, object, tempfile, level, ...) {
 }
 
 adfun_confint_chunk <- function(terms, object, level, ...) {
-  confint <- adfun_confint(terms = terms$terms, object = object, tempfile = terms$tempfile,
-                   level = level, ...)
+  confint <- adfun_confint(
+    terms = terms$terms, object = object, tempfile = terms$tempfile,
+    level = level, ...
+  )
 }
 
 adfun_confint_parallel <- function(terms, object, level, ...) {
-
   nworkers <- foreach::getDoParWorkers()
 
   indices <- parallel::splitIndices(length(terms), nworkers)
@@ -46,8 +49,10 @@ adfun_confint_parallel <- function(terms, object, level, ...) {
 
   on.exit(unload_dynlibs(tempfiles))
 
-  terms %<>% llply(.fun = adfun_confint_chunk, .parallel = TRUE,
-                   object = object, level = level, ...)
+  terms %<>% llply(
+    .fun = adfun_confint_chunk, .parallel = TRUE,
+    object = object, level = level, ...
+  )
 
   terms %<>% dplyr::bind_rows()
   terms$term %<>% as_term()
@@ -70,7 +75,6 @@ confint.tmb_ml_analysis <- function(object, parm = terms(object),
                                     parallel = getOption("mb.parallel", FALSE),
                                     beep = getOption("mb.beep", FALSE),
                                     ...) {
-
   chk_flag(beep)
   if (beep) on.exit(beepr::beep())
   beep <- FALSE
@@ -79,9 +83,9 @@ confint.tmb_ml_analysis <- function(object, parm = terms(object),
   chk_vector(level, c(0.5, 0.99))
   chk_flag(parallel)
 
-  if(!all(parm %in% terms(object, "all"))) error("not all terms recognised")
+  if (!all(parm %in% terms(object, "all"))) error("not all terms recognised")
 
-  if(!parallel) {
+  if (!parallel) {
     tempfile <- tempfile()
     on.exit(unload_dynlibs(tempfile))
     return(adfun_confint(terms = parm, object = object, tempfile = tempfile, level = level, ...))

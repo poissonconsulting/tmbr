@@ -1,5 +1,4 @@
 test_that("analyse", {
-
   template <- "
 #include <TMB.hpp>
 
@@ -58,29 +57,39 @@ test_that("analyse", {
                 return nll;
                 }"
 
-  expect_identical(pars(mb_code(template), "primary"),
-                   c("bAdultsInitial", "bDisturbance", "bHunterDays", "bPDO", "bSurvival",
-                     "bYearlingsInitial", "log_sMales"))
+  expect_identical(
+    pars(mb_code(template), "primary"),
+    c(
+      "bAdultsInitial", "bDisturbance", "bHunterDays", "bPDO", "bSurvival",
+      "bYearlingsInitial", "log_sMales"
+    )
+  )
 
-  expect_identical(pars(mb_code(template), "derived"),
-                   "sMales")
+  expect_identical(
+    pars(mb_code(template), "derived"),
+    "sMales"
+  )
 
-  expect_identical(pars(mb_code(template), "all"),
-                   c("bAdultsInitial", "bDisturbance", "bHunterDays", "bPDO", "bSurvival",
-                     "bYearlingsInitial", "log_sMales", "sMales"))
+  expect_identical(
+    pars(mb_code(template), "all"),
+    c(
+      "bAdultsInitial", "bDisturbance", "bHunterDays", "bPDO", "bSurvival",
+      "bYearlingsInitial", "log_sMales", "sMales"
+    )
+  )
 
   expect_error(pars(mb_code(template), "adreport"))
   expect_error(pars(mb_code(template), "report"))
 
   gen_inits <- function(data) {
     inits <- list()
-    inits$bSurvival = 0
-    inits$bDisturbance = 0
-    inits$bPDO = 0
-    inits$bHunterDays = 0
-    inits$bAdultsInitial = mean(data$Males)
-    inits$bYearlingsInitial = mean(data$Males) * 2
-    inits$log_sMales = 0
+    inits$bSurvival <- 0
+    inits$bDisturbance <- 0
+    inits$bPDO <- 0
+    inits$bHunterDays <- 0
+    inits$bAdultsInitial <- mean(data$Males)
+    inits$bYearlingsInitial <- mean(data$Males) * 2
+    inits$log_sMales <- 0
     inits
   }
 
@@ -113,7 +122,7 @@ r2 <- 1 - var(Males - eMales) / var(Males)
     gen_inits = gen_inits,
     select_data = list(Males = 1, "Disturbance*" = 1, Year = factor(1), PDO = 1, "HunterDays*" = 1),
     modify_data = modify_data,
-    new_expr = new_expr,  drops = list("bDisturbance", "bPDO", "bHunterDays")
+    new_expr = new_expr, drops = list("bDisturbance", "bPDO", "bHunterDays")
   )
 
   models <- make_all_models(model)

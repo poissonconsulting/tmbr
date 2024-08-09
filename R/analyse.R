@@ -35,22 +35,31 @@ unload_dynlibs <- function(tempfiles) {
 map <- function(inits) {
   check_uniquely_named_list(inits)
 
-  if (!length(inits)) return(list())
+  if (!length(inits)) {
+    return(list())
+  }
 
   inits <- inits[vapply(inits, function(x) (any(is.na(x))), TRUE)]
 
-  if (!length(inits)) return(list())
+  if (!length(inits)) {
+    return(list())
+  }
 
   inits %<>% llply(as.vector)
   map <- llply(inits, function(x) 1:length(x))
-  map <- purrr::map2(map, inits, function(x, y) {is.na(x) <- is.na(y); x})
+  map <- purrr::map2(map, inits, function(x, y) {
+    is.na(x) <- is.na(y)
+    x
+  })
   map %<>% llply(function(x) factor(x))
   map
 }
 
 set_dim <- function(x, dim) {
   x <- x$value
-  if (length(dim) == 1) return(x)
+  if (length(dim) == 1) {
+    return(x)
+  }
   dim(x) <- dim
   x
 }
@@ -58,7 +67,9 @@ set_dim <- function(x, dim) {
 adreport <- function(ad_fun, sd) {
   dims <- purrr::map(ad_fun$report(), dims)
 
-  if (!length(dims)) return(list(estimate = list(), sd = list()))
+  if (!length(dims)) {
+    return(list(estimate = list(), sd = list()))
+  }
 
   sum <- summary(sd, select = "report") %>%
     as.data.frame()
@@ -69,10 +80,14 @@ adreport <- function(ad_fun, sd) {
   sum$parameter <- str_replace(sum$parameter, "[.]\\d+$", "")
 
   estimate <- dplyr::select(sum, value = "Estimate", "parameter") %>%
-    plyr::dlply("parameter", function(x) {dplyr::select(x, !"parameter")})
+    plyr::dlply("parameter", function(x) {
+      dplyr::select(x, !"parameter")
+    })
 
   sd <- dplyr::select(sum, value = "Std. Error", "parameter") %>%
-    plyr::dlply("parameter", function(x) {dplyr::select(x, !"parameter")})
+    plyr::dlply("parameter", function(x) {
+      dplyr::select(x, !"parameter")
+    })
 
   attr(estimate, "split_type") <- NULL
   attr(estimate, "split_labels") <- NULL
@@ -104,19 +119,28 @@ tmb_analysis <- function(data, model, tempfile, glance, quiet) {
 
   map <- map(inits)
 
-  inits %<>% llply(function(x) {x[is.na(x)] <- 0; x})
+  inits %<>% llply(function(x) {
+    x[is.na(x)] <- 0
+    x
+  })
 
-  ad_fun <- TMB::MakeADFun(data = data, inits, map = map,
-                           random = names(model$random_effects),
-                           DLL = basename(tempfile), silent = quiet)
+  ad_fun <- TMB::MakeADFun(
+    data = data, inits, map = map,
+    random = names(model$random_effects),
+    DLL = basename(tempfile), silent = quiet
+  )
 
   opt <- try(do.call("optim", ad_fun))
 
-  if (is.try_error(opt)) return(obj)
+  if (is.try_error(opt)) {
+    return(obj)
+  }
 
   sd <- try(TMB::sdreport(ad_fun))
 
-  if (is.try_error(sd)) return(obj)
+  if (is.try_error(sd)) {
+    return(obj)
+  }
 
   adreport <- adreport(ad_fun, sd)
 
@@ -136,11 +160,13 @@ tmb_analysis <- function(data, model, tempfile, glance, quiet) {
 
   mcmcr <- as.mcmcr(estimate)
 
-  obj %<>% c(inits = list(inits),
-             logLik = logLik,
-             mcmcr = list(mcmcr),
-             sd = list(sd),
-             opt = list(opt))
+  obj %<>% c(
+    inits = list(inits),
+    logLik = logLik,
+    mcmcr = list(mcmcr),
+    sd = list(sd),
+    opt = list(opt)
+  )
 
   class(obj) <- c("tmb_ml_analysis", "tmb_analysis", "mb_analysis")
 
@@ -161,12 +187,13 @@ analyse_tmb_data <- function(data, model, tempfile, glance, quiet) {
 }
 
 analyse_tmb_data_chunk <- function(data, model, quiet) {
-  analyse_tmb_data(data = data$data, model = model, tempfile = data$tempfile,
-                   quiet = quiet, glance = FALSE)
+  analyse_tmb_data(
+    data = data$data, model = model, tempfile = data$tempfile,
+    quiet = quiet, glance = FALSE
+  )
 }
 
 analyse_tmb_data_parallel <- function(data, model, quiet) {
-
   nworkers <- foreach::getDoParWorkers()
 
   indices <- parallel::splitIndices(length(data), nworkers)
@@ -179,8 +206,10 @@ analyse_tmb_data_parallel <- function(data, model, quiet) {
 
   on.exit(unload_dynlibs(tempfiles))
 
-  data %<>% llply(.fun = analyse_tmb_data_chunk, .parallel = TRUE,
-                  model = model, quiet = quiet)
+  data %<>% llply(
+    .fun = analyse_tmb_data_chunk, .parallel = TRUE,
+    model = model, quiet = quiet
+  )
 
   data %<>% unlist(recursive = FALSE)
 
@@ -204,7 +233,9 @@ analyse.tmb_model <- function(x, data,
     check_data(data)
   } else if (is.list(data)) {
     llply(data, check_data)
-  } else error("data must be a data.frame or a list of data.frames")
+  } else {
+    error("data must be a data.frame or a list of data.frames")
+  }
 
   chk_flag(parallel)
   chk_flag(quiet)
@@ -215,8 +246,10 @@ analyse.tmb_model <- function(x, data,
   if (!parallel || is.data.frame(data)) {
     tempfile <- tempfile()
     on.exit(unload_dynlibs(tempfile))
-    return(analyse_tmb_data(data = data, model = x, tempfile = tempfile,
-                            quiet = quiet, glance = glance))
+    return(analyse_tmb_data(
+      data = data, model = x, tempfile = tempfile,
+      quiet = quiet, glance = glance
+    ))
   }
 
   analyse_tmb_data_parallel(data, model = x, quiet = quiet)
