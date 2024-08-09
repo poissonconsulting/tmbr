@@ -4,10 +4,12 @@ is_dims <- function(x) {
 
 zeros <- function(dims) {
   stopifnot(is_dims(dims))
-  if (length(dims) == 1)
+  if (length(dims) == 1) {
     return(numeric(dims))
-  if (length(dims) == 2)
+  }
+  if (length(dims) == 2) {
     return(matrix(0, nrow = dims[1], ncol = dims[2]))
+  }
   array(0, dims)
 }
 
@@ -16,8 +18,9 @@ check_dims_inits <- function(x, y) {
   y %<>% llply(dims)
   x <- x[names(x) %in% names(y)]
   y <- y[names(x)]
-  if (!identical(x, y))
+  if (!identical(x, y)) {
     error("dimensions of user-provided random inits must match those of random effects")
+  }
   x
 }
 
@@ -41,15 +44,19 @@ replace_n <- function(random_effect, data) {
 }
 
 random_inits <- function(data, random_effects) {
-  if (!length(random_effects)) return(NULL)
+  if (!length(random_effects)) {
+    return(NULL)
+  }
 
-  if (!all(unlist(random_effects) %in% names(data)))
+  if (!all(unlist(random_effects) %in% names(data))) {
     error("elements in random_effects must in data")
+  }
 
   data <- data[vapply(data, is.factor, TRUE)]
 
-  if (!all(unlist(random_effects) %in% names(data)))
+  if (!all(unlist(random_effects) %in% names(data))) {
     error("elements in random_effects must be factors in data")
+  }
 
   data %<>% vapply(nlevels, 1L) %>% unlist()
 

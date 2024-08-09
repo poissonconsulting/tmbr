@@ -82,7 +82,8 @@ for (i in 1:length(Pairs)) {
 model %<>% update_model(
   gen_inits = function(data) list(alpha = 4, beta1 = 1, beta2 = 0, beta3 = 0, log_sAnnual = 0, bAnnual = rep(0, data$nAnnual)),
   select_data = list("Pairs" = integer(), "Year*" = integer(), Annual = factor()),
-  random_effects = list(bAnnual = "Annual"))
+  random_effects = list(bAnnual = "Annual")
+)
 
 data <- bauw::peregrine
 data$Annual <- factor(data$Year)
@@ -112,7 +113,7 @@ devtools::install_github("poissonconsulting/tmbr")
 ## Citation
 
 ```{r, comment="", echo=FALSE}
-citation(package = 'tmbr')
+citation(package = "tmbr")
 ```
 
 ## Contribution
