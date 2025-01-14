@@ -50,3 +50,4 @@ Remotes:
     poissonconsulting/timer
 Encoding: UTF-8
 RoxygenNote: 7.3.2
+Config/Needs/website: poissonconsulting/poissontemplate
