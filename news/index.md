@@ -1,5 +1,10 @@
 # Changelog
 
+## tmbr 0.0.1.9005
+
+- Add fledge-bump workflow
+- Add fledge-tag-on-merge workflow
+
 ## tmbr 0.0.1.9004
 
 ### Bug fixes
