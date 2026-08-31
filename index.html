@@ -69,7 +69,7 @@
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ntthung/mbr" class="external-link">mbr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/poissonconsulting/tmbr" class="external-link">tmbr</a></span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">model</span><span class="op">(</span><span class="st">"#include &lt;TMB.hpp&gt;</span></span>
+<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">model</span><span class="op">(</span>code <span class="op">=</span> <span class="st">"#include &lt;TMB.hpp&gt;</span></span>
 <span><span class="st"></span></span>
 <span><span class="st">template&lt;class Type&gt;</span></span>
 <span><span class="st">Type objective_function&lt;Type&gt;::operator() () {</span></span>

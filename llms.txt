@@ -19,7 +19,7 @@ library(tmbr)
 
 ``` r
 
-model <- model("#include <TMB.hpp>
+model <- model(code = "#include <TMB.hpp>
 
 template<class Type>
 Type objective_function<Type>::operator() () {
