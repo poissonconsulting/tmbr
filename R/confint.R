@@ -17,9 +17,12 @@ adfun_confint <- function(terms, object, tempfile, level, ...) {
   load_dynlib(model, tempfile)
 
   ad_fun <- TMB::MakeADFun(
-    data = data, inits, map = map,
+    data = data,
+    inits,
+    map = map,
     random = names(model$random_effects),
-    DLL = basename(tempfile), silent = TRUE
+    DLL = basename(tempfile),
+    silent = TRUE
   )
 
   opt <- try(do.call("optim", ad_fun))
@@ -31,8 +34,11 @@ adfun_confint <- function(terms, object, tempfile, level, ...) {
 
 adfun_confint_chunk <- function(terms, object, level, ...) {
   confint <- adfun_confint(
-    terms = terms$terms, object = object, tempfile = terms$tempfile,
-    level = level, ...
+    terms = terms$terms,
+    object = object,
+    tempfile = terms$tempfile,
+    level = level,
+    ...
   )
 }
 
@@ -45,14 +51,19 @@ adfun_confint_parallel <- function(terms, object, level, ...) {
 
   tempfiles <- replicate(length(terms), tempfile())
 
-  terms %<>% purrr::map2(tempfiles, function(x, y) list(terms = x, tempfile = y))
+  terms %<>%
+    purrr::map2(tempfiles, function(x, y) list(terms = x, tempfile = y))
 
   on.exit(unload_dynlibs(tempfiles))
 
-  terms %<>% llply(
-    .fun = adfun_confint_chunk, .parallel = TRUE,
-    object = object, level = level, ...
-  )
+  terms %<>%
+    llply(
+      .fun = adfun_confint_chunk,
+      .parallel = TRUE,
+      object = object,
+      level = level,
+      ...
+    )
 
   terms %<>% dplyr::bind_rows()
   terms$term %<>% as_term()
@@ -70,25 +81,38 @@ adfun_confint_parallel <- function(terms, object, level, ...) {
 #' @param ... Addtional arguments passed to TMB::tmbprofile
 #' @export
 # need to parallelise and deal with terms
-confint.tmb_ml_analysis <- function(object, parm = terms(object),
-                                    level = getOption("mb.conf_level", 0.95),
-                                    parallel = getOption("mb.parallel", FALSE),
-                                    beep = getOption("mb.beep", FALSE),
-                                    ...) {
+confint.tmb_ml_analysis <- function(
+  object,
+  parm = terms(object),
+  level = getOption("mb.conf_level", 0.95),
+  parallel = getOption("mb.parallel", FALSE),
+  beep = getOption("mb.beep", FALSE),
+  ...
+) {
   chk_flag(beep)
-  if (beep) on.exit(beepr::beep())
+  if (beep) {
+    on.exit(beepr::beep())
+  }
   beep <- FALSE
 
   chk_scalar(level)
   chk_vector(level, c(0.5, 0.99))
   chk_flag(parallel)
 
-  if (!all(parm %in% terms(object, "all"))) error("not all terms recognised")
+  if (!all(parm %in% terms(object, "all"))) {
+    error("not all terms recognised")
+  }
 
   if (!parallel) {
     tempfile <- tempfile()
     on.exit(unload_dynlibs(tempfile))
-    return(adfun_confint(terms = parm, object = object, tempfile = tempfile, level = level, ...))
+    return(adfun_confint(
+      terms = parm,
+      object = object,
+      tempfile = tempfile,
+      level = level,
+      ...
+    ))
   }
   adfun_confint_parallel(terms = parm, object = object, level = level, ...)
 }

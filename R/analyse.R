@@ -10,7 +10,8 @@ list_by_name <- function(x) {
 
 add_report <- function(x) {
   x %<>% str_replace_all("\\sREPORT[(][^)]+[)];", "\n")
-  x %<>% str_replace_all("\\sADREPORT[(]([^)]+)[)]", "REPORT(\\1);\nADREPORT(\\1)")
+  x %<>%
+    str_replace_all("\\sADREPORT[(]([^)]+)[)]", "REPORT(\\1);\nADREPORT(\\1)")
   x
 }
 
@@ -28,7 +29,9 @@ load_dynlib <- function(model, tempfile) {
 }
 
 unload_dynlibs <- function(tempfiles) {
-  for (tempfile in tempfiles) try(dyn.unload(TMB::dynlib(tempfile)), silent = TRUE)
+  for (tempfile in tempfiles) {
+    try(dyn.unload(TMB::dynlib(tempfile)), silent = TRUE)
+  }
 }
 
 # Constructs a list identifying which parameters to fix (based on missing values in inits).
@@ -109,9 +112,16 @@ tmb_analysis <- function(data, model, tempfile, glance, quiet) {
   timer$start()
 
   obj <- list(model = model, data = data)
-  class(obj) <- c("mb_null_analysis", "tmb_ml_analysis", "tmb_analysis", "mb_analysis")
+  class(obj) <- c(
+    "mb_null_analysis",
+    "tmb_ml_analysis",
+    "tmb_analysis",
+    "mb_analysis"
+  )
 
-  if (glance) on.exit(print(glance(obj)))
+  if (glance) {
+    on.exit(print(glance(obj)))
+  }
 
   data %<>% modify_data(model = model)
 
@@ -119,15 +129,19 @@ tmb_analysis <- function(data, model, tempfile, glance, quiet) {
 
   map <- map(inits)
 
-  inits %<>% llply(function(x) {
-    x[is.na(x)] <- 0
-    x
-  })
+  inits %<>%
+    llply(function(x) {
+      x[is.na(x)] <- 0
+      x
+    })
 
   ad_fun <- TMB::MakeADFun(
-    data = data, inits, map = map,
+    data = data,
+    inits,
+    map = map,
     random = names(model$random_effects),
-    DLL = basename(tempfile), silent = quiet
+    DLL = basename(tempfile),
+    silent = quiet
   )
 
   opt <- try(do.call("optim", ad_fun))
@@ -160,13 +174,14 @@ tmb_analysis <- function(data, model, tempfile, glance, quiet) {
 
   mcmcr <- as.mcmcr(estimate)
 
-  obj %<>% c(
-    inits = list(inits),
-    logLik = logLik,
-    mcmcr = list(mcmcr),
-    sd = list(sd),
-    opt = list(opt)
-  )
+  obj %<>%
+    c(
+      inits = list(inits),
+      logLik = logLik,
+      mcmcr = list(mcmcr),
+      sd = list(sd),
+      opt = list(opt)
+    )
 
   class(obj) <- c("tmb_ml_analysis", "tmb_analysis", "mb_analysis")
 
@@ -180,16 +195,32 @@ analyse_tmb_data <- function(data, model, tempfile, glance, quiet) {
   load_dynlib(model, tempfile)
 
   if (is.data.frame(data)) {
-    return(tmb_analysis(data = data, model = model, tempfile = tempfile, glance = glance, quiet = quiet))
+    return(tmb_analysis(
+      data = data,
+      model = model,
+      tempfile = tempfile,
+      glance = glance,
+      quiet = quiet
+    ))
   }
 
-  plyr::llply(data, tmb_analysis, model = model, tempfile = tempfile, glance = glance, quiet = quiet)
+  plyr::llply(
+    data,
+    tmb_analysis,
+    model = model,
+    tempfile = tempfile,
+    glance = glance,
+    quiet = quiet
+  )
 }
 
 analyse_tmb_data_chunk <- function(data, model, quiet) {
   analyse_tmb_data(
-    data = data$data, model = model, tempfile = data$tempfile,
-    quiet = quiet, glance = FALSE
+    data = data$data,
+    model = model,
+    tempfile = data$tempfile,
+    quiet = quiet,
+    glance = FALSE
   )
 }
 
@@ -206,10 +237,13 @@ analyse_tmb_data_parallel <- function(data, model, quiet) {
 
   on.exit(unload_dynlibs(tempfiles))
 
-  data %<>% llply(
-    .fun = analyse_tmb_data_chunk, .parallel = TRUE,
-    model = model, quiet = quiet
-  )
+  data %<>%
+    llply(
+      .fun = analyse_tmb_data_chunk,
+      .parallel = TRUE,
+      model = model,
+      quiet = quiet
+    )
 
   data %<>% unlist(recursive = FALSE)
 
@@ -217,17 +251,22 @@ analyse_tmb_data_parallel <- function(data, model, quiet) {
 }
 
 #' @export
-analyse.tmb_model <- function(x, data,
-                              nchains = getOption("mb.nchains", 3L),
-                              niters = getOption("mb.niters", 1000L),
-                              nthin = getOption("mb.thin", NULL),
-                              parallel = getOption("mb.parallel", FALSE),
-                              quiet = getOption("mb.quiet", TRUE),
-                              glance = getOption("mb.glance", TRUE),
-                              beep = getOption("mb.beep", TRUE),
-                              ...) {
+analyse.tmb_model <- function(
+  x,
+  data,
+  nchains = getOption("mb.nchains", 3L),
+  niters = getOption("mb.niters", 1000L),
+  nthin = getOption("mb.thin", NULL),
+  parallel = getOption("mb.parallel", FALSE),
+  quiet = getOption("mb.quiet", TRUE),
+  glance = getOption("mb.glance", TRUE),
+  beep = getOption("mb.beep", TRUE),
+  ...
+) {
   chk_flag(beep)
-  if (beep) on.exit(beepr::beep())
+  if (beep) {
+    on.exit(beepr::beep())
+  }
 
   if (is.data.frame(data)) {
     check_data(data)
@@ -247,8 +286,11 @@ analyse.tmb_model <- function(x, data,
     tempfile <- tempfile()
     on.exit(unload_dynlibs(tempfile))
     return(analyse_tmb_data(
-      data = data, model = x, tempfile = tempfile,
-      quiet = quiet, glance = glance
+      data = data,
+      model = x,
+      tempfile = tempfile,
+      quiet = quiet,
+      glance = glance
     ))
   }
 
