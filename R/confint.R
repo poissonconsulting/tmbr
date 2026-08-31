@@ -7,7 +7,7 @@ profile_confint <- function(term, ad_fun, level = level, ...) {
 }
 
 adfun_confint <- function(terms, object, tempfile, level, ...) {
-  model <- model(object)
+  model <- get_model(object)
   data <- data_set(object) %>%
     modify_data(model = model)
 
