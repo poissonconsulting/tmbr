@@ -75,12 +75,13 @@ for (i in 1:length(Pairs)) {
 
   glance <- glance(analysis)
   expect_is(glance, "tbl")
-  expect_identical(colnames(glance), c("n", "K", "logLik", "IC", "converged"))
-  expect_equal(glance$logLik, -154.4664, tolerance = 0.0001)
-  expect_equal(glance$IC, 320.6974, tolerance = 0.001)
+  expect_identical(colnames(glance), c("n", "K", "converged"))
   expect_identical(glance$n, 40L)
   expect_identical(glance$K, 5L)
   expect_true(glance$converged)
+
+  expect_equal(logLik(analysis), -154.4664, tolerance = 0.0001)
+  expect_equal(IC(analysis), 320.6974, tolerance = 0.001)
 
   coef <- coef(analysis, simplify = TRUE)
 
