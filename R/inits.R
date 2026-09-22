@@ -19,7 +19,9 @@ check_dims_inits <- function(x, y) {
   x <- x[names(x) %in% names(y)]
   y <- y[names(x)]
   if (!identical(x, y)) {
-    error("dimensions of user-provided random inits must match those of random effects")
+    error(
+      "dimensions of user-provided random inits must match those of random effects"
+    )
   }
   x
 }
