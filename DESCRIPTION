@@ -2,10 +2,7 @@ Package: tmbr
 Title: Analyses Using TMB
 Version: 0.0.1.9009
 Authors@R: 
-    person(given = "Joe",
-           family = "Thorley",
-           role = c("aut", "cre"),
-           email = "joe@poissonconsulting.ca",
+    person("Joe", "Thorley", , "joe@poissonconsulting.ca", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-7683-4592"))
 Description: Facilitates analyses using 'Template Model Builder'.
 License: MIT + file LICENSE
@@ -25,8 +22,8 @@ Imports:
     mcmcr,
     plyr,
     purrr,
-    rlang,
     Rcpp,
+    rlang,
     stats,
     stringr,
     term,
@@ -47,8 +44,7 @@ Remotes:
     poissonconsulting/bauw,
     poissonconsulting/embr,
     poissonconsulting/mcmcdata,
-    poissonconsulting/newdata,
     poissonconsulting/timer
+Config/Needs/website: poissonconsulting/poissontemplate
 Encoding: UTF-8
 RoxygenNote: 7.3.2
-Config/Needs/website: poissonconsulting/poissontemplate
