@@ -17,7 +17,10 @@ check_model_pars.tmb_code <- function(x, fixed, random, derived, drops) {
     error("derived parameters missing from derived code parameters")
   }
 
-  if (length(drops) && !all(unlist(drops) %in% pars(x, param_type = "primary", scalar = TRUE))) {
+  if (
+    length(drops) &&
+      !all(unlist(drops) %in% pars(x, param_type = "primary", scalar = TRUE))
+  ) {
     error("drops parameters missing from primary scalar code pars")
   }
 

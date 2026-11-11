@@ -60,8 +60,13 @@ test_that("analyse", {
   expect_identical(
     pars(mb_code(template), "primary"),
     c(
-      "bAdultsInitial", "bDisturbance", "bHunterDays", "bPDO", "bSurvival",
-      "bYearlingsInitial", "log_sMales"
+      "bAdultsInitial",
+      "bDisturbance",
+      "bHunterDays",
+      "bPDO",
+      "bSurvival",
+      "bYearlingsInitial",
+      "log_sMales"
     )
   )
 
@@ -73,8 +78,14 @@ test_that("analyse", {
   expect_identical(
     pars(mb_code(template), "all"),
     c(
-      "bAdultsInitial", "bDisturbance", "bHunterDays", "bPDO", "bSurvival",
-      "bYearlingsInitial", "log_sMales", "sMales"
+      "bAdultsInitial",
+      "bDisturbance",
+      "bHunterDays",
+      "bPDO",
+      "bSurvival",
+      "bYearlingsInitial",
+      "log_sMales",
+      "sMales"
     )
   )
 
@@ -120,14 +131,33 @@ r2 <- 1 - var(Males - eMales) / var(Males)
   model <- model(
     code = template,
     gen_inits = gen_inits,
-    select_data = list(Males = 1, "Disturbance*" = 1, Year = factor(1), PDO = 1, "HunterDays*" = 1),
+    select_data = list(
+      Males = 1,
+      "Disturbance*" = 1,
+      Year = factor(1),
+      PDO = 1,
+      "HunterDays*" = 1
+    ),
     modify_data = modify_data,
-    new_expr = new_expr, drops = list("bDisturbance", "bPDO", "bHunterDays")
+    new_expr = new_expr,
+    drops = list("bDisturbance", "bPDO", "bHunterDays")
   )
 
   models <- make_all_models(model)
 
   expect_identical(models[[1]], model)
 
-  expect_identical(names(models), c("full", "base+bHunterDays+bPDO", "base+bDisturbance+bPDO", "base+bDisturbance+bHunterDays", "base+bPDO", "base+bHunterDays", "base+bDisturbance", "base"))
+  expect_identical(
+    names(models),
+    c(
+      "full",
+      "base+bHunterDays+bPDO",
+      "base+bDisturbance+bPDO",
+      "base+bDisturbance+bHunterDays",
+      "base+bPDO",
+      "base+bHunterDays",
+      "base+bDisturbance",
+      "base"
+    )
+  )
 })
